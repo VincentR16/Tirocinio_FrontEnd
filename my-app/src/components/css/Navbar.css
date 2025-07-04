@@ -1,0 +1,83 @@
+.tab-header {
+  top: 1rem;
+  z-index: 10; /* assicurati che sia sopra gli altri elementi */
+  position:sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: white;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 100px;
+  padding: 0.5rem 1.5rem;
+  width: 100%;
+  flex-wrap: wrap;  
+}
+.logo {
+  display: flex;
+  align-items: center;      
+  justify-content: flex-start;
+  color: rgb(17, 25, 40);
+  gap: 0.5em;
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: 2.5rem; /* usa rem */
+  font-family: "Roboto", sans-serif;
+  color: rgb(17, 25, 40);
+}
+
+.tab-wrapper {
+  display: flex;
+  position: relative;
+  gap: 0.5rem;
+  /*background-color: #007bff;*/
+  border-radius: 100px;
+  width: fit-content;
+}
+
+.tab-button {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  color: rgb(17, 25, 40);
+  font-family: 'Roboto',serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  padding: 0.5rem 0.5rem;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  color: rgb(29, 79, 217);
+  font-weight: 600;
+}
+.tab-button:hover{
+  color: rgb(29, 79, 217);
+  font-weight: 600;
+}
+
+.pill {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2.2rem;
+  border-radius: 100px;
+  background-color: rgba(61, 61, 61, 0);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: white;
+  backdrop-filter: blur(4px);
+  transition: transform 0.3s ease, width 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  z-index: 0;
+}
+.vertical-line {
+  width: 1px;
+  height: 3rem; 
+  background-color: rgba(0, 0, 0, 0.1);
+  margin: 0 1rem;
+}
