@@ -2,15 +2,37 @@ import { useEffect, useRef, useState } from "react";
 import { Shield } from "lucide-react";
 import { useScrollContext } from "../customHook/ScrollContext";
 import "./css/NavBar.css";
+import { useHomeContext } from "../customHook/HomeContext";
+import { AuthTypeEnum } from "../types/Auth.types";
 
 export default function Navbar() {
   const { scrollToAbout, scrollToLogin } = useScrollContext();
+  const { setAuthType } = useHomeContext();
 
   const tabs = [
-    { label: "About us", action: scrollToAbout },
-    { label: "Login", action: scrollToLogin },
-    { label: "Signup", action: scrollToLogin },
+    {
+      label: "About us",
+      action: () => {
+        scrollToAbout();
+        setAuthType(AuthTypeEnum.LOGIN)
+      },
+    },
+    {
+      label: "Login",
+      action: () => {
+        scrollToLogin();
+        setAuthType(AuthTypeEnum.LOGIN);
+      },
+    },
+    {
+      label: "Signup",
+      action: () => {
+        scrollToLogin();
+        setAuthType(AuthTypeEnum.REGISTER_PATIENT)
+      },
+    },
   ];
+
   const [activeIndex, setActiveIndex] = useState(0);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const pillRef = useRef<HTMLDivElement>(null);

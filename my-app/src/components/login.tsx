@@ -20,13 +20,13 @@ import { DatePickerInput } from "@mantine/dates";
 import type { PaperProps } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { GoogleButton } from "./GoogleButton";
-import type { AuthType } from "../types/Auth.types";
 import { AuthTypeEnum } from "../types/Auth.types";
 import { useState } from "react";
+import { useHomeContext } from "../customHook/HomeContext";
 
 export function AuthenticationForm(props: PaperProps) {
-  const [authType, setAuthType] = useState<AuthType>(AuthTypeEnum.LOGIN);
-
+  
+  const {authType, setAuthType} = useHomeContext()
   const [userType, setUserType] = useState<"Yes" | "No">("No");
 
   const handleChange = (value: string) => {

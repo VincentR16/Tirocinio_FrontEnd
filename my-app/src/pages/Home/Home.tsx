@@ -1,15 +1,15 @@
 import "./style/Home.css";
-import { HomeContext } from "../../customHook/HomeContext";
+import { HomeProvider } from "../../customHook/HomeProvider";
 import { ScrollProvider } from "../../customHook/ScrollProvider";
 import HomeComponent from "./HomeComponent";
 
 export default function Home() {
 
   return (
-    <HomeContext value={undefined}>
+    <HomeProvider>
       <ScrollProvider>
          <HomeComponent></HomeComponent>
     </ScrollProvider>
-    </HomeContext>
+    </HomeProvider>
   );
 }
