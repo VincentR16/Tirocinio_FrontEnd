@@ -14,7 +14,6 @@ export default function Navbar() {
       label: "About us",
       action: () => {
         scrollToAbout();
-        setAuthType(AuthTypeEnum.LOGIN)
       },
     },
     {

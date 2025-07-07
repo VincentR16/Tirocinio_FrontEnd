@@ -37,7 +37,7 @@ export default function FlipCard({frontContent, icon,backContent,title }: conten
 
         <div className="flip-card-back">
           <p>{backContent}</p>
-          <ButtonCard content="Expoler more" onClick={() => setFlipped(false)}></ButtonCard>
+          <ButtonCard content="Go back" onClick={() => setFlipped(false)}></ButtonCard>
         </div>
       </div>
     </div>
