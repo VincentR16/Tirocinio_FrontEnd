@@ -69,17 +69,19 @@ export default function Welcome() {
             />
           </div>
         </div>
-        <hr className="custom-hr" />
+        <div ref={loginRef}>
+          <hr className="custom-hr" />
 
-        <div ref={loginRef} className="form-container">
-          <GradientText
-            colors={["#2563eb, #0f172a,#2563eb,#0f172a"]}
-            animationSpeed={3}
-            className="custom-class"
-          >
-            Welcome to MedTrust
-          </GradientText>
-          <AuthenticationForm className="auth-container"></AuthenticationForm>
+          <div className="form-container">
+            <GradientText
+              colors={["#2563eb, #0f172a,#2563eb,#0f172a"]}
+              animationSpeed={3}
+              className="custom-class"
+            >
+              Welcome to MedTrust
+            </GradientText>
+            <AuthenticationForm className="auth-container"></AuthenticationForm>
+          </div>
         </div>
       </main>
       <footer>

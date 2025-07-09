@@ -2,14 +2,15 @@ import { WelcomeProvider } from "./customHook/WelcomeProvider";
 import { ScrollProvider } from "./customHook/ScrollProvider";
 import Welcome from "./pages/welcomePage/Welcome";
 import { Navigate } from "react-router-dom";
+import Home from "./pages/homePage/HomePage";
 
 export const routes = [
   {
     path: "/",
-    element: <Navigate to="/home" />,
+    element: <Navigate to="/welcome" />,
   },
   {
-    path: "/home",
+    path: "/welcome",
     element: (
       <WelcomeProvider>
         <ScrollProvider>
@@ -19,6 +20,7 @@ export const routes = [
     ),
   },
   {
-    path: "/firstPage"
+    path: "/home",
+    element: <Home></Home>
   }
 ];

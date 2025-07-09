@@ -6,11 +6,11 @@ export function ScrollProvider({ children }: { children: ReactNode }) {
   const aboutRef = useRef<HTMLDivElement>(null);
 
   const scrollToLogin = () => {
-    loginRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    loginRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   };
 
   const scrollToAbout = () => {
-    aboutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    aboutRef.current?.scrollIntoView({ behavior: "smooth", block: "start"});
   };
 
 

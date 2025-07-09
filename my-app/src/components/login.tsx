@@ -26,12 +26,14 @@ import { useLoginForm } from "../customHook/form/UseLoginForm";
 import { useRegisterForm } from "../customHook/form/UseRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
 import { loginApi } from "../api/LoginApi";
+import { useNavigate } from "react-router-dom";
 
 export function AuthenticationForm(props: PaperProps) {
   const { authType, setAuthType } = useWelcomeContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
+  const navigate = useNavigate()
 
   const handleChange = (value: string) => {
     setUserType(value as "Yes" | "No");
@@ -62,6 +64,7 @@ export function AuthenticationForm(props: PaperProps) {
                 try {
                   const res = await loginApi(values);
                   console.log("login success", res);
+                  navigate("/home")
                 } catch (err) {
                   console.log("error", err);
                 }
