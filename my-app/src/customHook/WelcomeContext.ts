@@ -6,14 +6,14 @@ type HomeContextType = {
   setAuthType: (type: AuthType) =>  void;
 };
 
-export const HomeContext = createContext<HomeContextType | undefined>(
+export const WelcomeContext = createContext<HomeContextType | undefined>(
   undefined
 );
 
-export function useHomeContext() {
-  const context = useContext(HomeContext);
+export function useWelcomeContext() {
+  const context = useContext(WelcomeContext);
   if (!context) {
-    throw new Error("useHomeContext must be used within a HomeProvider");
+    throw new Error("useWelcomeContext must be used within a HomeProvider");
   }
   return context;
 }

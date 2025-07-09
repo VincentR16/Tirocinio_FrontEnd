@@ -1,6 +1,6 @@
-import { HomeProvider } from "./customHook/HomeProvider";
+import { WelcomeProvider } from "./customHook/WelcomeProvider";
 import { ScrollProvider } from "./customHook/ScrollProvider";
-import Home from "./pages/Home/Home";
+import Welcome from "./pages/welcomePage/Welcome";
 import { Navigate } from "react-router-dom";
 
 export const routes = [
@@ -11,11 +11,14 @@ export const routes = [
   {
     path: "/home",
     element: (
-      <HomeProvider>
+      <WelcomeProvider>
         <ScrollProvider>
-          <Home></Home>
+          <Welcome></Welcome>
         </ScrollProvider>
-      </HomeProvider>
+      </WelcomeProvider>
     ),
   },
+  {
+    path: "/firstPage"
+  }
 ];

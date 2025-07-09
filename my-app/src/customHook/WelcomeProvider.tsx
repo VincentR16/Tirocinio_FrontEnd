@@ -1,12 +1,12 @@
 import { useState, type ReactNode } from "react";
-import { HomeContext } from "./HomeContext";
+import { WelcomeContext } from "./WelcomeContext";
 import { AuthTypeEnum, type AuthType } from "../types/Auth.type";
 
-export function HomeProvider({ children }: { children: ReactNode }) {
+export function WelcomeProvider({ children }: { children: ReactNode }) {
   const [authType, setAuthType] = useState<AuthType>(AuthTypeEnum.LOGIN);
   return (
-    <HomeContext.Provider value={{ authType, setAuthType }}>
+    <WelcomeContext.Provider value={{ authType, setAuthType }}>
       {children}
-    </HomeContext.Provider>
+    </WelcomeContext.Provider>
   );
 }

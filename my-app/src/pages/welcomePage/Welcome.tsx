@@ -1,4 +1,4 @@
-import "./style/Home.css";
+import "./style/Welcome.css";
 import Card from "../../components/Card";
 import BlurText from "../../components/BlurText";
 import NavBar from "../../components/NavBar";
@@ -10,7 +10,7 @@ import { useScrollContext } from "../../customHook/ScrollContext";
 import ReactLogo from "../../assets/react.svg";
 import { Flex } from "@mantine/core";
 
-export default function Home() {
+export default function Welcome() {
   const { aboutRef, loginRef } = useScrollContext();
 
   return (

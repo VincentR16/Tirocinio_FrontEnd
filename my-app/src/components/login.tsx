@@ -21,14 +21,14 @@ import type { PaperProps } from "@mantine/core";
 import { GoogleButton } from "./GoogleButton";
 import { AuthTypeEnum } from "../types/Auth.type";
 import { useState } from "react";
-import { useHomeContext } from "../customHook/HomeContext";
+import { useWelcomeContext } from "../customHook/WelcomeContext";
 import { useLoginForm } from "../customHook/form/UseLoginForm";
 import { useRegisterForm } from "../customHook/form/UseRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
 import { loginApi } from "../api/LoginApi";
 
 export function AuthenticationForm(props: PaperProps) {
-  const { authType, setAuthType } = useHomeContext();
+  const { authType, setAuthType } = useWelcomeContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
@@ -68,7 +68,7 @@ export function AuthenticationForm(props: PaperProps) {
               })
             : registerForm.onSubmit(async (values) => {
                 try {
-                  const res = await loginApi(values);
+                  const res = await loginApi(values); //todo fare api register 
                   console.log("register success", res);
                 } catch (err) {
                   console.log("error", err);
@@ -109,7 +109,7 @@ export function AuthenticationForm(props: PaperProps) {
                 mt="md"
                 label="Surname"
                 placeholder="Your Surname"
-                value={registerForm.values.name}
+                value={registerForm.values.surname}
                 onChange={(event) =>
                   registerForm.setFieldValue(
                     "surname",
@@ -154,7 +154,7 @@ export function AuthenticationForm(props: PaperProps) {
                 placeholder="Your phone"
                 value={registerForm.values.phone}
                 onAccept={(value) =>
-                  registerForm.setFieldError("phone", value || "")
+                  registerForm.setFieldValue("phone", value || "")
                 }
                 error={registerForm.errors.phone}
                 withAsterisk
@@ -191,7 +191,11 @@ export function AuthenticationForm(props: PaperProps) {
             required
             label="Email"
             placeholder="hello@mantine.dev"
-            value={registerForm.values.email}
+            value={
+              authType === AuthTypeEnum.LOGIN
+                ? loginForm.values.email
+                : registerForm.values.email
+            }
             onChange={(event) => {
               if (authType == AuthTypeEnum.LOGIN) {
                 loginForm.setFieldValue("email", event.currentTarget.value);
@@ -199,7 +203,11 @@ export function AuthenticationForm(props: PaperProps) {
                 registerForm.setFieldValue("email", event.currentTarget.value);
               }
             }}
-            error={registerForm.errors.email}
+            error={
+              authType === AuthTypeEnum.LOGIN
+                ? loginForm.errors.email
+                : registerForm.errors.email
+            }
             radius="md"
           />
 
@@ -207,7 +215,11 @@ export function AuthenticationForm(props: PaperProps) {
             required
             label="Password"
             placeholder="Your password"
-            value={registerForm.values.password}
+            value={
+              authType === AuthTypeEnum.LOGIN
+                ? loginForm.values.password
+                : registerForm.values.password
+            }
             onChange={(event) => {
               if (authType == AuthTypeEnum.LOGIN) {
                 loginForm.setFieldValue("password", event.currentTarget.value);
@@ -218,13 +230,18 @@ export function AuthenticationForm(props: PaperProps) {
                 );
               }
             }}
-            error={registerForm.errors.password}
+            error={
+              authType === AuthTypeEnum.LOGIN
+                ? loginForm.errors.password
+                : registerForm.errors.password
+            }
             radius="md"
           />
 
           {authType !== AuthTypeEnum.LOGIN && (
             <div>
               <Checkbox
+                readOnly
                 mt="xl"
                 label="I accept terms and conditions"
                 checked={true}
@@ -238,13 +255,14 @@ export function AuthenticationForm(props: PaperProps) {
             component="button"
             type="button"
             c="dimmed"
-            onClick={() =>
+            onClick={() => {
               setAuthType(
                 authType === AuthTypeEnum.LOGIN
                   ? AuthTypeEnum.REGISTER_PATIENT
                   : AuthTypeEnum.LOGIN
-              )
-            }
+              );
+              console.log("authtype:", authType);
+            }}
             size="xs"
           >
             {authType === AuthTypeEnum.LOGIN
