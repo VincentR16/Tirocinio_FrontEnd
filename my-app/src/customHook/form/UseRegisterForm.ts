@@ -11,7 +11,7 @@ export function useRegisterForm() {
       password: "",
       codiceFiscale: "",
       gender: "",
-      birthDate: null,
+      birthDate: "",
       role: RoleTypeEnum.PATIENT,
       phone: "",
     },
@@ -50,11 +50,6 @@ export function useRegisterForm() {
         /^\+\d{2} \d{3} \d{3}-\d{4}$/.test(val)
           ? null
           : "Inserisci un numero di telefono valido (+39 000 000-0000)",
-
-      role: (val) =>
-        val === RoleTypeEnum.DOCTOR || val === RoleTypeEnum.PATIENT
-          ? null
-          : "Ruolo non valido",
     },
   });
 }

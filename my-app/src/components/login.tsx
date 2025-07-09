@@ -24,10 +24,11 @@ import { useState } from "react";
 import { useHomeContext } from "../customHook/HomeContext";
 import { useLoginForm } from "../customHook/form/UseLoginForm";
 import { useRegisterForm } from "../customHook/form/UseRegisterForm";
+import { RoleTypeEnum } from "../types/Role.type";
+import { loginApi } from "../api/LoginApi";
 
 export function AuthenticationForm(props: PaperProps) {
-  
-  const {authType, setAuthType} = useHomeContext()
+  const { authType, setAuthType } = useHomeContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
@@ -37,11 +38,12 @@ export function AuthenticationForm(props: PaperProps) {
 
     if (value === "Yes") {
       setAuthType(AuthTypeEnum.REGISTER_DOCTOR);
+      registerForm.setFieldValue("role", RoleTypeEnum.DOCTOR);
     } else {
       setAuthType(AuthTypeEnum.REGISTER_PATIENT);
+      registerForm.setFieldValue("role", RoleTypeEnum.PATIENT);
     }
   };
-
 
   return (
     <Paper radius="md" p="lg" withBorder {...props}>
@@ -53,7 +55,27 @@ export function AuthenticationForm(props: PaperProps) {
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      <form onSubmit={registerForm.onSubmit(() => {})}>
+      <form
+        onSubmit={
+          authType === AuthTypeEnum.LOGIN
+            ? loginForm.onSubmit(async (values) => {
+                try {
+                  const res = await loginApi(values);
+                  console.log("login success", res);
+                } catch (err) {
+                  console.log("error", err);
+                }
+              })
+            : registerForm.onSubmit(async (values) => {
+                try {
+                  const res = await loginApi(values);
+                  console.log("register success", res);
+                } catch (err) {
+                  console.log("error", err);
+                }
+              })
+        }
+      >
         <Stack>
           {authType !== AuthTypeEnum.LOGIN && (
             <div>
@@ -78,6 +100,7 @@ export function AuthenticationForm(props: PaperProps) {
                 onChange={(event) =>
                   registerForm.setFieldValue("name", event.currentTarget.value)
                 }
+                error={registerForm.errors.name}
                 radius="md"
                 withAsterisk
               />
@@ -88,8 +111,12 @@ export function AuthenticationForm(props: PaperProps) {
                 placeholder="Your Surname"
                 value={registerForm.values.name}
                 onChange={(event) =>
-                  registerForm.setFieldValue("surname", event.currentTarget.value)
+                  registerForm.setFieldValue(
+                    "surname",
+                    event.currentTarget.value
+                  )
                 }
+                error={registerForm.errors.surname}
                 radius="md"
                 withAsterisk
               />
@@ -100,12 +127,22 @@ export function AuthenticationForm(props: PaperProps) {
                 placeholder="Pick one"
                 label="Gender"
                 withAsterisk
+                value={registerForm.values.gender}
+                onChange={(value) =>
+                  registerForm.setFieldValue("gender", value || "")
+                }
+                error={registerForm.errors.gender}
               ></Select>
 
               <DatePickerInput
                 mt="md"
                 placeholder="Pick a date"
                 label="Date of Birth"
+                value={registerForm.values.birthDate}
+                onChange={(value) =>
+                  registerForm.setFieldValue("birthDate", value || "")
+                }
+                error={registerForm.errors.birthDate}
                 withAsterisk
               />
 
@@ -115,6 +152,11 @@ export function AuthenticationForm(props: PaperProps) {
                 component={IMaskInput}
                 mask="+00 000 000-0000"
                 placeholder="Your phone"
+                value={registerForm.values.phone}
+                onAccept={(value) =>
+                  registerForm.setFieldError("phone", value || "")
+                }
+                error={registerForm.errors.phone}
                 withAsterisk
               />
               {authType != AuthTypeEnum.REGISTER_DOCTOR && (
@@ -150,10 +192,14 @@ export function AuthenticationForm(props: PaperProps) {
             label="Email"
             placeholder="hello@mantine.dev"
             value={registerForm.values.email}
-            onChange={(event) =>
-              loginForm.setFieldValue("email", event.currentTarget.value)
-            }
-            error={registerForm.errors.email && "Invalid email"}
+            onChange={(event) => {
+              if (authType == AuthTypeEnum.LOGIN) {
+                loginForm.setFieldValue("email", event.currentTarget.value);
+              } else {
+                registerForm.setFieldValue("email", event.currentTarget.value);
+              }
+            }}
+            error={registerForm.errors.email}
             radius="md"
           />
 
@@ -162,13 +208,17 @@ export function AuthenticationForm(props: PaperProps) {
             label="Password"
             placeholder="Your password"
             value={registerForm.values.password}
-            onChange={(event) =>
-              loginForm.setFieldValue("password", event.currentTarget.value)
-            }
-            error={
-              registerForm.errors.password &&
-              "Password should include at least 6 characters"
-            }
+            onChange={(event) => {
+              if (authType == AuthTypeEnum.LOGIN) {
+                loginForm.setFieldValue("password", event.currentTarget.value);
+              } else {
+                registerForm.setFieldValue(
+                  "password",
+                  event.currentTarget.value
+                );
+              }
+            }}
+            error={registerForm.errors.password}
             radius="md"
           />
 

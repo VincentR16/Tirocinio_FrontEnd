@@ -7,7 +7,7 @@ export type RegisterRequest = {
   password: string;
   codiceFiscale?: string;     
   gender: string;
-  birthDate: Date | null;          
+  birthDate: string;          
   phone: string;
   role: RoleType;             
 };
