@@ -21,19 +21,20 @@ import type { PaperProps } from "@mantine/core";
 import { GoogleButton } from "./GoogleButton";
 import { AuthTypeEnum } from "../types/Auth.type";
 import { useState } from "react";
-import { useWelcomeContext } from "../customHook/WelcomeContext";
-import { useLoginForm } from "../customHook/form/UseLoginForm";
-import { useRegisterForm } from "../customHook/form/UseRegisterForm";
+import { useWelcomeContext } from "../Hook/WelcomeContext";
+import { useLoginForm } from "../Hook/form/UseLoginForm";
+import { useRegisterForm } from "../Hook/form/UseRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
 import { loginApi } from "../api/LoginApi";
 import { useNavigate } from "react-router-dom";
+import { registerApi } from "../api/RegisterApi";
 
 export function AuthenticationForm(props: PaperProps) {
   const { authType, setAuthType } = useWelcomeContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (value: string) => {
     setUserType(value as "Yes" | "No");
@@ -64,15 +65,16 @@ export function AuthenticationForm(props: PaperProps) {
                 try {
                   const res = await loginApi(values);
                   console.log("login success", res);
-                  navigate("/home")
+                  navigate("/home");
                 } catch (err) {
                   console.log("error", err);
                 }
               })
             : registerForm.onSubmit(async (values) => {
                 try {
-                  const res = await loginApi(values); //todo fare api register 
+                  const res = await registerApi(values); //todo fare api register
                   console.log("register success", res);
+                  navigate("/home");
                 } catch (err) {
                   console.log("error", err);
                 }
@@ -153,7 +155,7 @@ export function AuthenticationForm(props: PaperProps) {
                 mt="md"
                 label="Phone"
                 component={IMaskInput}
-                mask="+00 000 000-0000"
+                mask="+39 000 000-0000"
                 placeholder="Your phone"
                 value={registerForm.values.phone}
                 onAccept={(value) =>
@@ -169,14 +171,14 @@ export function AuthenticationForm(props: PaperProps) {
                   placeholder="Your SSN"
                   required
                   maxLength={16}
-                  value={registerForm.values.codiceFiscale}
+                  value={registerForm.values.ssn}
                   onChange={(event) =>
                     registerForm.setFieldValue(
-                      "codiceFiscale",
+                      "ssn",
                       event.currentTarget.value.toUpperCase()
                     )
                   }
-                  error={registerForm.errors.codiceFiscale}
+                  error={registerForm.errors.ssn}
                 />
               )}
               {authType != AuthTypeEnum.REGISTER_PATIENT && (
@@ -185,6 +187,13 @@ export function AuthenticationForm(props: PaperProps) {
                   label="Ospedal"
                   placeholder="Your Ospedal Name"
                   required
+                  value={registerForm.values.ospidal}
+                  onChange={(event) =>
+                    registerForm.setFieldValue(
+                      "ospidal",
+                      event.currentTarget.value,
+                    )
+                  }
                 />
               )}
             </div>
@@ -193,7 +202,7 @@ export function AuthenticationForm(props: PaperProps) {
           <TextInput
             required
             label="Email"
-            placeholder="hello@mantine.dev"
+            placeholder="hello@MedTrust.net"
             value={
               authType === AuthTypeEnum.LOGIN
                 ? loginForm.values.email

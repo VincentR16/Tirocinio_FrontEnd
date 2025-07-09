@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Shield } from "lucide-react";
-import { useScrollContext } from "../customHook/ScrollContext";
+import { useScrollContext } from "../Hook/ScrollContext";
 import "./style/Navbar.css";
-import { useWelcomeContext } from "../customHook/WelcomeContext";
+import { useWelcomeContext } from "../Hook/WelcomeContext";
 import { AuthTypeEnum } from "../types/Auth.type";
 
 export default function Navbar() {

@@ -9,11 +9,12 @@ export function useRegisterForm() {
       surname: "",
       email: "",
       password: "",
-      codiceFiscale: "",
+      ssn: "",
       gender: "",
       birthDate: "",
       role: RoleTypeEnum.PATIENT,
       phone: "",
+      ospidal: ""
     },
 
     validate: {
@@ -36,7 +37,7 @@ export function useRegisterForm() {
           ? "La password deve contenere almeno un numero"
           : null,
 
-      codiceFiscale: (val) =>
+      ssn: (val) =>
         !val || val === "" || /^[A-Z0-9]{16}$/.test(val)
           ? null
           : "Codice fiscale non valido (16 caratteri alfanumerici)",

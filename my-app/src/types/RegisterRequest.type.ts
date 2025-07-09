@@ -5,9 +5,10 @@ export type RegisterRequest = {
   surname: string;
   email: string;
   password: string;
-  codiceFiscale?: string;     
+  ssn?: string;     
   gender: string;
   birthDate: string;          
   phone: string;
-  role: RoleType;             
+  role: RoleType;   
+  ospidal?: string;          
 };
