@@ -1,4 +1,4 @@
-import "./css/FlipCard.css";
+import "./style/FlipCard.css";
 import ButtonCard from "./ButtonCard";
 import React, { useState } from "react";
 

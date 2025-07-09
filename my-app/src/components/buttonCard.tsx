@@ -1,4 +1,4 @@
-import "./css/ButtonCard.css"
+import "./style/ButtonCard.css"
 
 type ButtonCardProps = {
   content: string;

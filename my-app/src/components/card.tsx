@@ -1,4 +1,4 @@
-import "./css/Card.css";
+import "./style/Card.css";
 import logoTeam from "../assets/logoTeam.png";
 import { Globe } from "lucide-react";
 import { Map } from "lucide-react";

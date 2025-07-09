@@ -1,7 +1,7 @@
 import "./style/Welcome.css";
 import Card from "../../components/Card";
 import BlurText from "../../components/BlurText";
-import NavBar from "../../components/NavBar";
+import NavBar from "../../components/Navbar";
 import FlipCard from "../../components/FlipCard";
 import GradientText from "../../components/GradientText";
 import { AuthenticationForm } from "../../components/Login";
@@ -10,8 +10,10 @@ import { useScrollContext } from "../../customHook/ScrollContext";
 import ReactLogo from "../../assets/react.svg";
 import { Flex } from "@mantine/core";
 
+
 export default function Welcome() {
   const { aboutRef, loginRef } = useScrollContext();
+ 
 
   return (
     <div ref={aboutRef} className="background">

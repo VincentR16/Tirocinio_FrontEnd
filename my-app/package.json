@@ -16,6 +16,7 @@
     "@mantine/hooks": "^8.1.2",
     "@mantine/notifications": "^8.1.2",
     "@reduxjs/toolkit": "^2.8.2",
+    "@tabler/icons-react": "^3.34.0",
     "axios": "^1.10.0",
     "framer-motion": "^12.20.1",
     "lucide-react": "^0.525.0",
