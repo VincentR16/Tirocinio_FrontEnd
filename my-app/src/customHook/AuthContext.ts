@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { RoleType } from "../types/Role.types";
+import type { RoleType } from "../types/Role.type";
 
 type AuthContextType = {
   id: number;

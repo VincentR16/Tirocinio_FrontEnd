@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
-import { RoleTypeEnum, type RoleType } from "../types/Role.types";
+import { RoleTypeEnum, type RoleType } from "../types/Role.type";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [email,setEmail] = useState("");

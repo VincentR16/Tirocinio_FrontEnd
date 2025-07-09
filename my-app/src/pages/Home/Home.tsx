@@ -1,10 +1,10 @@
 import "./style/Home.css";
-import Card from "../../components/card";
-import BlurText from "../../components/blurText";
-import NavBar from "../../components/navBar";
-import FlipCard from "../../components/flipCard";
+import Card from "../../components/Card";
+import BlurText from "../../components/BlurText";
+import NavBar from "../../components/NavBar";
+import FlipCard from "../../components/FlipCard";
 import GradientText from "../../components/GradientText";
-import { AuthenticationForm } from "../../components/login";
+import { AuthenticationForm } from "../../components/Login";
 import { Briefcase, FileArchive, Lock } from "lucide-react";
 import { useScrollContext } from "../../customHook/ScrollContext";
 import ReactLogo from "../../assets/react.svg";

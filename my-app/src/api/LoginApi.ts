@@ -1,5 +1,5 @@
-import type { LoginRequest } from "../types/LoginRequest.types";
-import axios from "axios"
+import type { LoginRequest } from "../types/LoginRequest.type";
+import axios from "../axios"
 
 export function loginApi(data: LoginRequest){
     const response = axios.post("",data);

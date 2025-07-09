@@ -3,7 +3,7 @@ import { Shield } from "lucide-react";
 import { useScrollContext } from "../customHook/ScrollContext";
 import "./css/NavBar.css";
 import { useHomeContext } from "../customHook/HomeContext";
-import { AuthTypeEnum } from "../types/Auth.types";
+import { AuthTypeEnum } from "../types/Auth.type";
 
 export default function Navbar() {
   const { scrollToAbout, scrollToLogin } = useScrollContext();

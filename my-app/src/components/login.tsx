@@ -18,16 +18,19 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { DatePickerInput } from "@mantine/dates";
 import type { PaperProps } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { GoogleButton } from "./GoogleButton";
-import { AuthTypeEnum } from "../types/Auth.types";
+import { AuthTypeEnum } from "../types/Auth.type";
 import { useState } from "react";
 import { useHomeContext } from "../customHook/HomeContext";
+import { useLoginForm } from "../customHook/form/UseLoginForm";
+import { useRegisterForm } from "../customHook/form/UseRegisterForm";
 
 export function AuthenticationForm(props: PaperProps) {
   
   const {authType, setAuthType} = useHomeContext()
   const [userType, setUserType] = useState<"Yes" | "No">("No");
+  const loginForm = useLoginForm();
+  const registerForm = useRegisterForm();
 
   const handleChange = (value: string) => {
     setUserType(value as "Yes" | "No");
@@ -39,26 +42,7 @@ export function AuthenticationForm(props: PaperProps) {
     }
   };
 
-  const form = useForm({
-    initialValues: {
-      email: "",
-      name: "",
-      surname: "",
-      password: "",
-      codiceFiscale: "",
-      terms: true,
-    },
 
-    validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
-      codiceFiscale: (value) =>
-        /^[A-Z0-9]{16}$/.test(value) ? null : "Codice fiscale non valido",
-    },
-  });
   return (
     <Paper radius="md" p="lg" withBorder {...props}>
       <Group grow mb="md" mt="md" display={Flex} justify="center">
@@ -69,7 +53,7 @@ export function AuthenticationForm(props: PaperProps) {
 
       <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => {})}>
+      <form onSubmit={registerForm.onSubmit(() => {})}>
         <Stack>
           {authType !== AuthTypeEnum.LOGIN && (
             <div>
@@ -90,9 +74,9 @@ export function AuthenticationForm(props: PaperProps) {
                 mt="md"
                 label="Name"
                 placeholder="Your name"
-                value={form.values.name}
+                value={registerForm.values.name}
                 onChange={(event) =>
-                  form.setFieldValue("name", event.currentTarget.value)
+                  registerForm.setFieldValue("name", event.currentTarget.value)
                 }
                 radius="md"
                 withAsterisk
@@ -102,9 +86,9 @@ export function AuthenticationForm(props: PaperProps) {
                 mt="md"
                 label="Surname"
                 placeholder="Your Surname"
-                value={form.values.name}
+                value={registerForm.values.name}
                 onChange={(event) =>
-                  form.setFieldValue("surname", event.currentTarget.value)
+                  registerForm.setFieldValue("surname", event.currentTarget.value)
                 }
                 radius="md"
                 withAsterisk
@@ -140,14 +124,14 @@ export function AuthenticationForm(props: PaperProps) {
                   placeholder="Your SSN"
                   required
                   maxLength={16}
-                  value={form.values.codiceFiscale}
+                  value={registerForm.values.codiceFiscale}
                   onChange={(event) =>
-                    form.setFieldValue(
+                    registerForm.setFieldValue(
                       "codiceFiscale",
                       event.currentTarget.value.toUpperCase()
                     )
                   }
-                  error={form.errors.codiceFiscale}
+                  error={registerForm.errors.codiceFiscale}
                 />
               )}
               {authType != AuthTypeEnum.REGISTER_PATIENT && (
@@ -165,11 +149,11 @@ export function AuthenticationForm(props: PaperProps) {
             required
             label="Email"
             placeholder="hello@mantine.dev"
-            value={form.values.email}
+            value={registerForm.values.email}
             onChange={(event) =>
-              form.setFieldValue("email", event.currentTarget.value)
+              loginForm.setFieldValue("email", event.currentTarget.value)
             }
-            error={form.errors.email && "Invalid email"}
+            error={registerForm.errors.email && "Invalid email"}
             radius="md"
           />
 
@@ -177,12 +161,12 @@ export function AuthenticationForm(props: PaperProps) {
             required
             label="Password"
             placeholder="Your password"
-            value={form.values.password}
+            value={registerForm.values.password}
             onChange={(event) =>
-              form.setFieldValue("password", event.currentTarget.value)
+              loginForm.setFieldValue("password", event.currentTarget.value)
             }
             error={
-              form.errors.password &&
+              registerForm.errors.password &&
               "Password should include at least 6 characters"
             }
             radius="md"
@@ -193,10 +177,7 @@ export function AuthenticationForm(props: PaperProps) {
               <Checkbox
                 mt="xl"
                 label="I accept terms and conditions"
-                checked={form.values.terms}
-                onChange={(event) =>
-                  form.setFieldValue("terms", event.currentTarget.checked)
-                }
+                checked={true}
               />
             </div>
           )}

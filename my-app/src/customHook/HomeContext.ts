@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { AuthType } from "../types/Auth.types";
+import type { AuthType } from "../types/Auth.type";
 
 type HomeContextType = {
   authType: AuthType;

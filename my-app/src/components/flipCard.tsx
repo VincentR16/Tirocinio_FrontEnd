@@ -1,5 +1,5 @@
 import "./css/FlipCard.css";
-import ButtonCard from "./buttonCard";
+import ButtonCard from "./ButtonCard";
 import React, { useState } from "react";
 
 type contentProps = {
