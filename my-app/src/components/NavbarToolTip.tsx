@@ -7,7 +7,7 @@ import {
   IconSettings,
   IconUser,
 } from '@tabler/icons-react';
-import { Center, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
+import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import { Shield } from "lucide-react";
 import classes from "./style/NavbarToolTip.module.css";
 
@@ -51,10 +51,10 @@ export function NavbarToolTip() {
   return (
     <nav className={classes.navbar}>
       <Center>
-        <Shield color='white'></Shield>
+        <Shield color='rgb(17, 25, 40)'></Shield>
       </Center>
       <Stack>
-        <Text c="white" mt='xs' size='xs' ff="Roboto">MedTrust</Text>
+        
       </Stack>
 
       <div className={classes.navbarMain}>
