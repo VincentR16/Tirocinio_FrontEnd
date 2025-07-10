@@ -1,5 +1,5 @@
 import "./style/Card.css";
-import logoTeam from "../assets/logoTeam.png";
+import logoTeam from "../../public/logoTeam.png";
 import { Globe } from "lucide-react";
 import { Map } from "lucide-react";
 import { Phone } from "lucide-react";
