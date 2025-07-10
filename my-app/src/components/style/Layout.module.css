@@ -1,0 +1,10 @@
+.title{
+    font-size: x-large;
+}
+
+.header
+{
+    align-items: center;
+    justify-items: start;
+    padding: 0;
+}

@@ -1,9 +1,10 @@
-import { NavbarToolTip } from "../../components/NavbarToolTip";
 
-export default function Home(){
-    return(
-        <main>
-            <NavbarToolTip></NavbarToolTip> 
-        </main>
-    )
+import Layout from "../../components/Layout";
+
+export default function Home() {
+  return (
+    <div>
+      <Layout />
+    </div>
+  );
 }

@@ -3,6 +3,7 @@ import { ScrollProvider } from "./Hook/ScrollProvider";
 import Welcome from "./pages/welcomePage/Welcome";
 import { Navigate } from "react-router-dom";
 import Home from "./pages/homePage/HomePage";
+import Profile from "./pages/profilePage/ProfilePage";
 
 export const routes = [
   {
@@ -21,6 +22,12 @@ export const routes = [
   },
   {
     path: "/home",
-    element: <Home></Home>
-  }
+    element: <Home></Home>,
+    children: [
+      {
+        path: "profile", 
+        element: <Profile />,
+      },
+    ],
+  },
 ];
