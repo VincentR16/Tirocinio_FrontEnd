@@ -40,7 +40,7 @@ const mockdata = [
   { icon: IconSettings, label: "Settings",path: "/home"},
 ];
 
-export function NavbarToolTip() {
+export function Sidebar() {
   const [active, setActive] = useState(2);
   const navigate = useNavigate()
 

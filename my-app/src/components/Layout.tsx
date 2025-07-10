@@ -2,7 +2,7 @@ import { AppShell, Center, Flex } from "@mantine/core";
 import { Shield } from "lucide-react";
 import { Burger } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { NavbarToolTip } from "./NavbarToolTip";
+import { Sidebar } from "./Sidebar";
 import classes from "./style/Layout.module.css";
 import { Outlet } from "react-router-dom";
 
@@ -45,7 +45,7 @@ export default function Layout() {
         </Flex>
       </AppShell.Header>
       <AppShell.Navbar>
-        <NavbarToolTip></NavbarToolTip>
+        <Sidebar></Sidebar>
       </AppShell.Navbar>
       <AppShell.Main><Outlet/></AppShell.Main>S
     </AppShell>
