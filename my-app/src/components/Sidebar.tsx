@@ -32,6 +32,10 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
   );
 }
 
+type SidebarProps = {
+  onLogout: () => void;
+};
+
 const mockdata = [
   { icon: IconHome2, label: "Home",path: "/home"},
   { icon: IconGauge, label: "Dashboard",path: "/home"},
@@ -40,8 +44,8 @@ const mockdata = [
   { icon: IconSettings, label: "Settings",path: "/home"},
 ];
 
-export function Sidebar() {
-  const [active, setActive] = useState(2);
+export function Sidebar({onLogout}:SidebarProps) {
+  const [active, setActive] = useState(0);
   const navigate = useNavigate()
 
   const links = mockdata.map((link, index) => (
@@ -63,7 +67,7 @@ export function Sidebar() {
           {links}
         </Stack>
         <Stack justify="center" mt={375} gap={0}>
-          <NavbarLink icon={IconLogout} label="Logout" />
+          <NavbarLink onClick={onLogout} icon={IconLogout} label="Logout" />
         </Stack>
       </div>
     </nav>

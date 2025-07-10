@@ -1,18 +1,32 @@
-import { AppShell, Center, Flex } from "@mantine/core";
+import { AppShell, Button, Center, Flex, Group, Modal } from "@mantine/core";
 import { Shield } from "lucide-react";
 import { Burger } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Sidebar } from "./Sidebar";
 import classes from "./style/Layout.module.css";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { logoutApi } from "../api/LogoutApi";
 
 export default function Layout() {
   const [opened, { toggle }] = useDisclosure();
+  const [openedModal, { open, close }] = useDisclosure(false);
+  const navigate = useNavigate();
+  const onLogout = () => {
+    close();
+    try {
+      logoutApi();
+      console.log("logout success");
+    } catch (err) {
+      console.log("Error", err);
+    }
+
+    navigate("/welcome");
+  };
 
   return (
     <AppShell
       padding="lg"
-      header={{ height: 60}}
+      header={{ height: 60 }}
       navbar={{
         width: 80,
         breakpoint: "sm",
@@ -45,9 +59,27 @@ export default function Layout() {
         </Flex>
       </AppShell.Header>
       <AppShell.Navbar>
-        <Sidebar></Sidebar>
+        <Sidebar onLogout={open}></Sidebar>
       </AppShell.Navbar>
-      <AppShell.Main><Outlet/></AppShell.Main>S
+      <AppShell.Main>
+        <Outlet />
+      </AppShell.Main>
+      <Modal
+        opened={openedModal}
+        onClose={close}
+        title="Logout"
+        withinPortal={false}
+      >
+        Are you sure you want to logout? This action cannot be undone.
+        <Group mt={10}>
+          <Button variant="default" onClick={onLogout}>
+            Confirm
+          </Button>
+          <Button color="red" onClick={close}>
+            Cancell
+          </Button>
+        </Group>
+      </Modal>
     </AppShell>
   );
 }
