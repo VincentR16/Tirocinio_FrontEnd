@@ -5,6 +5,7 @@ import { Navigate } from "react-router-dom";
 import RootLayout from "./pages/rootLayout/RootLayout.page";
 import Profile from "./pages/profile/Profile.page";
 import Home from "./pages/home/Home.page";
+import ProtectedRoot from "./utils/ProtectedRoot";
 
 export const routes = [
   {
@@ -16,21 +17,25 @@ export const routes = [
     element: (
       <WelcomeProvider>
         <ScrollProvider>
-          <Welcome/>
+          <Welcome />
         </ScrollProvider>
       </WelcomeProvider>
     ),
   },
   {
     path: "/home",
-    element: <RootLayout/>,
+    element: (
+      <ProtectedRoot>
+        <RootLayout />
+      </ProtectedRoot>
+    ),
     children: [
       {
-        path: "", 
-        element: <Home/>,
+        path: "",
+        element: <Home />,
       },
       {
-        path: "profile", 
+        path: "profile",
         element: <Profile />,
       },
     ],

@@ -4,24 +4,13 @@ import { Burger } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Sidebar } from "./Sidebar";
 import classes from "./style/Layout.module.css";
-import { Outlet, useNavigate } from "react-router-dom";
-import { logoutApi } from "../api/LogoutApi";
+import { Outlet } from "react-router-dom";
+import useLogout from "../Hook/useLogout";
 
 export default function Layout() {
   const [opened, { toggle }] = useDisclosure();
   const [openedModal, { open, close }] = useDisclosure(false);
-  const navigate = useNavigate();
-  const onLogout = () => {
-    close();
-    try {
-      logoutApi();
-      console.log("logout success");
-    } catch (err) {
-      console.log("Error", err);
-    }
-
-    navigate("/welcome");
-  };
+  const logout = useLogout();
 
   return (
     <AppShell
@@ -72,7 +61,13 @@ export default function Layout() {
       >
         Are you sure you want to logout? This action cannot be undone.
         <Group mt={10}>
-          <Button variant="default" onClick={onLogout}>
+          <Button
+            variant="default"
+            onClick={() => {
+              logout();
+              close();
+            }}
+          >
             Confirm
           </Button>
           <Button color="red" onClick={close}>

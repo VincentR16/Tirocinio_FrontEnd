@@ -25,9 +25,9 @@ import { useWelcomeContext } from "../Hook/WelcomeContext";
 import { useLoginForm } from "../Hook/form/UseLoginForm";
 import { useRegisterForm } from "../Hook/form/UseRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
-import { loginApi } from "../api/LoginApi";
 import { useNavigate } from "react-router-dom";
 import { registerApi } from "../api/RegisterApi";
+import useLogin from "../Hook/useLogine";
 
 export function AuthenticationForm(props: PaperProps) {
   const { authType, setAuthType } = useWelcomeContext();
@@ -35,6 +35,7 @@ export function AuthenticationForm(props: PaperProps) {
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
   const navigate = useNavigate();
+  const login = useLogin();
 
   const handleChange = (value: string) => {
     setUserType(value as "Yes" | "No");
@@ -62,17 +63,11 @@ export function AuthenticationForm(props: PaperProps) {
         onSubmit={
           authType === AuthTypeEnum.LOGIN
             ? loginForm.onSubmit(async (values) => {
-                try {
-                  const res = await loginApi(values);
-                  console.log("login success", res);
-                  navigate("/home");
-                } catch (err) {
-                  console.log("error", err);
-                }
+                login(values)
               })
             : registerForm.onSubmit(async (values) => {
                 try {
-                  const res = await registerApi(values); //todo fare api register
+                  const res = await registerApi(values); 
                   console.log("register success", res);
                   navigate("/home");
                 } catch (err) {

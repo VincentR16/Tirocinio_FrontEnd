@@ -9,16 +9,14 @@ const Component = () => {
   return element;
 };
 
-
-
 export default function App() {
   return (
     <MantineProvider>
-        <Router>
-          <AuthProvider>
+      <Router>
+        <AuthProvider>
           <Component />
-          </AuthProvider>
-        </Router>
+        </AuthProvider>
+      </Router>
     </MantineProvider>
   );
 }

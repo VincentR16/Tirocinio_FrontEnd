@@ -3,9 +3,11 @@ import type { RoleType } from "../types/Role.type";
 
 type AuthContextType = {
   id: string;
-  setId: (id:string) => void;
+  setId: (id: string) => void;
   role: RoleType;
   setRole: (role: RoleType) => void;
+  isAuthenticated: boolean;
+  setIsAuthenticated: (flag: boolean) => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
