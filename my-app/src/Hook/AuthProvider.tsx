@@ -1,13 +1,12 @@
 import { useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
-import { RoleTypeEnum, type RoleType } from "../types/Role.type";
+import { type RoleType } from "../types/Role.type";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [email,setEmail] = useState("");
-    const [id,setId] = useState(0);
-    const [role,setRole] = useState<RoleType>(RoleTypeEnum.PATIENT)
+    const [id,setId] = useState("");
+    const [role,setRole] = useState<RoleType>(undefined)
 
   return (
-    <AuthContext.Provider value={{id,email,role,setId,setEmail,setRole}}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{id,role,setId,setRole}}>{children}</AuthContext.Provider>
   );
 }

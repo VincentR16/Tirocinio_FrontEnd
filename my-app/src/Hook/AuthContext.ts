@@ -2,10 +2,8 @@ import { createContext, useContext } from "react";
 import type { RoleType } from "../types/Role.type";
 
 type AuthContextType = {
-  id: number;
-  setId: (id:number) => void;
-  email: string;
-  setEmail: (email:string) => void;
+  id: string;
+  setId: (id:string) => void;
   role: RoleType;
   setRole: (role: RoleType) => void;
 };
@@ -21,6 +19,3 @@ export function useAuthContext() {
 
   return context;
 }
-
-
-//todo da finire di implementare con le funzioni di getme login e logout
