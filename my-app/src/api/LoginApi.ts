@@ -1,9 +1,9 @@
 import type { LoginRequest } from "../types/LoginRequest.type";
-import axios from "./Axios";
+import api from "./axios";
 
 
 export async function loginApi(data: LoginRequest) {
-  const response = await axios.post("/auth/login", data);
+  const response = await api.post("/auth/login", data);
   return response;
 }
     

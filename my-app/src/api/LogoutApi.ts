@@ -1,6 +1,6 @@
-import axios from "./Axios";
+import api from "./axios";
 
 export async function logoutApi() {
-  const response = await axios.post("/auth/logout");
+  const response = await api.post("/auth/logout");
   return response;
 }

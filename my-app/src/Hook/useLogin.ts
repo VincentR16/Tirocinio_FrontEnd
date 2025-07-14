@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { loginApi } from "../api/LoginApi";
+import { loginApi } from "../api/loginApi";
 import type { LoginRequest } from "../types/LoginRequest.type";
 import { useAuthContext } from "./AuthContext";
-import { getMeApi } from "../api/GetMeApi";
+import { getMeApi } from "../api/getMeApi";
 
 export default function useLogin() {
   const { setIsAuthenticated,setId, setRole } = useAuthContext();
@@ -20,7 +20,7 @@ export default function useLogin() {
       console.log("login success", res);
       navigate("/home");
     } catch (err) {
-      console.log("error", err);
+      console.error("Login Error", err);
     }
   };
 }

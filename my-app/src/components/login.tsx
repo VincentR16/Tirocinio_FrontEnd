@@ -25,16 +25,15 @@ import { useWelcomeContext } from "../Hook/WelcomeContext";
 import { useLoginForm } from "../Hook/form/UseLoginForm";
 import { useRegisterForm } from "../Hook/form/UseRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
-import { useNavigate } from "react-router-dom";
-import { registerApi } from "../api/RegisterApi";
-import useLogin from "../Hook/useLogine";
+import useLogin from "../Hook/useLogin";
+import useRegister from "../Hook/useRegister";
 
 export function AuthenticationForm(props: PaperProps) {
   const { authType, setAuthType } = useWelcomeContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
-  const navigate = useNavigate();
+  const register = useRegister();
   const login = useLogin();
 
   const handleChange = (value: string) => {
@@ -63,16 +62,10 @@ export function AuthenticationForm(props: PaperProps) {
         onSubmit={
           authType === AuthTypeEnum.LOGIN
             ? loginForm.onSubmit(async (values) => {
-                login(values)
+                login(values);
               })
             : registerForm.onSubmit(async (values) => {
-                try {
-                  const res = await registerApi(values); 
-                  console.log("register success", res);
-                  navigate("/home");
-                } catch (err) {
-                  console.log("error", err);
-                }
+                register(values);
               })
         }
       >
@@ -186,7 +179,7 @@ export function AuthenticationForm(props: PaperProps) {
                   onChange={(event) =>
                     registerForm.setFieldValue(
                       "ospidal",
-                      event.currentTarget.value,
+                      event.currentTarget.value
                     )
                   }
                 />

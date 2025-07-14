@@ -1,6 +1,6 @@
 import {  useNavigate } from "react-router-dom";
 import { useAuthContext } from "./AuthContext";
-import { logoutApi } from "../api/LogoutApi";
+import { logoutApi } from "../api/logoutApi";
 
 export default function useLogout() {
   const { setIsAuthenticated, setId, setRole } = useAuthContext();
@@ -11,7 +11,7 @@ export default function useLogout() {
       logoutApi();
       console.log("logout success");
     } catch (err) {
-      console.log("Error", err);
+      console.error("Logout Error", err);
     }
 
     setIsAuthenticated(false);

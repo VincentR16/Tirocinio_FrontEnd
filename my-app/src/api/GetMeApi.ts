@@ -1,7 +1,7 @@
 import type { User } from "../types/User.type"
-import axios from "./Axios"
+import api from "./axios"
 
 export async function getMeApi(): Promise<User>{
-    const response = await axios.get<User>("user/me")
+    const response = await api.get<User>("user/me")
     return response.data;
 }
