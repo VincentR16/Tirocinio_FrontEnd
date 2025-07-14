@@ -20,10 +20,11 @@ api.interceptors.response.use(
             withCredentials: true,
           }
         );
+        console.log("AccessToken has been refreshed!")
         return api(originalRequest);
       } catch (err) {
         console.error("Refresh token failed:", err);
-        window.location.href = "/login";
+        //window.location.href = "/welcome";
       }
     }
     return Promise.reject(error);

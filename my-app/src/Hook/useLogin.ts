@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../api/loginApi";
 import type { LoginRequest } from "../types/LoginRequest.type";
-import { useAuthContext } from "./AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 import { getMeApi } from "../api/getMeApi";
 
 export default function useLogin() {
@@ -11,7 +11,7 @@ export default function useLogin() {
   return async (request: LoginRequest) => {
     try {
       const res = await loginApi(request);
-
+      
       const user = await getMeApi();
       setId(user.id);
       setRole(user.role);

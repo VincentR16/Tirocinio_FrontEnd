@@ -4,4 +4,5 @@ import api from "./axios"
 export async function getMeApi(): Promise<User>{
     const response = await api.get<User>("user/me")
     return response.data;
+    //todo gestire tutti i dati dell utente
 }

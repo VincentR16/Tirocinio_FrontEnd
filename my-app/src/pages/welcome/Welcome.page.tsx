@@ -6,7 +6,7 @@ import FlipCard from "../../components/FlipCard";
 import GradientText from "../../components/GradientText";
 import { AuthenticationForm } from "../../components/Login";
 import { Briefcase, FileArchive, Lock } from "lucide-react";
-import { useScrollContext } from "../../Hook/ScrollContext";
+import { useScrollContext } from "../../context/ScrollContext";
 import ReactLogo from "/react.svg?url";
 import { Flex } from "@mantine/core";
 

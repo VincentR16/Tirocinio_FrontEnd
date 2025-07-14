@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import { type RoleType } from "../types/Role.type";
 
 export function AuthProvider({ children }: { children: ReactNode }) {

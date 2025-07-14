@@ -5,7 +5,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { Sidebar } from "./Sidebar";
 import classes from "./style/Layout.module.css";
 import { Outlet } from "react-router-dom";
-import useLogout from "../Hook/useLogout";
+import useLogout from "../hook/useLogout";
 
 export default function Layout() {
   const [opened, { toggle }] = useDisclosure();

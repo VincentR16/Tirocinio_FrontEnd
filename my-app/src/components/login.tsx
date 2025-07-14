@@ -21,12 +21,12 @@ import type { PaperProps } from "@mantine/core";
 import { GoogleButton } from "./GoogleButton";
 import { AuthTypeEnum } from "../types/Auth.type";
 import { useState } from "react";
-import { useWelcomeContext } from "../Hook/WelcomeContext";
-import { useLoginForm } from "../Hook/form/UseLoginForm";
-import { useRegisterForm } from "../Hook/form/UseRegisterForm";
+import { useWelcomeContext } from "../context/WelcomeContext";
+import { useLoginForm } from "../hook/form/useLoginForm";
+import { useRegisterForm } from "../hook/form/useRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
-import useLogin from "../Hook/useLogin";
-import useRegister from "../Hook/useRegister";
+import useLogin from "../hook/useLogin";
+import useRegister from "../hook/useRegister";
 
 export function AuthenticationForm(props: PaperProps) {
   const { authType, setAuthType } = useWelcomeContext();

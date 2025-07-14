@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useAuthContext } from "../Hook/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 

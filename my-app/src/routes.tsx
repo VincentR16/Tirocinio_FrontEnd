@@ -1,5 +1,5 @@
-import { WelcomeProvider } from "./Hook/WelcomeProvider";
-import { ScrollProvider } from "./Hook/ScrollProvider";
+import { WelcomeProvider } from "./hook/WelcomeProvider";
+import { ScrollProvider } from "./hook/ScrollProvider";
 import Welcome from "./pages/welcome/Welcome.page";
 import { Navigate } from "react-router-dom";
 import RootLayout from "./pages/rootLayout/RootLayout.page";

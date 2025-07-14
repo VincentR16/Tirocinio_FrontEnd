@@ -1,4 +1,4 @@
-import { ScrollContext } from "./ScrollContext";
+import { ScrollContext } from "../context/ScrollContext";
 import { type ReactNode, useRef } from "react";
 
 export function ScrollProvider({ children }: { children: ReactNode }) {

@@ -1,5 +1,5 @@
 import {  useNavigate } from "react-router-dom";
-import { useAuthContext } from "./AuthContext";
+import { useAuthContext } from "../context/AuthContext";
 import { logoutApi } from "../api/logoutApi";
 
 export default function useLogout() {
