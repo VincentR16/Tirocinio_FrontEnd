@@ -8,6 +8,8 @@ type AuthContextType = {
   setRole: (role: RoleType) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (flag: boolean) => void;
+  isLoading: boolean; 
+  setLoading: (flag: boolean) => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(

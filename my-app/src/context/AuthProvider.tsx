@@ -6,10 +6,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [id, setId] = useState<string>("");
   const [role, setRole] = useState<RoleType>(undefined);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(true)
 
   return (
     <AuthContext.Provider
-      value={{ id, role, isAuthenticated, setIsAuthenticated, setId, setRole }}
+      value={{ id, role, isAuthenticated,isLoading,setLoading, setIsAuthenticated, setId, setRole }}
     >
       {children}
     </AuthContext.Provider>

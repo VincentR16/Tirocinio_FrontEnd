@@ -1,16 +1,16 @@
-import { WelcomeProvider } from "./hook/WelcomeProvider";
-import { ScrollProvider } from "./hook/ScrollProvider";
+import { WelcomeProvider } from "./context/WelcomeProvider";
+import { ScrollProvider } from "./context/ScrollProvider";
 import Welcome from "./pages/welcome/Welcome.page";
-import { Navigate } from "react-router-dom";
 import RootLayout from "./pages/rootLayout/RootLayout.page";
 import Profile from "./pages/profile/Profile.page";
 import Home from "./pages/home/Home.page";
 import ProtectedRoot from "./utils/ProtectedRoot";
+import InitialRedirect from "./utils/InitialRedirect";
 
 export const routes = [
   {
     path: "/",
-    element: <Navigate to="/welcome" />,
+    element: <InitialRedirect/>,
   },
   {
     path: "/welcome",
