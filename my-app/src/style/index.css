@@ -16,7 +16,7 @@ body {
   padding: 0rem 0rem;
 }
 main{
-  min-height: 100vh;
+  max-height: 100vh;
 }
 
 

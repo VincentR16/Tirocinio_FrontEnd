@@ -7,9 +7,9 @@ export type User = {
   name: string;
   surname: string;
   email: string;
-  birthDate: string | null;
-  gender: string | null;
-  phone: string | null;
+  birthDate: string;
+  gender: string;
+  phone: string;
   role: RoleType;
   patient?: Patient;
   doctor?: Doctor;

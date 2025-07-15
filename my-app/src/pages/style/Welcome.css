@@ -24,6 +24,10 @@ main .custom-hr{
  border-color: rgba(0, 0, 0, 0.1);
 }
 
+main{
+  max-height: 200vh;
+}
+
 
 .title-container {
   display: flex;

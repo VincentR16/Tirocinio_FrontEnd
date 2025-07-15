@@ -3,7 +3,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { getMeApi } from "../api/getMeApi";
 
 export default function usePersistentLogin() {
-  const { setId, setIsAuthenticated, setRole, setLoading } = useAuthContext();
+  const {setUser, setIsAuthenticated, setLoading } = useAuthContext();
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -15,8 +15,7 @@ export default function usePersistentLogin() {
         const user = await getMeApi();
 
         //setto i dati recuperati
-        setId(user.id);
-        setRole(user.role);
+        setUser(user)
         setIsAuthenticated(true);
       } catch {
         setIsAuthenticated(false);
@@ -25,5 +24,5 @@ export default function usePersistentLogin() {
       }
     };
     checkLogin();
-  }, [setId, setIsAuthenticated, setRole, setLoading]);
+  }, [setIsAuthenticated, setLoading, setUser]);
 }

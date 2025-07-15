@@ -3,7 +3,7 @@ import { useAuthContext } from "../context/AuthContext";
 import { logoutApi } from "../api/logoutApi";
 
 export default function useLogout() {
-  const { setIsAuthenticated, setId, setRole } = useAuthContext();
+  const { setIsAuthenticated,setUser } = useAuthContext();
   const navigate = useNavigate();
 
   return async () => {
@@ -15,9 +15,8 @@ export default function useLogout() {
     }
 
     setIsAuthenticated(false);
-    setId("");
-    setRole(undefined);
-
+    setUser(undefined)
+   
     navigate("/welcome");
   };
 }

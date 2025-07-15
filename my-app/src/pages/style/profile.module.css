@@ -1,0 +1,38 @@
+.container {
+  max-width: 100%;
+  padding: 1rem 0rem;
+}
+
+.avatar {
+  height: 20vh;
+  width: 20vh;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.profileName{
+  font-size: 32px;
+  font-weight:500;
+}
+
+.roleText{
+  color: rgb(29, 79, 217);
+  font-size: large;
+  font-weight: bold;
+}
+
+.avatar:hover {
+  animation: levitate 2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes levitate {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

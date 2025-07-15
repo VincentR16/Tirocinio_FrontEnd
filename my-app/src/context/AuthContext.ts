@@ -1,11 +1,9 @@
 import { createContext, useContext } from "react";
-import type { RoleType } from "../types/Role.type";
+import type { User } from "../types/User.type";
 
 type AuthContextType = {
-  id: string;
-  setId: (id: string) => void;
-  role: RoleType;
-  setRole: (role: RoleType) => void;
+  user: User | undefined;
+  setUser: (obj: User| undefined) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (flag: boolean) => void;
   isLoading: boolean; 

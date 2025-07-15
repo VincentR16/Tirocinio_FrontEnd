@@ -5,18 +5,17 @@ import { useAuthContext } from "../context/AuthContext";
 import { getMeApi } from "../api/getMeApi";
 
 export default function useLogin() {
-  const { setIsAuthenticated,setId, setRole } = useAuthContext();
+  const { setIsAuthenticated, setUser } = useAuthContext();
   const navigate = useNavigate();
 
   return async (request: LoginRequest) => {
     try {
       const res = await loginApi(request);
-      
+
       const user = await getMeApi();
-      setId(user.id);
-      setRole(user.role);
+      setUser(user);
       setIsAuthenticated(true);
-      
+
       console.log("login success", res);
       navigate("/home");
     } catch (err) {

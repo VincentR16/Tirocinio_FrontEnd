@@ -1,16 +1,15 @@
 import { useState, type ReactNode } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { type RoleType } from "../types/Role.type";
+import type { User } from "../types/User.type";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [id, setId] = useState<string>("");
-  const [role, setRole] = useState<RoleType>(undefined);
+  const [user,setUser] = useState<User | undefined>()
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(true)
 
   return (
     <AuthContext.Provider
-      value={{ id, role, isAuthenticated,isLoading,setLoading, setIsAuthenticated, setId, setRole }}
+      value={{user,isAuthenticated,isLoading,setLoading, setIsAuthenticated,setUser}}
     >
       {children}
     </AuthContext.Provider>
