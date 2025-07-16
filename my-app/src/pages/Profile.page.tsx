@@ -18,7 +18,7 @@ import { useProfileForm } from "../hook/form/useProfileForm";
 import { useState } from "react";
 import { DatePickerInput } from "@mantine/dates";
 import { RoleTypeEnum } from "../types/Role.type";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { notifications } from "@mantine/notifications";
 import useUpdateUser from "../hook/useUpdateUser";
 
 export default function Profile() {
@@ -29,22 +29,16 @@ export default function Profile() {
 
   return (
     <main>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
-
       <Flex direction="row" justify="center" className={classes.container}>
-        <Paper className={classes.paper} w="100%" shadow="md" mt="lg" radius="md" withBorder p="lg">
+        <Paper
+          className={classes.paper}
+          w="100%"
+          shadow="md"
+          mt="lg"
+          radius="md"
+          withBorder
+          p="lg"
+        >
           <Flex mb="xl" direction="column" align="center" w="100%">
             <Avatar
               variant="light"
@@ -67,20 +61,22 @@ export default function Profile() {
             onSubmit={form.onSubmit((values) => {
               update(values);
               setIsDisabled(true);
-              toast("✅ Profile updated!", {
-                position: "bottom-right",
-                autoClose: 5500,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Bounce,
+              notifications.show({
+                mt:"md",
+                position:"top-right",   
+                title: "Success",
+                message: "Your profile has been updated",
+                autoClose: 2500,
+                color: "green",
+                style: {
+                  borderColor: "rgb(55, 177, 77)", 
+                  borderWidth: 0.5,
+                  borderStyle: "solid",
+                },
               });
-              
             })}
           >
+            
             <Flex direction="row" justify="center" gap="xl">
               <Flex mr="xl" direction="column" gap="md" w="35%">
                 <TextInput
