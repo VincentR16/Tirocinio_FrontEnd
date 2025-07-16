@@ -10,5 +10,6 @@ export type RegisterRequest = {
   birthDate: string;          
   phone: string;
   role: RoleType;   
+  location: string;
   ospidal?: string;          
 };

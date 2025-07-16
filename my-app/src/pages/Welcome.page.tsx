@@ -1,12 +1,12 @@
-import "../style/Welcome.css";
-import Card from "../../components/Card";
-import BlurText from "../../components/BlurText";
-import NavBar from "../../components/Navbar";
-import FlipCard from "../../components/FlipCard";
-import GradientText from "../../components/GradientText";
-import { AuthenticationForm } from "../../components/Login";
+import "./style/Welcome.css";
+import Card from "../components/Card";
+import BlurText from "../components/BlurText";
+import NavBar from "../components/Navbar";
+import FlipCard from "../components/FlipCard"
+import GradientText from "../components/GradientText";
+import { AuthenticationForm } from "../components/Login";
 import { Briefcase, FileArchive, Lock } from "lucide-react";
-import { useScrollContext } from "../../context/ScrollContext";
+import { useScrollContext } from "../context/ScrollContext";
 import ReactLogo from "/react.svg?url";
 import { Flex } from "@mantine/core";
 

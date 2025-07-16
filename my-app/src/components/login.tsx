@@ -2,8 +2,6 @@ import {
   Anchor,
   Button,
   Checkbox,
-  Divider,
-  Flex,
   Group,
   Paper,
   PasswordInput,
@@ -18,7 +16,6 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { DatePickerInput } from "@mantine/dates";
 import type { PaperProps } from "@mantine/core";
-import { GoogleButton } from "./GoogleButton";
 import { AuthTypeEnum } from "../types/Auth.type";
 import { useState } from "react";
 import { useWelcomeContext } from "../context/WelcomeContext";
@@ -50,13 +47,7 @@ export function AuthenticationForm(props: PaperProps) {
 
   return (
     <Paper radius="md" p="lg" withBorder {...props}>
-      <Group grow mb="md" mt="md" display={Flex} justify="center">
-        <GoogleButton radius="xl" style={{ maxWidth: 150 }}>
-          Google
-        </GoogleButton>
-      </Group>
-
-      <Divider label="Or continue with email" labelPosition="center" my="lg" />
+     
 
       <form
         onSubmit={
@@ -151,6 +142,12 @@ export function AuthenticationForm(props: PaperProps) {
                 }
                 error={registerForm.errors.phone}
                 withAsterisk
+              />
+              <TextInput
+                label="Location"
+                value={registerForm.values.location}
+                error={registerForm.errors.location}
+                {...registerForm.getInputProps("location")}
               />
               {authType != AuthTypeEnum.REGISTER_DOCTOR && (
                 <TextInput
@@ -261,7 +258,6 @@ export function AuthenticationForm(props: PaperProps) {
                   ? AuthTypeEnum.REGISTER_PATIENT
                   : AuthTypeEnum.LOGIN
               );
-              console.log("authtype:", authType);
             }}
             size="xs"
           >

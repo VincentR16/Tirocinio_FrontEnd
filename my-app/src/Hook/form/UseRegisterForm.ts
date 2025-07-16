@@ -14,7 +14,8 @@ export function useRegisterForm() {
       birthDate: "",
       role: RoleTypeEnum.PATIENT,
       phone: "",
-      ospidal: ""
+      ospidal: "",
+      location: "",
     },
 
     validate: {
@@ -37,15 +38,27 @@ export function useRegisterForm() {
           ? "La password deve contenere almeno un numero"
           : null,
 
-      ssn: (val) =>
-        !val || val === "" || /^[A-Z0-9]{16}$/.test(val)
+      ssn: (val, values) =>
+        values.role === RoleTypeEnum.PATIENT
+          ? val && /^[A-Z0-9]{16}$/.test(val)
+            ? null
+            : "Codice fiscale non valido (16 caratteri alfanumerici)"
+          : null,
+      location: (val) => (val ? null : "Location'name is required"),
+
+      gender: (val) =>
+        typeof val === "string" && val.trim().length > 0
           ? null
-          : "Codice fiscale non valido (16 caratteri alfanumerici)",
+          : "Seleziona il genere",
 
-      gender: (val) => (val.trim().length > 0 ? null : "Seleziona il genere"),
+      birthDate: (val) => (val ? null : "La data di nascita è obbligatoria"),
 
-      birthDate: (val) =>
-          val ? null : "La data di nascita è obbligatoria",
+      ospidal: (val, values) =>
+        values.role === RoleTypeEnum.DOCTOR
+          ? typeof val === "string" && val.trim().length > 0
+            ? null
+            : "Il nome dell'ospedale è obbligatorio"
+          : null,
 
       phone: (val) =>
         /^\+\d{2} \d{3} \d{3}-\d{4}$/.test(val)

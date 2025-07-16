@@ -20,9 +20,14 @@
   font-weight: bold;
 }
 
+
 .avatar:hover {
   animation: levitate 2s ease-in-out infinite;
   transform-origin: center;
+}
+
+.paper{
+  border-color: rgba(99, 139, 230, 0.0);
 }
 
 @keyframes levitate {

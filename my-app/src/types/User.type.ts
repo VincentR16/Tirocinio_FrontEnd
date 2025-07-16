@@ -7,6 +7,7 @@ export type User = {
   name: string;
   surname: string;
   email: string;
+  location: string;
   birthDate: string;
   gender: string;
   phone: string;
