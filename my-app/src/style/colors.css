@@ -1,0 +1,9 @@
+:root {
+  --color-primary: #3684ff;
+  --color-secondary: #ffffff;
+  --color-tertiary: #233047;
+  --color-quaternary: #101827;
+
+  --background-gradient: linear-gradient(to bottom right, #f8fafc, #eff6ff, #e0e7ff);
+  --background-solid: #e0e7ff; /* opzionale */
+}

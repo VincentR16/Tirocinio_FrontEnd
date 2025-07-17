@@ -10,6 +10,7 @@ import {
   Select,
   TextInput,
   Radio,
+  Divider,
 } from "@mantine/core";
 import { IMaskInput } from "react-imask";
 import "@mantine/core/styles.css";
@@ -24,6 +25,7 @@ import { useRegisterForm } from "../hook/form/useRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
 import useLogin from "../hook/useLogin";
 import useRegister from "../hook/useRegister";
+import GradientText from "./GradientText";
 
 export function AuthenticationForm(props: PaperProps) {
   const { authType, setAuthType } = useWelcomeContext();
@@ -46,9 +48,7 @@ export function AuthenticationForm(props: PaperProps) {
   };
 
   return (
-    <Paper radius="md" p="lg" withBorder {...props}>
-     
-
+    <Paper mt="xl" radius="md" p="lg" withBorder {...props}>
       <form
         onSubmit={
           authType === AuthTypeEnum.LOGIN
@@ -61,9 +61,17 @@ export function AuthenticationForm(props: PaperProps) {
         }
       >
         <Stack>
+          <GradientText
+            colors={["#2563eb, #0f172a,#2563eb,#0f172a"]}
+            animationSpeed={3}
+            className="custom-class"
+          >
+            Welcome to MedTrust
+          </GradientText>
+          <Divider></Divider>
           {authType !== AuthTypeEnum.LOGIN && (
             <div>
-              <Radio.Group
+              <Radio.Group 
                 name="User-type"
                 label="Are you a Doctor?"
                 withAsterisk
