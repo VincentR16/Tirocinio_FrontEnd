@@ -1,23 +1,19 @@
-import { useNavigate } from "react-router-dom";
 import { loginApi } from "../api/loginApi";
-import type { LoginRequest } from "../types/LoginRequest.type";
 import { useAuthContext } from "../context/AuthContext";
-import { getMeApi } from "../api/getMeApi";
+import type { LoginRequest } from "../types/LoginRequest.type";
 
 export default function useLogin() {
-  const { setIsAuthenticated, setUser } = useAuthContext();
-  const navigate = useNavigate();
+   const {setLoading, setUser} = useAuthContext();
 
   return async (request: LoginRequest) => {
     try {
+      setLoading(true);
       const res = await loginApi(request);
+      setLoading(false);
+      setUser(res);
 
-      const user = await getMeApi();
-      setUser(user);
-      setIsAuthenticated(true);
-
-      console.log("login success", res);
-      navigate("/home");
+      console.log("Login success", res);
+      return res;
     } catch (err) {
       console.error("Login Error", err);
     }

@@ -1,24 +1,21 @@
-import { useNavigate } from "react-router-dom";
 import { registerApi } from "../api/registerApi";
-import type { RegisterRequest } from "../types/RegisterRequest.type";
-import { getMeApi } from "../api/getMeApi";
 import { useAuthContext } from "../context/AuthContext";
+import type { RegisterRequest } from "../types/RegisterRequest.type";
+import type { RegisterResponse } from "../types/RegisterResponse";
 
+//setta lo user e restituisce il qrcode
 export default function useRegister() {
-  const { setUser, setIsAuthenticated } = useAuthContext();
-  const navigate = useNavigate();
-
-  return async (request: RegisterRequest) => {
+  const { setUser, setLoading } = useAuthContext();
+  return async (request: RegisterRequest): Promise<string | undefined> => {
     try {
-      const res = await registerApi(request);
-
-      const user = await getMeApi();
-      setUser(user);
-      setIsAuthenticated(true);
+      setLoading(true);
+      const res: RegisterResponse = await registerApi(request);
+    
+      setLoading(false);
+      setUser(res.user);
 
       console.log("register success", res);
-
-      navigate("/home");
+      return res.qrCodeUrl;
     } catch (err) {
       console.log("error", err);
     }

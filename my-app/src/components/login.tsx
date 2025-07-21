@@ -28,7 +28,7 @@ import useRegister from "../hook/useRegister";
 import GradientText from "./GradientText";
 
 export function AuthenticationForm(props: PaperProps) {
-  const { authType, setAuthType } = useWelcomeContext();
+  const { authType, setAuthType, openCode, openQr, setQrCode } = useWelcomeContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
@@ -54,9 +54,14 @@ export function AuthenticationForm(props: PaperProps) {
           authType === AuthTypeEnum.LOGIN
             ? loginForm.onSubmit(async (values) => {
                 login(values);
+                openCode();
               })
             : registerForm.onSubmit(async (values) => {
-                register(values);
+                const url = await register(values);
+                if (url) {
+                  setQrCode(url);
+                  openQr();
+                }
               })
         }
       >
@@ -71,7 +76,7 @@ export function AuthenticationForm(props: PaperProps) {
           <Divider></Divider>
           {authType !== AuthTypeEnum.LOGIN && (
             <div>
-              <Radio.Group 
+              <Radio.Group
                 name="User-type"
                 label="Are you a Doctor?"
                 withAsterisk
@@ -153,6 +158,7 @@ export function AuthenticationForm(props: PaperProps) {
               />
               <TextInput
                 label="Location"
+                withAsterisk
                 value={registerForm.values.location}
                 error={registerForm.errors.location}
                 {...registerForm.getInputProps("location")}

@@ -2,20 +2,25 @@ import "./style/Welcome.css";
 import Card from "../components/Card";
 import BlurText from "../components/BlurText";
 import NavBar from "../components/Navbar";
-import FlipCard from "../components/FlipCard"
+import FlipCard from "../components/FlipCard";
 import { AuthenticationForm } from "../components/Login";
 import { Briefcase, FileArchive, Lock } from "lucide-react";
 import { useScrollContext } from "../context/ScrollContext";
 import ReactLogo from "/react.svg?url";
 import { Flex } from "@mantine/core";
-
+import TwoFactorAuthModal from "../components/TwoFactorAuthModal";
+import QrCodeModal from "../components/QrCodeModal";
 
 export default function Welcome() {
   const { aboutRef, loginRef } = useScrollContext();
- 
 
   return (
     <div ref={aboutRef} className="background">
+      {/* modal che si aprirà nel momento della registrazione per scansionare il qrCode */}
+      <QrCodeModal />
+      {/* modal che si aprirà nel momento del login per inserire il codice */}
+      <TwoFactorAuthModal />
+
       <NavBar />
       <header>
         <div className="container">
@@ -74,7 +79,6 @@ export default function Welcome() {
           <hr className="custom-hr" />
 
           <div className="form-container">
-            
             <AuthenticationForm className="auth-container"></AuthenticationForm>
           </div>
         </div>

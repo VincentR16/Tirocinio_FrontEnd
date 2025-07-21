@@ -12,6 +12,7 @@ export type User = {
   gender: string;
   phone: string;
   role: RoleType;
+  twoFactorAuthenticationSecret: string;
   patient?: Patient;
   doctor?: Doctor;
 };
