@@ -10,23 +10,16 @@ export default function QrCodeModal() {
       withinPortal={false}
       withCloseButton={false}
       size="auto"
-      p={0}
-      title={
-        <Center>
-          <Text size="lg" fw={700} ta="center" w="100%">
-            Two Factor Authentication
-          </Text>
-        </Center>
-      }
+      closeOnClickOutside={false}
     >
       <Stack>
         <Center>
-          <Text size="lg" fw={600} ta="center" w="100%">
-            Scan thw QrCode with GoogleAuth
+          <Text mt="xs" p="xs" size="xl" fw={600} ta="center" w="100%">
+            Scan the QrCode with GoogleAuthenticator
           </Text>
         </Center>
         <Center>
-          <Image w="auto" fit="contain" src={qrCode}></Image>
+          <Image w={350} p="lg" fit="contain" src={qrCode}></Image>
         </Center>
         <Button
           onClick={() => {

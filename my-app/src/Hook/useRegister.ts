@@ -15,6 +15,7 @@ export default function useRegister() {
       return res.qrCodeUrl;
     },
 
+
     onError: (error) => {
       console.error('Register error', error);
     },
