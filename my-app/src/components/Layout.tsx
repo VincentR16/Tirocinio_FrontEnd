@@ -64,7 +64,7 @@ export default function Layout() {
           <Button
             variant="default"
             onClick={() => {
-              logout();
+              logout.mutate();
               close();
             }}
           >

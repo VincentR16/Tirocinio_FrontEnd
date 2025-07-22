@@ -23,12 +23,15 @@ import { useWelcomeContext } from "../context/WelcomeContext";
 import { useLoginForm } from "../hook/form/useLoginForm";
 import { useRegisterForm } from "../hook/form/useRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
+import { notifications } from "@mantine/notifications";
 import useLogin from "../hook/useLogin";
 import useRegister from "../hook/useRegister";
 import GradientText from "./GradientText";
+import { IconCheck } from "@tabler/icons-react";
 
 export function AuthenticationForm(props: PaperProps) {
-  const { authType, setAuthType, openCode, openQr, setQrCode } = useWelcomeContext();
+  const { authType, setAuthType, openCode, openQr, setQrCode } =
+    useWelcomeContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
@@ -53,15 +56,44 @@ export function AuthenticationForm(props: PaperProps) {
         onSubmit={
           authType === AuthTypeEnum.LOGIN
             ? loginForm.onSubmit(async (values) => {
-                login(values);
-                openCode();
+                login.mutate(values, {
+                  onSuccess: () => {
+                    openCode();
+                  },
+                  onError: (error) => {
+                    notifications.show({
+                      color: "red",
+                      title: "Invalid Email or Password",
+                      message:
+                        "try again!",
+                    });
+                    console.error("Error Login:", error);
+                  },
+                });
               })
             : registerForm.onSubmit(async (values) => {
-                const url = await register(values);
-                if (url) {
-                  setQrCode(url);
-                  openQr();
-                }
+                register.mutate(values, {
+                  onSuccess: (qrCodeUrl) => {
+                    setQrCode(qrCodeUrl);
+                    openQr();
+                    notifications.show({
+                      title: "Two Factor Access",
+                      message: "Scan the QrCode to complete the registration ",
+                      icon: <IconCheck size={18} />,
+                      loading: false,
+                      autoClose: 3000,
+                    });
+                  },
+                  onError: (error) => {
+                    notifications.show({
+                      color: "red",
+                      title: "Invalid Email or Phone number",
+                      message:
+                        "Your Email or Phone number is already in our sistem",
+                    });
+                    console.error("Error signup:", error);
+                  },
+                });
               })
         }
       >

@@ -1,21 +1,21 @@
-import { loginApi } from "../api/loginApi";
-import { useAuthContext } from "../context/AuthContext";
-import type { LoginRequest } from "../types/LoginRequest.type";
+import { useMutation } from '@tanstack/react-query';
+import { loginApi } from '../api/loginApi';
+import { useAuthContext } from '../context/AuthContext';
+import type { LoginRequest } from '../types/LoginRequest.type';
 
 export default function useLogin() {
-   const {setLoading, setUser} = useAuthContext();
+  const { setUser } = useAuthContext();
 
-  return async (request: LoginRequest) => {
-    try {
-      setLoading(true);
-      const res = await loginApi(request);
-      setLoading(false);
-      setUser(res);
+  return useMutation({
+    mutationFn: (request: LoginRequest) => loginApi(request),
 
-      console.log("Login success", res);
-      return res;
-    } catch (err) {
-      console.error("Login Error", err);
-    }
-  };
+    onSuccess: (data) => {
+      setUser(data);
+      console.log('Login success', data);
+    },
+
+    onError: (error) => {
+      console.error('Login error', error);
+    },
+  });
 }

@@ -1,23 +1,23 @@
-import { registerApi } from "../api/registerApi";
-import { useAuthContext } from "../context/AuthContext";
-import type { RegisterRequest } from "../types/RegisterRequest.type";
-import type { RegisterResponse } from "../types/RegisterResponse";
+import { useMutation } from '@tanstack/react-query';
+import { registerApi } from '../api/registerApi';
+import { useAuthContext } from '../context/AuthContext';
+import type { RegisterRequest } from '../types/RegisterRequest.type';
+import type { RegisterResponse } from '../types/RegisterResponse';
 
-//setta lo user e restituisce il qrcode
 export default function useRegister() {
-  const { setUser, setLoading } = useAuthContext();
-  return async (request: RegisterRequest): Promise<string | undefined> => {
-    try {
-      setLoading(true);
-      const res: RegisterResponse = await registerApi(request);
-    
-      setLoading(false);
-      setUser(res.user);
+  const { setUser } = useAuthContext();
 
-      console.log("register success", res);
+  return useMutation({
+    mutationFn: async (request: RegisterRequest): Promise<string> => {
+      const res: RegisterResponse = await registerApi(request);
+      setUser(res.user);
+      console.log('Register success', res);
       return res.qrCodeUrl;
-    } catch (err) {
-      console.log("error", err);
-    }
-  };
+    },
+
+    onError: (error) => {
+      console.error('Register error', error);
+    },
+  });
 }
+

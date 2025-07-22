@@ -59,24 +59,26 @@ export default function Profile() {
           </Flex>
           <form
             onSubmit={form.onSubmit((values) => {
-              update(values);
-              setIsDisabled(true);
-              notifications.show({
-                mt:"md",
-                position:"top-right",   
-                title: "Success",
-                message: "Your profile has been updated",
-                autoClose: 2500,
-                color: "green",
-                style: {
-                  borderColor: "rgb(55, 177, 77)", 
-                  borderWidth: 0.5,
-                  borderStyle: "solid",
+              update.mutate(values, {
+                onSuccess: () => {
+                  setIsDisabled(true);
+                  notifications.show({
+                    mt: "md",
+                    position: "top-right",
+                    title: "Success",
+                    message: "Your profile has been updated",
+                    autoClose: 2500,
+                    color: "green",
+                    style: {
+                      borderColor: "rgb(55, 177, 77)",
+                      borderWidth: 0.5,
+                      borderStyle: "solid",
+                    },
+                  });
                 },
               });
             })}
           >
-            
             <Flex direction="row" justify="center" gap="xl">
               <Flex mr="xl" direction="column" gap="md" w="35%">
                 <TextInput
