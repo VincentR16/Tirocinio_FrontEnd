@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { Shield } from "lucide-react";
 import { useScrollContext } from "../context/ScrollContext";
 import "./style/Navbar.css";
-import { useWelcomeContext } from "../context/WelcomeContext";
-import { AuthTypeEnum } from "../types/Auth.type";
+import { AuthTypeEnum, type AuthType } from "../types/Auth.type";
 
-export default function Navbar() {
+
+
+type NavBarProps = {
+  setAuthType: (type: AuthType) => void;
+};
+
+export default function Navbar({ setAuthType }: NavBarProps) {
   const { scrollToAbout, scrollToLogin } = useScrollContext();
-  const { setAuthType } = useWelcomeContext();
 
   const tabs = [
     {

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import { getMeApi } from "../api/getMeApi";
 
+
 export default function usePersistentLogin() {
   const { setUser, setIsAuthenticated, setLoading } = useAuthContext();
 
@@ -17,6 +18,7 @@ export default function usePersistentLogin() {
         //setto i dati recuperati
         setUser(user);
         setIsAuthenticated(true);
+      
       } catch {
         setIsAuthenticated(false);
       } finally {

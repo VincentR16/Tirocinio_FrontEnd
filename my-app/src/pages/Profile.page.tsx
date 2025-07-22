@@ -67,7 +67,7 @@ export default function Profile() {
                     position: "top-right",
                     title: "Success",
                     message: "Your profile has been updated",
-                    autoClose: 2500,
+                    autoClose: 3500,
                     color: "green",
                     style: {
                       borderColor: "rgb(55, 177, 77)",

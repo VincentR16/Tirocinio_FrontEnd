@@ -1,7 +1,10 @@
 import { createContext, useContext } from "react";
 import type { User } from "../types/User.type";
 
+
 type AuthContextType = {
+    //serve per gestire componente login e i suoi campi
+
   user: User | undefined;
   setUser: (obj: User| undefined) => void;
   isAuthenticated: boolean;

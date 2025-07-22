@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
 } from "@mantine/core";
-import { useWelcomeContext } from "../context/WelcomeContext";
+import { useQrContext } from "../context/QrContext";
 import { useState } from "react";
 import useTwoFactorAuth from "../hook/useTwoFactorAuth";
 import { useAuthContext } from "../context/AuthContext";
@@ -15,7 +15,7 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons-react";
 
 export default function TwofactorAuthModal() {
-  const { closeCode, openedCode } = useWelcomeContext();
+  const { closeCode, openedCode } = useQrContext();
   const twoFactorAuth = useTwoFactorAuth();
   const { user } = useAuthContext();
   const [twoFactorAuthenticationCode, setCode] = useState("");
@@ -57,11 +57,11 @@ export default function TwofactorAuthModal() {
                 onSuccess: () => {
                   setIsError(false);
                   notifications.show({
-                    title: "Two factor Authentication",
-                    message: "Pin is valid",
+                    title: "Welcome back!",
+                    message: "You're now logged in.",
                     icon: <IconCheck size={18} />,
                     loading: false,
-                    autoClose: 2000,
+                    autoClose: 3500
                   });
                 },
                 onError: () => {
@@ -69,6 +69,7 @@ export default function TwofactorAuthModal() {
                     color: "red",
                     title: "Two factor Authentication",
                     message: "Pin is not valid, try again!",
+                    autoClose: 3500
                   });
                   setIsError(true)
                 },

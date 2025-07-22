@@ -1,4 +1,4 @@
-import { WelcomeProvider } from "./context/WelcomeProvider";
+import { QrProvider } from "./context/QrProvider";
 import { ScrollProvider } from "./context/ScrollProvider";
 import Welcome from "./pages/Welcome.page";
 import RootLayout from "./pages/RootLayout.page";
@@ -15,11 +15,11 @@ export const routes = [
   {
     path: "/welcome",
     element: (
-      <WelcomeProvider>
+      <QrProvider>
         <ScrollProvider>
           <Welcome />
         </ScrollProvider>
-      </WelcomeProvider>
+      </QrProvider>
     ),
   },
   {

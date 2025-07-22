@@ -1,8 +1,8 @@
 import { Button, Center, Text, Image, Modal, Stack } from "@mantine/core";
-import { useWelcomeContext } from "../context/WelcomeContext";
+import { useQrContext } from "../context/QrContext";
 
 export default function QrCodeModal() {
-  const { qrCode, openedQr, closeQr, openCode } = useWelcomeContext();
+  const { qrCode, openedQr, closeQr, openCode } = useQrContext();
   return (
     <Modal
       opened={openedQr}

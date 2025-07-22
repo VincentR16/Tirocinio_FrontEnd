@@ -10,9 +10,12 @@ import ReactLogo from "/react.svg?url";
 import { Flex } from "@mantine/core";
 import TwoFactorAuthModal from "../components/TwoFactorAuthModal";
 import QrCodeModal from "../components/QrCodeModal";
+import { useState } from "react";
+import { type AuthType, AuthTypeEnum } from "../types/Auth.type";
 
 export default function Welcome() {
   const { aboutRef, loginRef } = useScrollContext();
+  const [authType, setAuthType] = useState<AuthType>(AuthTypeEnum.LOGIN);
 
   return (
     <div ref={aboutRef} className="background">
@@ -21,7 +24,7 @@ export default function Welcome() {
       {/* modal che si aprirà nel momento del login per inserire il codice */}
       <TwoFactorAuthModal />
 
-      <NavBar />
+      <NavBar  setAuthType={setAuthType} />
       <header>
         <div className="container">
           <div className="title-container">
@@ -79,7 +82,7 @@ export default function Welcome() {
           <hr className="custom-hr" />
 
           <div className="form-container">
-            <AuthenticationForm className="auth-container"></AuthenticationForm>
+            <AuthenticationForm authType={authType} setAuthType={setAuthType} className="auth-container"></AuthenticationForm>
           </div>
         </div>
       </main>

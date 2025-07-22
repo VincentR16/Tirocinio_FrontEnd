@@ -17,9 +17,9 @@ import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import { DatePickerInput } from "@mantine/dates";
 import type { PaperProps } from "@mantine/core";
-import { AuthTypeEnum } from "../types/Auth.type";
+import { AuthTypeEnum, type AuthType } from "../types/Auth.type";
 import { useState } from "react";
-import { useWelcomeContext } from "../context/WelcomeContext";
+import { useQrContext } from "../context/QrContext";
 import { useLoginForm } from "../hook/form/useLoginForm";
 import { useRegisterForm } from "../hook/form/useRegisterForm";
 import { RoleTypeEnum } from "../types/Role.type";
@@ -29,9 +29,18 @@ import useRegister from "../hook/useRegister";
 import GradientText from "./GradientText";
 import { IconCheck } from "@tabler/icons-react";
 
-export function AuthenticationForm(props: PaperProps) {
-  const { authType, setAuthType, openCode, openQr, setQrCode } =
-    useWelcomeContext();
+
+type AuthenticationFormProps = PaperProps & {
+  authType: AuthType;
+  setAuthType: (type: AuthType) => void;
+};
+
+export function AuthenticationForm({
+  authType,
+  setAuthType,
+  ...props
+}: AuthenticationFormProps) {
+  const { openCode, openQr, setQrCode } = useQrContext();
   const [userType, setUserType] = useState<"Yes" | "No">("No");
   const loginForm = useLoginForm();
   const registerForm = useRegisterForm();
@@ -64,8 +73,8 @@ export function AuthenticationForm(props: PaperProps) {
                     notifications.show({
                       color: "red",
                       title: "Invalid Email or Password",
-                      message:
-                        "try again!",
+                      message: "try again!",
+                      autoClose: 3500,
                     });
                     console.error("Error Login:", error);
                   },
@@ -81,7 +90,7 @@ export function AuthenticationForm(props: PaperProps) {
                       message: "Scan the QrCode to complete the registration ",
                       icon: <IconCheck size={18} />,
                       loading: false,
-                      autoClose: 3000,
+                      autoClose: 3500,
                     });
                   },
                   onError: (error) => {
@@ -90,6 +99,7 @@ export function AuthenticationForm(props: PaperProps) {
                       title: "Invalid Email or Phone number",
                       message:
                         "Your Email or Phone number is already in our sistem",
+                      autoClose: 3500,
                     });
                     console.error("Error signup:", error);
                   },

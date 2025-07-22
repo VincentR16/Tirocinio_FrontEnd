@@ -1,19 +1,16 @@
 import { useState, type ReactNode } from "react";
-import { WelcomeContext } from "../context/WelcomeContext";
-import { AuthTypeEnum, type AuthType } from "../types/Auth.type";
+import { QrContext } from "./QrContext";
 import { useDisclosure } from "@mantine/hooks";
 
-export function WelcomeProvider({ children }: { children: ReactNode }) {
-  const [authType, setAuthType] = useState<AuthType>(AuthTypeEnum.LOGIN);
+export function QrProvider({ children }: { children: ReactNode }) {
+
   const [openedCode, { close: closeCode, open: openCode }] =
     useDisclosure(false);
   const [openedQr, { close: closeQr, open: openQr }] = useDisclosure(false);
   const [qrCode, setQrCode] = useState<string>("");
   return (
-    <WelcomeContext.Provider
+    <QrContext.Provider
       value={{
-        authType,
-        setAuthType,
         openedCode,
         openCode,
         closeCode,
@@ -25,6 +22,6 @@ export function WelcomeProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-    </WelcomeContext.Provider>
+    </QrContext.Provider>
   );
 }
