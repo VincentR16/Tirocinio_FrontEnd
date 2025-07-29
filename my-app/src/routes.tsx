@@ -6,11 +6,12 @@ import Profile from "./pages/Profile.page";
 import Home from "./pages/Home.page";
 import ProtectedRoot from "./utils/ProtectedRoot";
 import InitialRedirect from "./utils/InitialRedirect";
+import CreateEhr from "./pages/CreateEhr.page";
 
 export const routes = [
   {
     path: "/",
-    element: <InitialRedirect/>,
+    element: <InitialRedirect />,
   },
   {
     path: "/welcome",
@@ -37,6 +38,10 @@ export const routes = [
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "ehr/create",
+        element: <CreateEhr />,
       },
     ],
   },

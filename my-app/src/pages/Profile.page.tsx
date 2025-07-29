@@ -28,7 +28,7 @@ export default function Profile() {
   const update = useUpdateUser();
 
   return (
-    <main>
+    <>
       <Flex direction="row" justify="center" className={classes.container}>
         <Paper
           className={classes.paper}
@@ -179,6 +179,6 @@ export default function Profile() {
           </form>
         </Paper>
       </Flex>
-    </main>
+    </>
   );
 }
