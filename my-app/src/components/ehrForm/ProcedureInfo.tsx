@@ -1,7 +1,6 @@
-import { Flex, TextInput, Select, Textarea, Checkbox } from "@mantine/core";
+import { Flex, TextInput, Select, Textarea } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
-
 
 export default function ProcedureInfo() {
   return (
@@ -56,6 +55,7 @@ export default function ProcedureInfo() {
           placeholder="Why was the procedure performed?"
           autosize
           minRows={2}
+          maxRows={3}
         />
 
         <Textarea
@@ -63,10 +63,9 @@ export default function ProcedureInfo() {
           label="Notes"
           placeholder="Additional notes or description"
           autosize
-          minRows={2}
+          minRows={3}
+          maxRows={4}
         />
-
-        <Checkbox mt="md" label="Patient consented" />
       </Flex>
     </Flex>
   );

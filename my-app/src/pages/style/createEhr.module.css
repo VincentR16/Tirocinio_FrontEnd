@@ -3,7 +3,6 @@
   padding: 1rem 0rem;
   gap: 15%;
   padding: 2%;
-  height: 57vh;
 }
 
 .subContainer {
@@ -11,5 +10,12 @@
 }
 
 .paperContainer {
+  display: flex;
+  flex-direction: column;
   height: 82vh;
 }
+
+.arrow{
+  margin-bottom: 0.3rem;
+}
+

@@ -61,7 +61,8 @@ export default function TwofactorAuthModal() {
                     message: "You're now logged in.",
                     icon: <IconCheck size={18} />,
                     loading: false,
-                    autoClose: 3500
+                    autoClose: 3500,
+                    position: "top-right"
                   });
                 },
                 onError: () => {

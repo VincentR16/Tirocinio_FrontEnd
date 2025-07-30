@@ -1,15 +1,28 @@
 import {
   ActionIcon,
   Button,
+  Center,
   Flex,
   Group,
   Paper,
+  Stack,
   Stepper,
   Tooltip,
 } from "@mantine/core";
+import { IconCircleCheck } from "@tabler/icons-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  User,
+  Stethoscope,
+  Biohazard,
+  Eye,
+  HeartPulse,
+  Syringe,
+  Pill,
+   Check,
+} from "lucide-react";
 import PatientInfo from "../components/ehrForm/PatientoInfo";
 import EncounterInfo from "../components/ehrForm/EncounterInfo";
 import AllergyInfo from "../components/ehrForm/AllergyInfo";
@@ -17,7 +30,7 @@ import ObservationInfo from "../components/ehrForm/ObservationInfo";
 import ConditionInfo from "../components/ehrForm/ConditionInfo";
 import ProcedureInfo from "../components/ehrForm/ProcedureInfo";
 import MedicationInfo from "../components/ehrForm/MedicationInfo";
-import classes from "./style/createEhr.module.css"
+import classes from "./style/createEhr.module.css";
 
 export default function CreateEhr() {
   const navigate = useNavigate();
@@ -31,7 +44,7 @@ export default function CreateEhr() {
     <>
       <Tooltip label="Go back">
         <ActionIcon
-          mb="xs"
+          className={classes.arrow}
           size="lg"
           variant="subtle"
           onClick={() => navigate("/home")}
@@ -41,31 +54,36 @@ export default function CreateEhr() {
       </Tooltip>
 
       <Paper p="xl" radius="md" shadow="sm" className={classes.paperContainer}>
-        <Flex direction="column">
+        <Flex direction="column" style={{ height: "100%" }}>
           <Stepper
             active={active}
             onStepClick={setActive}
             allowNextStepsSelect={false}
+            completedIcon={<IconCircleCheck />}
           >
             <Stepper.Step
+              icon={<User></User>}
               label={active === 0 ? "Patient" : ""}
               description={active === 0 ? "Create a Patient" : ""}
             >
               <PatientInfo />
             </Stepper.Step>
             <Stepper.Step
+              icon={<Stethoscope></Stethoscope>}
               label={active === 1 ? "Encounter" : ""}
               description={active === 1 ? "Describe the encounter" : ""}
             >
               <EncounterInfo />
             </Stepper.Step>
             <Stepper.Step
+              icon={<Biohazard></Biohazard>}
               label={active === 2 ? "Allergy" : ""}
               description={active === 2 ? "Patient's allergy" : ""}
             >
               <AllergyInfo />
             </Stepper.Step>
             <Stepper.Step
+              icon={<Eye />}
               label={active === 3 ? "Observation" : ""}
               description={
                 active === 3 ? "Describe the patient observation" : ""
@@ -74,35 +92,45 @@ export default function CreateEhr() {
               <ObservationInfo />
             </Stepper.Step>
             <Stepper.Step
+              icon={<HeartPulse />}
               label={active === 4 ? "Condition" : ""}
               description={active === 4 ? "dipict the patient's condition" : ""}
             >
               <ConditionInfo />
             </Stepper.Step>
             <Stepper.Step
+              icon={<Syringe />}
               label={active === 5 ? "Procedure" : ""}
               description={active === 5 ? "Explain the procedure" : ""}
             >
               <ProcedureInfo />
             </Stepper.Step>
             <Stepper.Step
+              icon={<Pill />}
               label={active === 6 ? "Medication" : ""}
               description={active === 6 ? "Describe the medication" : ""}
             >
               <MedicationInfo />
             </Stepper.Step>
             <Stepper.Completed>
-              Completed, click back button to get to previous step
+              <Stack p="xl" mt="xl">
+                <Center mt="xl">
+                 <Check size={80} color="#228be6" />
+                </Center>
+                <Center mt="xs">Form finisched, click complete to confirm and add the EHR</Center>
+              </Stack>
             </Stepper.Completed>
           </Stepper>
-
-          <Group justify="center" mt="xl">
+        
+          <Group
+            justify="center"
+            mt="auto"
+          >
             <Button variant="default" onClick={prevStep}>
               Back
             </Button>
             <Button onClick={nextStep}>Next step</Button>
           </Group>
-
         </Flex>
       </Paper>
     </>

@@ -40,14 +40,7 @@ export default function EncounterInfo() {
           placeholder="e.g. Check-up, Surgery"
           withAsterisk
         />
-        <Textarea
-          mt="md"
-          label="Reason"
-          placeholder="Reason for encounter"
-          autosize
-          minRows={2}
-          withAsterisk
-        />
+
         <DateTimePicker
           mt="md"
           label="Start time"
@@ -58,6 +51,14 @@ export default function EncounterInfo() {
           mt="md"
           label="End time"
           placeholder="End date and time"
+        />
+        <Textarea
+          mt="md"
+          label="Reason"
+          placeholder="Reason for encounter"
+          autosize
+          minRows={1}
+          withAsterisk
         />
       </Flex>
     </Flex>
