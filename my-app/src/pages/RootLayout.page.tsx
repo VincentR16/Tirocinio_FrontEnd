@@ -8,7 +8,7 @@ import classes from "./style/layout.module.css";
 
 
 export default function RootLayout() {
-    const [opened, { toggle }] = useDisclosure();
+    const [opened, { toggle }] = useDisclosure(true);
     const [openedModal, { open, close }] = useDisclosure(false);
     const logout = useLogout();
   

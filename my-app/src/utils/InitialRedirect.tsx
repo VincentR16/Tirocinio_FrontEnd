@@ -20,6 +20,7 @@ export default function InitialRedirect() {
         icon: <IconCheck size={18} />,
         loading: false,
         autoClose: 3500,
+        position: "top-right"
       });
       hasShownNotification.current = true;
     }

@@ -12,10 +12,13 @@
 .paperContainer {
   display: flex;
   flex-direction: column;
-  height: 82vh;
+  height: 80vh;
 }
 
 .arrow{
   margin-bottom: 0.3rem;
 }
 
+.formContainer{
+  height: 65vh;
+}

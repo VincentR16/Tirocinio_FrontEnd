@@ -2,8 +2,16 @@ import { Flex, TextInput, Select, InputBase } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IMaskInput } from "react-imask";
 import classes from "../../pages/style/createEhr.module.css";
+import { useEhrContext } from "../../context/EhrContext";
+import { Controller } from "react-hook-form";
+import { email } from "zod";
 
 export default function PatientInfo() {
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useEhrContext();
   return (
     <Flex direction="row" className={classes.container}>
       <Flex ml="lg" direction="column" className={classes.subContainer}>
@@ -11,31 +19,43 @@ export default function PatientInfo() {
           mt="md"
           label="Name"
           placeholder="Patient name"
-          value=""
           radius="md"
+          {...register("name")}
+          error={errors.name?.message}
           withAsterisk
         />
 
-        <Select
-          mt="md"
-          comboboxProps={{ withinPortal: true }}
-          data={["Male", "Female", "Other"]}
-          placeholder="Pick one"
-          label="Gender"
-          withAsterisk
-        ></Select>
+        <Controller
+          name="gender"
+          control={control}
+          render={({ field }) => (
+            <Select
+              mt="md"
+              data={["Male", "Female", "Other"]}
+              placeholder="Pick one"
+              label="Gender"
+              withAsterisk
+              {...field} // include: value, onChange, onBlur
+              error={errors.gender?.message}
+            />
+          )}
+        />
 
         <TextInput
           mt="md"
           label="Location"
           placeholder="Patient Location"
           withAsterisk
+          {...register("location")}
+          error={errors.location?.message}
         />
         <TextInput
           mt="md"
           required
           label="Email"
           placeholder="Patientemail@MedTrust.net"
+          {...email}
+          error={errors.email?.message}
         />
       </Flex>
 
@@ -46,13 +66,26 @@ export default function PatientInfo() {
           placeholder="Patient Surname"
           radius="md"
           withAsterisk
+          {...register("surname")}
+          error={errors.surname?.message}
         />
 
-        <DatePickerInput
-          mt="md"
-          placeholder="Pick a date"
-          label="Date of Birth"
-          withAsterisk
+        <Controller
+          name="dateOfBirth"
+          control={control}
+          render={({ field }) => (
+            <DatePickerInput
+              mt="md"
+              placeholder="Pick a date"
+              label="Date of Birth"
+              withAsterisk
+              value={field.value ? new Date(field.value) : null}
+              onChange={(date) =>
+                field.onChange(date ? date.toString().split("T")[0] : "")
+              }
+              error={errors.dateOfBirth?.message}
+            />
+          )}
         />
 
         <TextInput
@@ -61,6 +94,8 @@ export default function PatientInfo() {
           placeholder="Patient SSN"
           required
           maxLength={16}
+          {...register("ssn")}
+          error={errors.ssn?.message}
         />
         <InputBase
           mt="md"
@@ -69,6 +104,8 @@ export default function PatientInfo() {
           required
           mask="+39 000 000-0000"
           placeholder="Patient phone"
+          {...register("phone")}
+          error={errors.phone?.message}
         />
       </Flex>
     </Flex>

@@ -7,6 +7,7 @@ import Home from "./pages/Home.page";
 import ProtectedRoot from "./utils/ProtectedRoot";
 import InitialRedirect from "./utils/InitialRedirect";
 import CreateEhr from "./pages/CreateEhr.page";
+import { EhrProvider } from "./context/EhrProvider";
 
 export const routes = [
   {
@@ -41,7 +42,11 @@ export const routes = [
       },
       {
         path: "ehr/create",
-        element: <CreateEhr />,
+        element: (
+          <EhrProvider>
+            <CreateEhr />
+          </EhrProvider>
+        ),
       },
     ],
   },

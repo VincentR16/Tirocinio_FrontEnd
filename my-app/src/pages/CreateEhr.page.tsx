@@ -21,7 +21,7 @@ import {
   HeartPulse,
   Syringe,
   Pill,
-   Check,
+  Check,
 } from "lucide-react";
 import PatientInfo from "../components/ehrForm/PatientoInfo";
 import EncounterInfo from "../components/ehrForm/EncounterInfo";
@@ -54,84 +54,88 @@ export default function CreateEhr() {
       </Tooltip>
 
       <Paper p="xl" radius="md" shadow="sm" className={classes.paperContainer}>
-        <Flex direction="column" style={{ height: "100%" }}>
-          <Stepper
-            active={active}
-            onStepClick={setActive}
-            allowNextStepsSelect={false}
-            completedIcon={<IconCircleCheck />}
-          >
-            <Stepper.Step
-              icon={<User></User>}
-              label={active === 0 ? "Patient" : ""}
-              description={active === 0 ? "Create a Patient" : ""}
+        <form>
+          <Flex direction="column" className={classes.formContainer}>
+            <Stepper
+              active={active}
+              onStepClick={setActive}
+              allowNextStepsSelect={false}
+              completedIcon={<IconCircleCheck />}
             >
-              <PatientInfo />
-            </Stepper.Step>
-            <Stepper.Step
-              icon={<Stethoscope></Stethoscope>}
-              label={active === 1 ? "Encounter" : ""}
-              description={active === 1 ? "Describe the encounter" : ""}
-            >
-              <EncounterInfo />
-            </Stepper.Step>
-            <Stepper.Step
-              icon={<Biohazard></Biohazard>}
-              label={active === 2 ? "Allergy" : ""}
-              description={active === 2 ? "Patient's allergy" : ""}
-            >
-              <AllergyInfo />
-            </Stepper.Step>
-            <Stepper.Step
-              icon={<Eye />}
-              label={active === 3 ? "Observation" : ""}
-              description={
-                active === 3 ? "Describe the patient observation" : ""
-              }
-            >
-              <ObservationInfo />
-            </Stepper.Step>
-            <Stepper.Step
-              icon={<HeartPulse />}
-              label={active === 4 ? "Condition" : ""}
-              description={active === 4 ? "dipict the patient's condition" : ""}
-            >
-              <ConditionInfo />
-            </Stepper.Step>
-            <Stepper.Step
-              icon={<Syringe />}
-              label={active === 5 ? "Procedure" : ""}
-              description={active === 5 ? "Explain the procedure" : ""}
-            >
-              <ProcedureInfo />
-            </Stepper.Step>
-            <Stepper.Step
-              icon={<Pill />}
-              label={active === 6 ? "Medication" : ""}
-              description={active === 6 ? "Describe the medication" : ""}
-            >
-              <MedicationInfo />
-            </Stepper.Step>
-            <Stepper.Completed>
-              <Stack p="xl" mt="xl">
-                <Center mt="xl">
-                 <Check size={80} color="#228be6" />
-                </Center>
-                <Center mt="xs">Form finisched, click complete to confirm and add the EHR</Center>
-              </Stack>
-            </Stepper.Completed>
-          </Stepper>
-        
-          <Group
-            justify="center"
-            mt="auto"
-          >
-            <Button variant="default" onClick={prevStep}>
-              Back
-            </Button>
-            <Button onClick={nextStep}>Next step</Button>
-          </Group>
-        </Flex>
+              <Stepper.Step
+                icon={<User></User>}
+                label={active === 0 ? "Patient" : ""}
+                description={active === 0 ? "Create a Patient" : ""}
+              >
+                <PatientInfo />
+              </Stepper.Step>
+              <Stepper.Step
+                icon={<Stethoscope></Stethoscope>}
+                label={active === 1 ? "Encounter" : ""}
+                description={active === 1 ? "Describe the encounter" : ""}
+              >
+                <EncounterInfo />
+              </Stepper.Step>
+              <Stepper.Step
+                icon={<Biohazard></Biohazard>}
+                label={active === 2 ? "Allergy" : ""}
+                description={active === 2 ? "Patient's allergy" : ""}
+              >
+                <AllergyInfo />
+              </Stepper.Step>
+              <Stepper.Step
+                icon={<Eye />}
+                label={active === 3 ? "Observation" : ""}
+                description={
+                  active === 3 ? "Describe the patient observation" : ""
+                }
+              >
+                <ObservationInfo />
+              </Stepper.Step>
+              <Stepper.Step
+                icon={<HeartPulse />}
+                label={active === 4 ? "Condition" : ""}
+                description={
+                  active === 4 ? "dipict the patient's condition" : ""
+                }
+              >
+                <ConditionInfo />
+              </Stepper.Step>
+              <Stepper.Step
+                icon={<Syringe />}
+                label={active === 5 ? "Procedure" : ""}
+                description={active === 5 ? "Explain the procedure" : ""}
+              >
+                <ProcedureInfo />
+              </Stepper.Step>
+              <Stepper.Step
+                icon={<Pill />}
+                label={active === 6 ? "Medication" : ""}
+                description={active === 6 ? "Describe the medication" : ""}
+              >
+                <MedicationInfo />
+              </Stepper.Step>
+              <Stepper.Completed>
+                <Stack p="xl" mt="xl">
+                  <Center mt="xl">
+                    <Check size={80} color="#228be6" />
+                  </Center>
+                  <Center mt="xs">
+                    Form finisched, click complete to confirm and add the EHR
+                  </Center>
+                </Stack>
+              </Stepper.Completed>
+            </Stepper>
+          </Flex>
+          <Center>
+            <Group justify="center">
+              <Button variant="default" onClick={prevStep}>
+                Back
+              </Button>
+              <Button onClick={nextStep}>Next step</Button>
+            </Group>
+          </Center>
+        </form>
       </Paper>
     </>
   );
