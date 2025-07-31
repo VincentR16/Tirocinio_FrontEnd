@@ -4,7 +4,6 @@ import { IMaskInput } from "react-imask";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
 import { Controller } from "react-hook-form";
-import { email } from "zod";
 
 export default function PatientInfo() {
   const {
@@ -54,7 +53,7 @@ export default function PatientInfo() {
           required
           label="Email"
           placeholder="Patientemail@MedTrust.net"
-          {...email}
+          {...register("email")}
           error={errors.email?.message}
         />
       </Flex>
@@ -97,15 +96,26 @@ export default function PatientInfo() {
           {...register("ssn")}
           error={errors.ssn?.message}
         />
-        <InputBase
-          mt="md"
-          label="Phone"
-          component={IMaskInput}
-          required
-          mask="+39 000 000-0000"
-          placeholder="Patient phone"
-          {...register("phone")}
-          error={errors.phone?.message}
+
+        <Controller
+          name="phone"
+          control={control}
+          rules={{
+            required: "Phone is required",
+            minLength: { value: 10, message: "Invalid phone number" },
+          }}
+          render={({ field }) => (
+            <InputBase
+              mt="md"
+              label="Phone"
+              required
+              component={IMaskInput}
+              mask="+39 000 000-0000"
+              placeholder="Patient phone"
+              error={errors.phone?.message}
+              {...field}
+            />
+          )}
         />
       </Flex>
     </Flex>

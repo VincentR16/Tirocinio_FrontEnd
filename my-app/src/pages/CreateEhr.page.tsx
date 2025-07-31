@@ -121,7 +121,7 @@ export default function CreateEhr() {
                     <Check size={80} color="#228be6" />
                   </Center>
                   <Center mt="xs">
-                    Form finisched, click complete to confirm and add the EHR
+                    Form completed, click save to confirm and add the EHR
                   </Center>
                 </Stack>
               </Stepper.Completed>
