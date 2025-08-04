@@ -12,22 +12,41 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
-import { Controller } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
+import { useEffect } from "react";
+
+const emptyObservation = {
+  statusObservation: "",
+  categoryObservation: "",
+  code: "",
+  value: 0,
+  unit: "",
+  effectiveDateTime: "",
+  issuedAt: "",
+  performer: "",
+  comment: "",
+};
 
 export default function ObservationInfo() {
   const {
     register,
     control,
+    trigger,
     formState: { errors },
   } = useEhrContext();
 
-  const pills = Array(10)
-    .fill(0)
-    .map((_, index) => (
-      <Pill key={index} withRemoveButton>
-        Item {index}
-      </Pill>
-    ));
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "observations",
+  });
+
+  const index = fields.length - 1;
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      append(emptyObservation);
+    }
+  }, [fields.length, append]);
 
   return (
     <>
@@ -35,7 +54,7 @@ export default function ObservationInfo() {
         <Flex ml="lg" direction="column" className={classes.subContainer}>
           <Controller
             control={control}
-            name="statusObservation"
+            name={`observations.${index}.statusObservation`}
             render={({ field }) => (
               <Select
                 mt="md"
@@ -44,14 +63,14 @@ export default function ObservationInfo() {
                 data={["registered", "preliminary", "final", "amended"]}
                 withAsterisk
                 {...field}
-                error={errors.statusObservation?.message}
+                error={errors.observations?.[index]?.statusObservation?.message}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="categoryObservation"
+            name={`observations.${index}.categoryObservation`}
             render={({ field }) => (
               <Select
                 mt="md"
@@ -65,7 +84,9 @@ export default function ObservationInfo() {
                 ]}
                 withAsterisk
                 {...field}
-                error={errors.categoryObservation?.message}
+                error={
+                  errors.observations?.[index]?.categoryObservation?.message
+                }
               />
             )}
           />
@@ -75,15 +96,15 @@ export default function ObservationInfo() {
             label="Code"
             placeholder="e.g. Blood Pressure, Glucose"
             withAsterisk
-            {...register("code")}
-            error={errors.code?.message}
+            {...register(`observations.${index}.code`)}
+            error={errors.observations?.[index]?.code?.message}
           />
         </Flex>
 
         <Flex direction="column" className={classes.subContainer}>
           <Controller
             control={control}
-            name="value"
+            name={`observations.${index}.value`}
             render={({ field }) => (
               <NumberInput
                 mt="md"
@@ -91,7 +112,7 @@ export default function ObservationInfo() {
                 placeholder="Numerical result"
                 withAsterisk
                 {...field}
-                error={errors.value?.message}
+                error={errors.observations?.[index]?.value?.message}
               />
             )}
           />
@@ -101,22 +122,21 @@ export default function ObservationInfo() {
             label="Unit"
             placeholder="e.g. mmHg, °C, mg/dL"
             withAsterisk
-            {...register("unit")}
-            error={errors.unit?.message}
+            {...register(`observations.${index}.unit`)}
+            error={errors.observations?.[index]?.unit?.message}
           />
 
           <Controller
             control={control}
-            name="effectiveDateTime"
+            name={`observations.${index}.effectiveDateTime`}
             render={({ field }) => (
               <DateTimePicker
                 mt="md"
                 label="Effective Date & Time"
                 placeholder="When was it observed"
-                withAsterisk
                 value={field.value || null}
                 onChange={field.onChange}
-                error={errors.effectiveDateTime?.message}
+                error={errors.observations?.[index]?.effectiveDateTime?.message}
               />
             )}
           />
@@ -125,7 +145,7 @@ export default function ObservationInfo() {
         <Flex direction="column" className={classes.subContainer}>
           <Controller
             control={control}
-            name="issuedAt"
+            name={`observations.${index}.issuedAt`}
             render={({ field }) => (
               <DateTimePicker
                 mt="md"
@@ -133,7 +153,7 @@ export default function ObservationInfo() {
                 placeholder="When was it recorded"
                 value={field.value || null}
                 onChange={field.onChange}
-                error={errors.issuedAt?.message}
+                error={errors.observations?.[index]?.issuedAt?.message}
               />
             )}
           />
@@ -142,13 +162,13 @@ export default function ObservationInfo() {
             mt="md"
             label="Performer"
             placeholder="Doctor or device (optional)"
-            {...register("performer")}
-            error={errors.performer?.message}
+            {...register(`observations.${index}.performer`)}
+            error={errors.observations?.[index]?.performer?.message}
           />
 
           <Controller
             control={control}
-            name="comment"
+            name={`observations.${index}.comment`}
             render={({ field }) => (
               <Textarea
                 mt="md"
@@ -158,18 +178,47 @@ export default function ObservationInfo() {
                 minRows={1}
                 maxRows={3}
                 {...field}
-                error={errors.comment?.message}
+                error={errors.observations?.[index]?.comment?.message}
               />
             )}
           />
         </Flex>
       </Flex>
+
       <Stack>
         <Center>
-          <Button w="10rem">Add Observation</Button>
+          <Button
+            w="10rem"
+            onClick={async () => {
+              const valid = await trigger([
+                `observations.${index}.code`,
+                `observations.${index}.statusObservation`,
+                `observations.${index}.categoryObservation`,
+                `observations.${index}.unit`,
+                `observations.${index}.value`,
+              ]);
+              if (valid) {
+                append(emptyObservation);
+              }
+            }}
+          >
+            Add Observation
+          </Button>
         </Center>
-        <Center mt="xl">
-          <Pill.Group>{pills}</Pill.Group>
+        <Center mt="xs">
+          <Pill.Group>
+            {fields
+              .filter((item) => item.code?.trim() !== "")
+              .map((item, idx) => (
+                <Pill
+                  key={item.id}
+                  withRemoveButton
+                  onRemove={() => remove(idx)}
+                >
+                  {item.code}
+                </Pill>
+              ))}
+          </Pill.Group>
         </Center>
       </Stack>
     </>

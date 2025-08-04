@@ -57,8 +57,8 @@ export default function ProcedureInfo() {
           mt="md"
           label="Location"
           placeholder="Hospital, Clinic, or Department"
-          {...register("location")}
-          error={errors.location?.message}
+          {...register("locationProcedure")}
+          error={errors.locationProcedure?.message}
         />
       </Flex>
 

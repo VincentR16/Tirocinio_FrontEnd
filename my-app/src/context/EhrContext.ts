@@ -6,7 +6,11 @@ import type { EhrFormValues } from "../hook/form/schema/ehrSchema";
 type EhrContextType = {
   ehrRequest: EhrRequest | undefined;
   setEhr: (obj: EhrRequest | undefined) => void;
-} & Pick<UseFormReturn<EhrFormValues>, "register" | "control" | "formState">;;
+  handleNextStep: () => void;
+  prevStep: () => void;
+  active: number;
+  setActive: (obj: number) => void;
+} & UseFormReturn<EhrFormValues>;
 
 export const EhrContext = createContext<EhrContextType | undefined>(undefined);
 

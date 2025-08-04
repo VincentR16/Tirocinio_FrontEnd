@@ -113,7 +113,7 @@ export default function EncounterInfo() {
           placeholder="Reason for encounter"
           autosize
           minRows={1}
-          withAsterisk
+          maxRows={3}
           {...register("reason")}
           error={errors.reason?.message}
         />

@@ -7,58 +7,76 @@ import {
   Stack,
   Center,
   Pill,
+  Group,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
-import  { Controller } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
+import { useEffect } from "react";
+
+const emptyAllergy = {
+  substance: "",
+  clinicalStatus: "",
+  criticality: "",
+  typeAllergy: "",
+  reactionDescription: "",
+  category: "",
+  verificationStatus: "",
+  onsetDate: "",
+  recordedDate: "",
+};
 
 export default function AllergyInfo() {
-    const {
-      register,
-      control,
-      formState: { errors },
-    } = useEhrContext();
-    
-  const pills = Array(10)
-    .fill(0)
-    .map((_, index) => (
-      <Pill key={index} withRemoveButton>
-        Item {index}
-      </Pill>
-    ));
+  const {
+    register,
+    control,
+    trigger,
+    formState: { errors },
+  } = useEhrContext();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "allergies",
+  });
+
+  const index = fields.length - 1;
+  useEffect(() => {
+    if (fields.length === 0) {
+      append(emptyAllergy);
+    }
+  }, [fields.length, append]);
+
   return (
     <>
-      <Flex direction="row" gap="xl" className={classes.container}>
+      <Flex direction="row" gap="xl" className={classes.container} mb="xl">
         <Flex ml="lg" direction="column" className={classes.subContainer}>
           <TextInput
             mt="md"
             label="Substance"
             placeholder="e.g. Penicillin, Peanuts"
-            withAsterisk
-            {...register("substance")}
-            error={errors.substance?.message}
+            {...register(`allergies.${index}.substance`)}
+            error={errors.allergies?.[index]?.substance?.message}
           />
 
           <Controller
             control={control}
-            name="clinicalStatus"
+            name={`allergies.${index}.clinicalStatus`}
             render={({ field }) => (
               <Select
                 mt="md"
                 label="Clinical Status"
                 placeholder="Status"
                 data={["active", "inactive", "resolved"]}
-                withAsterisk
                 {...field}
-                error={errors.clinicalStatus?.message}
+                error={errors.allergies?.[index]?.clinicalStatus?.message}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="verificationStatus"
+            name={`allergies.${index}.verificationStatus`}
             render={({ field }) => (
               <Select
                 mt="md"
@@ -70,9 +88,8 @@ export default function AllergyInfo() {
                   "refuted",
                   "entered-in-error",
                 ]}
-                withAsterisk
                 {...field}
-                error={errors.verificationStatus?.message}
+                error={errors.allergies?.[index]?.verificationStatus?.message}
               />
             )}
           />
@@ -81,7 +98,7 @@ export default function AllergyInfo() {
         <Flex direction="column" className={classes.subContainer}>
           <Controller
             control={control}
-            name="criticality"
+            name={`allergies.${index}.criticality`}
             render={({ field }) => (
               <Select
                 mt="md"
@@ -89,14 +106,14 @@ export default function AllergyInfo() {
                 placeholder="Severity level"
                 data={["low", "high", "unable-to-assess"]}
                 {...field}
-                error={errors.criticality?.message}
+                error={errors.allergies?.[index]?.criticality?.message}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="reactionDescription"
+            name={`allergies.${index}.reactionDescription`}
             render={({ field }) => (
               <Textarea
                 mt="md"
@@ -106,14 +123,14 @@ export default function AllergyInfo() {
                 minRows={1}
                 maxRows={3}
                 {...field}
-                error={errors.reactionDescription?.message}
+                error={errors.allergies?.[index]?.reactionDescription?.message}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="onsetDate"
+            name={`allergies.${index}.onsetDate`}
             render={({ field }) => (
               <DatePickerInput
                 mt="md"
@@ -121,7 +138,7 @@ export default function AllergyInfo() {
                 placeholder="When did the reaction start?"
                 value={field.value || null}
                 onChange={field.onChange}
-                error={errors.onsetDate?.message}
+                error={errors.allergies?.[index]?.onsetDate?.message}
               />
             )}
           />
@@ -130,7 +147,7 @@ export default function AllergyInfo() {
         <Flex direction="column" className={classes.subContainer}>
           <Controller
             control={control}
-            name="type"
+            name={`allergies.${index}.typeAllergy`}
             render={({ field }) => (
               <Select
                 mt="md"
@@ -138,14 +155,14 @@ export default function AllergyInfo() {
                 placeholder="Select type"
                 data={["allergy", "intolerance"]}
                 {...field}
-                error={errors.type?.message}
+                error={errors.allergies?.[index]?.typeAllergy?.message}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="category"
+            name={`allergies.${index}.category`}
             render={({ field }) => (
               <Select
                 mt="md"
@@ -153,14 +170,14 @@ export default function AllergyInfo() {
                 placeholder="Category"
                 data={["food", "medication", "environment", "biologic"]}
                 {...field}
-                error={errors.category?.message}
+                error={errors.allergies?.[index]?.category?.message}
               />
             )}
           />
 
           <Controller
             control={control}
-            name="recordedDate"
+            name={`allergies.${index}.recordedDate`}
             render={({ field }) => (
               <DatePickerInput
                 mt="md"
@@ -168,21 +185,62 @@ export default function AllergyInfo() {
                 placeholder="When was it recorded?"
                 value={field.value || null}
                 onChange={field.onChange}
-                error={errors.recordedDate?.message}
+                error={errors.allergies?.[index]?.recordedDate?.message}
               />
             )}
           />
         </Flex>
       </Flex>
+
       <Stack>
         <Center>
-          <Button w="10rem">Add Allergy</Button>
+          <Button
+            w="10rem"
+            onClick={async () => {
+              const valid = await trigger([
+                `allergies.${index}.substance`,
+                `allergies.${index}.clinicalStatus`,
+              ]);
+
+              if (valid) {
+                append(emptyAllergy);
+              }
+            }}
+          >
+            Add Allergy
+          </Button>
         </Center>
-        <Center mt="xl">
-          <Pill.Group>{pills}</Pill.Group>
+
+        <Center mt="xs">
+          <Pill.Group>
+            {fields
+              .filter((item) => item.substance?.trim() !== "")
+              .map((item, idx) => (
+                <Pill
+                  key={item.id}
+                  withRemoveButton
+                  onRemove={() => remove(idx)}
+                >
+                  {item.substance}
+                </Pill>
+              ))}
+          </Pill.Group>
         </Center>
       </Stack>
+      <Center>
+        <Group justify="center">
+          <Button variant="default" onClick={prevStep}>
+            Back
+          </Button>
+          {active < 7 ? (
+            <Button onClick={handleNextStep}>Next step</Button>
+          ) : (
+            <>
+              <Button color="green">Salva</Button>
+            </>
+          )}
+        </Group>
+      </Center>
     </>
   );
-  //todo
 }

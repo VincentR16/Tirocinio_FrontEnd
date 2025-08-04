@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 // Patient
-const patientSchema = z.object({
+export const patientSchema = z.object({
   name: z.string().min(2, "Name too short"),
   surname: z.string().min(2, "Surname too short"),
   gender: z.enum(["Male", "Female", "Other"]),
-  location: z.string().min(2, "Location is required"),
+  location: z.string().optional(),
   email: z.string().email("Invalid email"),
   ssn: z.string().length(16, "SSN must be 16 characters"),
   dateOfBirth: z
@@ -18,7 +18,7 @@ const patientSchema = z.object({
 });
 
 // Encounter
-const encounterSchema = z.object({
+export const encounterSchema = z.object({
   statusEncounter: z.string().min(1, "Status is required"),
   class: z.string().min(1, "Class is required"),
   locationEncounter: z.string().min(1, "Location is required"),
@@ -36,18 +36,18 @@ const encounterSchema = z.object({
     .refine((val) => !val || !isNaN(new Date(val).getTime()), {
       message: "Invalid end time",
     }),
-  reason: z.string().min(1, "Reason is required"),
+  reason: z.string().min(1, "Reason is required").optional(),
 });
 
 // Allergy
-const allergySchema = z.object({
+export const allergySchema = z.object({
   substance: z.string().min(1, "Substance is required"),
   criticality: z.string().optional(),
   typeAllergy: z.string().optional(),
   clinicalStatus: z.string().min(1, "Clinical status is required"),
   reactionDescription: z.string().optional(),
   category: z.string().optional(),
-  verificationStatus: z.string().min(1, "Verification status is required"),
+  verificationStatus: z.string().optional(),
   onsetDate: z
     .string()
     .optional()
@@ -62,20 +62,29 @@ const allergySchema = z.object({
     }),
 });
 
+const arrayAllerrgySchema = z.object({
+  allergies: z.array(allergySchema).optional()
+})
+
 // Observations
-const observationSchema = z.object({
+export const observationSchema = z.object({ 
   statusObservation: z.string().min(1, "Status is required"),
   value: z.number().positive("Value must be positive"),
-  issuedAt: z.date().optional(),
+  issuedAt: z.string().optional(),
   categoryObservation: z.string().min(1, "Category is required"),
   unit: z.string().min(1, "Unit is required"),
   performer: z.string().optional(),
   code: z.string().min(1, "Code is required"),
-  effectiveDateTime: z.date().optional(),
+  effectiveDateTime: z.string().optional(),
   comment: z.string().optional(),
 });
+
+const arrayObservationSchema = z.object({
+  observations: z.array(observationSchema)
+})
+
 //Condition
-const conditionSchema = z.object({
+export const conditionSchema = z.object({
   conditionCode: z.string().min(1, "Condition code is required"),
 
   clinicalStatus: z.string().min(1, "Clinical status is required"),
@@ -97,7 +106,7 @@ const conditionSchema = z.object({
   note: z.string().optional(),
 });
 
-const procedureSchema = z.object({
+export const procedureSchema = z.object({
   procedureCode: z.string().min(1, "Procedure code is required"),
 
   statusProcedure: z
@@ -108,7 +117,7 @@ const procedureSchema = z.object({
 
   performer: z.string().optional(),
 
-  location: z.string().optional(),
+  locationProcedure: z.string().optional(),
 
   performedDate: z
     .string()
@@ -145,7 +154,7 @@ const routeEnum = z.enum([
   "other",
 ]);
 
-const medicationSchema = z.object({
+export const medicationSchema = z.object({
   medication: z.string().min(1, "Medication name is required"),
 
   statusMedication: medicationStatusEnum,
@@ -168,12 +177,32 @@ const medicationSchema = z.object({
   reasonMedication: z.string().optional(),
 });
 
-export const ehrSchema = patientSchema
-  .merge(encounterSchema)
-  .merge(allergySchema)
-  .merge(observationSchema)
-  .merge(conditionSchema)
-  .merge(procedureSchema)
-  .merge(medicationSchema);
+export const stepSchemas = [
+  patientSchema,
+  encounterSchema,
+  arrayAllerrgySchema,
+  arrayObservationSchema,
+  conditionSchema,
+  procedureSchema,
+  medicationSchema,
+];
 
-export type EhrFormValues = z.infer<typeof ehrSchema>;
+// tipizzazione singola per ogni schema
+export type PatientFormValues = z.infer<typeof patientSchema>;
+export type EncounterFormValues = z.infer<typeof encounterSchema>;
+export type AllergyFormValues = z.infer<typeof arrayAllerrgySchema>;
+export type ObservationFormValues = z.infer<typeof arrayObservationSchema>;
+export type ConditionFormValues = z.infer<typeof conditionSchema>;
+export type ProcedureFormValues = z.infer<typeof procedureSchema>;
+export type MedicationFormValues = z.infer<typeof medicationSchema>;
+
+// tipo unificato per tutto il form (senza usare .merge)
+export type EhrFormValues = PatientFormValues &
+  EncounterFormValues &
+  AllergyFormValues &
+  ObservationFormValues &
+  ConditionFormValues &
+  ProcedureFormValues &
+  MedicationFormValues;
+
+

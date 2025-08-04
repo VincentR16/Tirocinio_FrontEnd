@@ -1,16 +1,13 @@
 import {
   ActionIcon,
-  Button,
   Center,
   Flex,
-  Group,
   Paper,
   Stack,
   Stepper,
   Tooltip,
 } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -31,14 +28,11 @@ import ConditionInfo from "../components/ehrForm/ConditionInfo";
 import ProcedureInfo from "../components/ehrForm/ProcedureInfo";
 import MedicationInfo from "../components/ehrForm/MedicationInfo";
 import classes from "./style/createEhr.module.css";
-
+import { useEhrContext } from "../context/EhrContext";
 export default function CreateEhr() {
+
   const navigate = useNavigate();
-  const [active, setActive] = useState(0);
-  const nextStep = () =>
-    setActive((current) => (current < 7 ? current + 1 : current));
-  const prevStep = () =>
-    setActive((current) => (current > 0 ? current - 1 : current));
+  const {active , setActive} = useEhrContext();
 
   return (
     <>
@@ -54,7 +48,6 @@ export default function CreateEhr() {
       </Tooltip>
 
       <Paper p="xl" radius="md" shadow="sm" className={classes.paperContainer}>
-        <form>
           <Flex direction="column" className={classes.formContainer}>
             <Stepper
               active={active}
@@ -79,7 +72,7 @@ export default function CreateEhr() {
               <Stepper.Step
                 icon={<Biohazard></Biohazard>}
                 label={active === 2 ? "Allergy" : ""}
-                description={active === 2 ? "Patient's allergy" : ""}
+                description={active === 2 ? "Patient's allergy (Optional)" : ""}
               >
                 <AllergyInfo />
               </Stepper.Step>
@@ -127,15 +120,6 @@ export default function CreateEhr() {
               </Stepper.Completed>
             </Stepper>
           </Flex>
-          <Center>
-            <Group justify="center">
-              <Button variant="default" onClick={prevStep}>
-                Back
-              </Button>
-              <Button onClick={nextStep}>Next step</Button>
-            </Group>
-          </Center>
-        </form>
       </Paper>
     </>
   );
