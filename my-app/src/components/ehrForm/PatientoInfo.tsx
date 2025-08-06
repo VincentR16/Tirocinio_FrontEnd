@@ -1,11 +1,4 @@
-import {
-  Flex,
-  TextInput,
-  Select,
-  InputBase,
-  Center,
-  Button,
-} from "@mantine/core";
+import { Flex, TextInput, Select, InputBase } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import { IMaskInput } from "react-imask";
 import classes from "../../pages/style/createEhr.module.css";
@@ -17,8 +10,6 @@ export default function PatientInfo() {
     register,
     control,
     formState: { errors },
-    handleNextStep,
-
   } = useEhrContext();
   return (
     <>
@@ -127,9 +118,6 @@ export default function PatientInfo() {
           />
         </Flex>
       </Flex>
-      <Center>
-        <Button onClick={handleNextStep}>Next step</Button>
-      </Center>
     </>
   );
 }

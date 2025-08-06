@@ -3,8 +3,6 @@ import {
   TextInput,
   Select,
   Textarea,
-  Button,
-  Group,
 } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
@@ -133,15 +131,6 @@ export default function MedicationInfo() {
           />
         </Flex>
       </Flex>
-      <Group justify="center">
-        <Button variant="default" onClick={prevStep}>
-          Back
-        </Button>
-
-        <>
-          <Button color="green">Salva</Button>
-        </>
-      </Group>
     </>
   );
 }

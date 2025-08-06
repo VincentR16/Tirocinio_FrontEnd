@@ -1,5 +1,4 @@
 import { Flex, Select, Textarea, TextInput } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
 import { Controller } from "react-hook-form";
@@ -40,21 +39,6 @@ export default function ConditionInfo() {
 
         <Controller
           control={control}
-          name="verificationStatus"
-          render={({ field }) => (
-            <Select
-              mt="md"
-              label="Verification Status"
-              placeholder="Verification level"
-              data={["confirmed", "unconfirmed", "provisional", "differential"]}
-              {...field}
-              error={errors.verificationStatus?.message}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
           name="severity"
           render={({ field }) => (
             <Select
@@ -85,36 +69,7 @@ export default function ConditionInfo() {
       </Flex>
 
       <Flex direction="column" className={classes.subContainer}>
-        <Controller
-          control={control}
-          name="onsetDate"
-          render={({ field }) => (
-            <DatePickerInput
-              mt="md"
-              label="Onset Date"
-              placeholder="When did it start?"
-              withAsterisk
-              value={field.value || null}
-              onChange={field.onChange}
-              error={errors.onsetDate?.message}
-            />
-          )}
-        />
 
-        <Controller
-          control={control}
-          name="abatementDate"
-          render={({ field }) => (
-            <DatePickerInput
-              mt="md"
-              label="Abatement Date"
-              placeholder="When did it resolve?"
-              value={field.value || null}
-              onChange={field.onChange}
-              error={errors.abatementDate?.message}
-            />
-          )}
-        />
 
         <TextInput
           mt="md"
@@ -141,8 +96,8 @@ export default function ConditionInfo() {
               label="Note"
               placeholder="Clinical notes, context or history"
               autosize
-              minRows={1}
-              maxRows={2}
+              minRows={5}
+              maxRows={5}
               {...field}
               error={errors.note?.message}
             />

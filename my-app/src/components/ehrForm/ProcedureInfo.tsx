@@ -1,5 +1,4 @@
 import { Flex, TextInput, Select, Textarea } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
 import  { Controller } from "react-hook-form";
@@ -53,33 +52,10 @@ export default function ProcedureInfo() {
           error={errors.performer?.message}
         />
 
-        <TextInput
-          mt="md"
-          label="Location"
-          placeholder="Hospital, Clinic, or Department"
-          {...register("locationProcedure")}
-          error={errors.locationProcedure?.message}
-        />
       </Flex>
 
       <Flex direction="column" className={classes.subContainer}>
-        <Controller
-          name="performedDate"
-          control={control}
-          render={({ field }) => (
-            <DatePickerInput
-              mt="md"
-              label="Performed Date"
-              placeholder="When was it performed?"
-              withAsterisk
-              value={field.value ? new Date(field.value) : null}
-              onChange={(date) =>
-                field.onChange(date ? date.toString().split("T")[0] : "")
-              }
-              error={errors.performedDate?.message}
-            />
-          )}
-        />
+       
 
         <Textarea
           mt="md"

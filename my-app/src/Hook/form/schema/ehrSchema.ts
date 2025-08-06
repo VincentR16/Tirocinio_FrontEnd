@@ -36,7 +36,7 @@ export const encounterSchema = z.object({
     .refine((val) => !val || !isNaN(new Date(val).getTime()), {
       message: "Invalid end time",
     }),
-  reason: z.string().min(1, "Reason is required").optional(),
+  reason: z.string().optional(),
 });
 
 // Allergy
@@ -44,63 +44,35 @@ export const allergySchema = z.object({
   substance: z.string().min(1, "Substance is required"),
   criticality: z.string().optional(),
   typeAllergy: z.string().optional(),
-  clinicalStatus: z.string().min(1, "Clinical status is required"),
   reactionDescription: z.string().optional(),
-  category: z.string().optional(),
-  verificationStatus: z.string().optional(),
-  onsetDate: z
-    .string()
-    .optional()
-    .refine((val) => !val || !isNaN(new Date(val).getTime()), {
-      message: "Invalid onset date",
-    }),
-  recordedDate: z
-    .string()
-    .optional()
-    .refine((val) => !val || !isNaN(new Date(val).getTime()), {
-      message: "Invalid recorded date",
-    }),
+  category: z.string().min(1, "Category is required"),
 });
 
-const arrayAllerrgySchema = z.object({
-  allergies: z.array(allergySchema).optional()
-})
+const arrayAllergySchema = z.object({
+  allergies: z.array(allergySchema),
+});
 
 // Observations
-export const observationSchema = z.object({ 
+export const observationSchema = z.object({
   statusObservation: z.string().min(1, "Status is required"),
-  value: z.number().positive("Value must be positive"),
-  issuedAt: z.string().optional(),
+  value: z.number(),
   categoryObservation: z.string().min(1, "Category is required"),
   unit: z.string().min(1, "Unit is required"),
   performer: z.string().optional(),
   code: z.string().min(1, "Code is required"),
-  effectiveDateTime: z.string().optional(),
   comment: z.string().optional(),
 });
 
 const arrayObservationSchema = z.object({
-  observations: z.array(observationSchema)
-})
+  observations: z.array(observationSchema),
+});
 
 //Condition
 export const conditionSchema = z.object({
   conditionCode: z.string().min(1, "Condition code is required"),
-
   clinicalStatus: z.string().min(1, "Clinical status is required"),
-  verificationStatus: z.string().optional(),
   severity: z.string().optional(),
   category: z.string().optional(),
-
-  onsetDate: z
-    .string()
-    .min(1, "Date of birth is required")
-    .refine((val) => !isNaN(new Date(val).getTime()), {
-      message: "Invalid date format",
-    }),
-
-  abatementDate: z.date().optional(),
-
   bodySite: z.string().optional(),
   recorder: z.string().optional(),
   note: z.string().optional(),
@@ -116,15 +88,6 @@ export const procedureSchema = z.object({
     }),
 
   performer: z.string().optional(),
-
-  locationProcedure: z.string().optional(),
-
-  performedDate: z
-    .string()
-    .min(1, "Date of birth is required")
-    .refine((val) => !isNaN(new Date(val).getTime()), {
-      message: "Invalid date format",
-    }),
 
   reason: z.string().optional(),
 
@@ -180,7 +143,7 @@ export const medicationSchema = z.object({
 export const stepSchemas = [
   patientSchema,
   encounterSchema,
-  arrayAllerrgySchema,
+  arrayAllergySchema,
   arrayObservationSchema,
   conditionSchema,
   procedureSchema,
@@ -190,7 +153,7 @@ export const stepSchemas = [
 // tipizzazione singola per ogni schema
 export type PatientFormValues = z.infer<typeof patientSchema>;
 export type EncounterFormValues = z.infer<typeof encounterSchema>;
-export type AllergyFormValues = z.infer<typeof arrayAllerrgySchema>;
+export type AllergyFormValues = z.infer<typeof arrayAllergySchema>;
 export type ObservationFormValues = z.infer<typeof arrayObservationSchema>;
 export type ConditionFormValues = z.infer<typeof conditionSchema>;
 export type ProcedureFormValues = z.infer<typeof procedureSchema>;
@@ -204,5 +167,3 @@ export type EhrFormValues = PatientFormValues &
   ConditionFormValues &
   ProcedureFormValues &
   MedicationFormValues;
-
-

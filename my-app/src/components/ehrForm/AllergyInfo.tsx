@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Flex,
   TextInput,
@@ -7,13 +8,13 @@ import {
   Stack,
   Center,
   Pill,
-  Group,
+  Text,
 } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
 import { Controller, useFieldArray } from "react-hook-form";
 import { useEffect } from "react";
+import { notifications } from "@mantine/notifications";
 
 const emptyAllergy = {
   substance: "",
@@ -31,7 +32,10 @@ export default function AllergyInfo() {
   const {
     register,
     control,
-    trigger,
+    handleNextStep,
+    watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useEhrContext();
 
@@ -40,56 +44,102 @@ export default function AllergyInfo() {
     name: "allergies",
   });
 
-  const index = fields.length - 1;
+  // Watch del form corrente (sempre indice 0)
+  const currentAllergy = watch("allergies.0");
+
   useEffect(() => {
     if (fields.length === 0) {
       append(emptyAllergy);
     }
   }, [fields.length, append]);
 
+  const addAllergy = async () => {
+    try {
+      // Valida solo il form corrente
+      await handleNextStep();
+
+      const values = getValues();
+      const currentAllergyData = values.allergies[0];
+
+      // Controlla se c'è già un'allergia con la stessa sostanza
+      const existingAllergies = fields.slice(1); // Escludi il form corrente (indice 0)
+      const isDuplicate = existingAllergies.some(
+        (allergy) =>
+          allergy.substance?.toLowerCase().trim() ===
+          currentAllergyData.substance?.toLowerCase().trim()
+      );
+
+      if (isDuplicate) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "There is already a allergy with the same substance",
+          autoClose: 3500,
+          position: "top-right",
+        });
+        return;
+      }
+
+      // Aggiungi l'allergia alla lista (diventerà una pillola)
+      append({ ...currentAllergyData });
+
+      // Reset solo del primo elemento dell'array (form corrente)
+      // Usa setValue per aggiornare solo l'indice 0
+      Object.keys(emptyAllergy).forEach((key) => {
+        setValue(`allergies.0.${key}` as any, (emptyAllergy as any)[key]);
+      });
+    } catch (error) {
+      console.warn("Validation failed, cannot add allergy", error);
+    }
+  };
+
+  const removeAllergy = (indexToRemove: number) => {
+    // Non rimuovere mai l'indice 0 (il form corrente)
+    if (indexToRemove > 0) {
+      remove(indexToRemove);
+    }
+  };
+
+  // Allergie salvate (escludi il form corrente)
+  const savedAllergies = fields
+    .slice(1)
+    .filter((allergy) => allergy.substance?.trim() !== "");
+
+  // Controlla se il form corrente è compilato
+  const isCurrentFormValid =
+    currentAllergy?.substance?.trim() !== "" &&
+    currentAllergy?.category?.trim() !== "";
+
   return (
     <>
+      {/* Form per inserire una nuova allergia */}
       <Flex direction="row" gap="xl" className={classes.container} mb="xl">
         <Flex ml="lg" direction="column" className={classes.subContainer}>
           <TextInput
             mt="md"
             label="Substance"
+            withAsterisk
             placeholder="e.g. Penicillin, Peanuts"
-            {...register(`allergies.${index}.substance`)}
-            error={errors.allergies?.[index]?.substance?.message}
+            {...register("allergies.0.substance")}
+            error={errors.allergies?.[0]?.substance?.message}
           />
 
           <Controller
             control={control}
-            name={`allergies.${index}.clinicalStatus`}
+            name="allergies.0.category"
             render={({ field }) => (
               <Select
                 mt="md"
-                label="Clinical Status"
-                placeholder="Status"
-                data={["active", "inactive", "resolved"]}
-                {...field}
-                error={errors.allergies?.[index]?.clinicalStatus?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name={`allergies.${index}.verificationStatus`}
-            render={({ field }) => (
-              <Select
-                mt="md"
-                label="Verification Status"
-                placeholder="Verification"
-                data={[
-                  "unconfirmed",
-                  "confirmed",
-                  "refuted",
-                  "entered-in-error",
-                ]}
-                {...field}
-                error={errors.allergies?.[index]?.verificationStatus?.message}
+                withAsterisk
+                label="Category"
+                placeholder="Select category"
+                data={["food", "medication", "environment", "biologic"]}
+                value={field.value || ""}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                ref={field.ref}
+                error={errors.allergies?.[0]?.category?.message}
+                clearable
               />
             )}
           />
@@ -98,94 +148,57 @@ export default function AllergyInfo() {
         <Flex direction="column" className={classes.subContainer}>
           <Controller
             control={control}
-            name={`allergies.${index}.criticality`}
+            name="allergies.0.criticality"
             render={({ field }) => (
               <Select
                 mt="md"
                 label="Criticality"
-                placeholder="Severity level"
+                placeholder="Select severity level"
                 data={["low", "high", "unable-to-assess"]}
-                {...field}
-                error={errors.allergies?.[index]?.criticality?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name={`allergies.${index}.reactionDescription`}
-            render={({ field }) => (
-              <Textarea
-                mt="md"
-                label="Reaction Description"
-                placeholder="e.g. Rash, Anaphylaxis"
-                autosize
-                minRows={1}
-                maxRows={3}
-                {...field}
-                error={errors.allergies?.[index]?.reactionDescription?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name={`allergies.${index}.onsetDate`}
-            render={({ field }) => (
-              <DatePickerInput
-                mt="md"
-                label="Onset Date"
-                placeholder="When did the reaction start?"
-                value={field.value || null}
+                value={field.value || ""}
                 onChange={field.onChange}
-                error={errors.allergies?.[index]?.onsetDate?.message}
+                onBlur={field.onBlur}
+                ref={field.ref}
+                error={errors.allergies?.[0]?.criticality?.message}
+                clearable
               />
             )}
           />
-        </Flex>
 
-        <Flex direction="column" className={classes.subContainer}>
           <Controller
             control={control}
-            name={`allergies.${index}.typeAllergy`}
+            name="allergies.0.typeAllergy"
             render={({ field }) => (
               <Select
                 mt="md"
                 label="Type"
                 placeholder="Select type"
                 data={["allergy", "intolerance"]}
-                {...field}
-                error={errors.allergies?.[index]?.typeAllergy?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name={`allergies.${index}.category`}
-            render={({ field }) => (
-              <Select
-                mt="md"
-                label="Category"
-                placeholder="Category"
-                data={["food", "medication", "environment", "biologic"]}
-                {...field}
-                error={errors.allergies?.[index]?.category?.message}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name={`allergies.${index}.recordedDate`}
-            render={({ field }) => (
-              <DatePickerInput
-                mt="md"
-                label="Recorded Date"
-                placeholder="When was it recorded?"
-                value={field.value || null}
+                value={field.value || ""}
                 onChange={field.onChange}
-                error={errors.allergies?.[index]?.recordedDate?.message}
+                onBlur={field.onBlur}
+                ref={field.ref}
+                error={errors.allergies?.[0]?.typeAllergy?.message}
+                clearable
+              />
+            )}
+          />
+        </Flex>
+
+        <Flex direction="column" className={classes.subContainer}>
+          <Controller
+            control={control}
+            name="allergies.0.reactionDescription"
+            render={({ field }) => (
+              <Textarea
+                mt="md"
+                label="Reaction Description"
+                placeholder="e.g. Rash, Anaphylaxis"
+                autosize
+                minRows={3}
+                maxRows={5}
+                {...field}
+                error={errors.allergies?.[0]?.reactionDescription?.message}
               />
             )}
           />
@@ -195,52 +208,50 @@ export default function AllergyInfo() {
       <Stack>
         <Center>
           <Button
-            w="10rem"
-            onClick={async () => {
-              const valid = await trigger([
-                `allergies.${index}.substance`,
-                `allergies.${index}.clinicalStatus`,
-              ]);
-
-              if (valid) {
-                append(emptyAllergy);
-              }
-            }}
+            color="green"
+            w="12rem"
+            onClick={addAllergy}
+            disabled={!isCurrentFormValid}
           >
             Add Allergy
           </Button>
         </Center>
 
-        <Center mt="xs">
-          <Pill.Group>
-            {fields
-              .filter((item) => item.substance?.trim() !== "")
-              .map((item, idx) => (
-                <Pill
-                  key={item.id}
-                  withRemoveButton
-                  onRemove={() => remove(idx)}
-                >
-                  {item.substance}
-                </Pill>
-              ))}
-          </Pill.Group>
-        </Center>
+        {/* Pillole delle allergie salvate */}
+        {savedAllergies.length > 0 && (
+          <Center mt="md">
+            <Stack align="center" gap="xs">
+              <Text size="sm" c="dimmed">
+                Added Allergies ({savedAllergies.length}):
+              </Text>
+              <Pill.Group>
+                {savedAllergies.map((allergy, index: number) => {
+                  const actualIndex = index + 1; // +1 perché saltiamo l'indice 0
+                  return (
+                    <Pill
+                      key={`${allergy.substance}-${actualIndex}`}
+                      withRemoveButton
+                      onRemove={() => removeAllergy(actualIndex)}
+                    >
+                      {allergy.substance}
+                      {allergy.category && ` (${allergy.category})`}
+                    </Pill>
+                  );
+                })}
+              </Pill.Group>
+            </Stack>
+          </Center>
+        )}
+
+        {savedAllergies.length === 0 && (
+          <Center mt="md">
+            <Text size="sm" c="dimmed">
+              No allergies added yet. Fill the form above and click "Add
+              Allergy" or just click "Next step".
+            </Text>
+          </Center>
+        )}
       </Stack>
-      <Center>
-        <Group justify="center">
-          <Button variant="default" onClick={prevStep}>
-            Back
-          </Button>
-          {active < 7 ? (
-            <Button onClick={handleNextStep}>Next step</Button>
-          ) : (
-            <>
-              <Button color="green">Salva</Button>
-            </>
-          )}
-        </Group>
-      </Center>
     </>
   );
 }

@@ -8,6 +8,7 @@ type EhrContextType = {
   setEhr: (obj: EhrRequest | undefined) => void;
   handleNextStep: () => void;
   prevStep: () => void;
+  nextStep: () => void;
   active: number;
   setActive: (obj: number) => void;
 } & UseFormReturn<EhrFormValues>;

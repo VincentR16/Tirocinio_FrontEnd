@@ -21,24 +21,23 @@ export function EhrProvider({ children }: { children: ReactNode }) {
   const handleNextStep = async () => {
     const currentSchema = stepSchemas[active];
     const values = form.getValues();
-    console.log("handle")
 
-    // ✅ Validazione con Zod
     try {
-       await currentSchema.parseAsync(values);
-       console.log("eccoci ", currentSchema)
-       nextStep();
+      await currentSchema.parseAsync(values);
+      if (active === 2 || active === 3) return;
+      nextStep();
     } catch (error) {
-      console.log("ok")
       if (error instanceof z.ZodError) {
         for (const issue of error.issues) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      form.setError(issue.path[0] as any, {
-        message: issue.message,
-      });
+          console.warn("Validation issues:", (error as z.ZodError).issues);
+          const path = issue.path.join(".");
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          form.setError(path as any, {
+            message: issue.message,
+          });
+        }
       }
-    }
-    return;
+      throw new Error("Form validation failed");
     }
   };
 
@@ -50,6 +49,7 @@ export function EhrProvider({ children }: { children: ReactNode }) {
         setEhr,
         handleNextStep,
         prevStep,
+        nextStep,
         active,
         setActive,
       }}
