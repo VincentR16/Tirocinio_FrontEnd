@@ -7,10 +7,11 @@ import { IconCheck } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
 
 export default function InitialRedirect() {
+
   //uso hook per vedere se ci sono ancora refresh e access token
   usePersistentLogin();
   const { isAuthenticated, isLoading } = useAuthContext();
-  const hasShownNotification = useRef(false); // 👈 evita doppia esecuzione
+  const hasShownNotification = useRef(false); 
 
   useEffect(() => {
     if (isAuthenticated && !hasShownNotification.current) {

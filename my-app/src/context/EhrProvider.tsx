@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import type { EhrRequest } from "../types/EhrRequest";
 import { EhrContext } from "./EhrContext";
-import { useEhrForm } from "../hook/form/useEhrForn";
+import { useEhrForm } from "../hook/form/useEhrForm";
 import { stepSchemas } from "../hook/form/schema/ehrSchema";
 import z from "zod";
 

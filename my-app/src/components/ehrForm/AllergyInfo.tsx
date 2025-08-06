@@ -75,7 +75,7 @@ export default function AllergyInfo() {
           color: "red",
           message: "There is already a allergy with the same substance",
           autoClose: 3500,
-          position: "top-right",
+          position: "bottom-right",
         });
         return;
       }

@@ -76,7 +76,7 @@ export default function ObservationInfo() {
           color: "red",
           message: "There is already an observation with the same code",
           autoClose: 3500,
-          position: "top-right",
+          position: "bottom-right",
         });
         return;
       }
@@ -119,7 +119,7 @@ export default function ObservationInfo() {
   return (
     <>
       {/* Form per inserire una nuova osservazione */}
-      <Flex direction="row" gap="xl" className={classes.container} mb="xl">
+      <Flex direction="row" gap="xl" className={classes.container} mb="md">
         <Flex ml="lg" direction="column" className={classes.subContainer}>
           <Controller
             control={control}
@@ -246,7 +246,7 @@ export default function ObservationInfo() {
 
         {/* Pillole delle osservazioni salvate */}
         {savedObservations.length > 0 && (
-          <Center mt="md">
+          <Center>
             <Stack align="center" gap="xs">
               <Text size="sm" c="dimmed">
                 Added Observations ({savedObservations.length}):
