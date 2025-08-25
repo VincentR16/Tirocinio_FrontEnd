@@ -1,5 +1,5 @@
 import { Flex, Select, TextInput, Textarea } from "@mantine/core";
-import { DatePickerInput } from "@mantine/dates";
+import { DateTimePicker } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
 import { Controller } from "react-hook-form";
 import { useEhrContext } from "../../context/EhrContext";
@@ -63,19 +63,44 @@ export default function EncounterInfo() {
       </Flex>
 
       <Flex direction="column" className={classes.subContainer}>
-        <TextInput
-          mt="md"
-          label="Type"
-          placeholder="e.g. Check-up, Surgery"
-          withAsterisk
-          {...register("type")}
-          error={errors.type?.message}
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <Select
+              mt="md"
+              label="Type"
+              placeholder="e.g. Check-up, Surgery"
+              data={[
+                "check-up",
+                "consultation",
+                "counseling",
+                "diagnostic",
+                "emergency",
+                "follow-up",
+                "physical-exam",
+                "procedure",
+                "rehabilitation",
+                "screening",
+                "surgery",
+                "therapy",
+                "treatment",
+                "vaccination",
+                "wellness",
+              ]}
+              withAsterisk
+              searchable
+              clearable
+              {...field}
+              error={errors.type?.message}
+            />
+          )}
         />
         <Controller
           name="start"
           control={control}
           render={({ field }) => (
-            <DatePickerInput
+            <DateTimePicker
               mt="md"
               label="Start time"
               placeholder="Start date "
@@ -93,11 +118,10 @@ export default function EncounterInfo() {
           name="end"
           control={control}
           render={({ field }) => (
-            <DatePickerInput
+            <DateTimePicker
               mt="md"
               label="End time"
               placeholder="End time"
-              withAsterisk
               value={field.value ? new Date(field.value) : null}
               onChange={(date) =>
                 field.onChange(date ? date.toString().split("T")[0] : "")

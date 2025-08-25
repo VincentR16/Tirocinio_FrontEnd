@@ -80,7 +80,7 @@ export default function AllergyInfo() {
         return;
       }
 
-      // Aggiungi l'allergia alla lista (diventerà una pillola)
+      // Aggiungi l'allergia alla lista 
       append({ ...currentAllergyData });
 
       // Reset solo del primo elemento dell'array (form corrente)
@@ -195,7 +195,7 @@ export default function AllergyInfo() {
                 label="Reaction Description"
                 placeholder="e.g. Rash, Anaphylaxis"
                 autosize
-                minRows={3}
+                minRows={4.5}
                 maxRows={5}
                 {...field}
                 error={errors.allergies?.[0]?.reactionDescription?.message}
