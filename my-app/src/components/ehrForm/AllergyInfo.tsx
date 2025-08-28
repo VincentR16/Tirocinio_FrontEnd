@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Flex,
-  TextInput,
   Select,
   Textarea,
   Button,
@@ -15,9 +14,12 @@ import { useEhrContext } from "../../context/EhrContext";
 import { Controller, useFieldArray } from "react-hook-form";
 import { useEffect } from "react";
 import { notifications } from "@mantine/notifications";
+import { MedicationSelect } from "../MedicalSelect";
+import { TermsTypeEnum } from "../../types/TermsType";
 
 const emptyAllergy = {
   substance: "",
+  code:"",
   clinicalStatus: "",
   criticality: "",
   typeAllergy: "",
@@ -30,9 +32,7 @@ const emptyAllergy = {
 
 export default function AllergyInfo() {
   const {
-    register,
     control,
-    handleNextStep,
     watch,
     setValue,
     getValues,
@@ -44,7 +44,7 @@ export default function AllergyInfo() {
     name: "allergies",
   });
 
-  // Watch del form corrente (sempre indice 0)
+  //Watch del form corrente (sempre indice 0)
   const currentAllergy = watch("allergies.0");
 
   useEffect(() => {
@@ -55,11 +55,34 @@ export default function AllergyInfo() {
 
   const addAllergy = async () => {
     try {
-      // Valida solo il form corrente
-      await handleNextStep();
-
       const values = getValues();
+      console.log("ecco,", values.allergies[0]);
+
+      
       const currentAllergyData = values.allergies[0];
+
+      if (!currentAllergyData.category?.trim()) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "Category is required",
+          autoClose: 3500,
+          position: "bottom-right",
+        });
+        return;
+      }
+
+      // Aggiungi validazione per il codice se necessario
+      if (!currentAllergyData.code?.trim()) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "Code is required",
+          autoClose: 3500,
+          position: "bottom-right",
+        });
+        return;
+      }
 
       // Controlla se c'è già un'allergia con la stessa sostanza
       const existingAllergies = fields.slice(1); // Escludi il form corrente (indice 0)
@@ -80,13 +103,21 @@ export default function AllergyInfo() {
         return;
       }
 
-      // Aggiungi l'allergia alla lista 
+      // Aggiungi l'allergia alla lista
       append({ ...currentAllergyData });
 
       // Reset solo del primo elemento dell'array (form corrente)
       // Usa setValue per aggiornare solo l'indice 0
       Object.keys(emptyAllergy).forEach((key) => {
         setValue(`allergies.0.${key}` as any, (emptyAllergy as any)[key]);
+      });
+
+      notifications.show({
+        title: "Success!",
+        color: "green",
+        message: "Allergy added successfully",
+        autoClose: 2000,
+        position: "bottom-right",
       });
     } catch (error) {
       console.warn("Validation failed, cannot add allergy", error);
@@ -105,23 +136,34 @@ export default function AllergyInfo() {
     .slice(1)
     .filter((allergy) => allergy.substance?.trim() !== "");
 
-  // Controlla se il form corrente è compilato
+  // Controlla se il form corrente è compilato e valido
   const isCurrentFormValid =
     currentAllergy?.substance?.trim() !== "" &&
-    currentAllergy?.category?.trim() !== "";
+    currentAllergy?.category?.trim() !== "" &&
+    currentAllergy?.code?.trim() !== ""; // Il codice deve essere presente (significa che è stata selezionata un'opzione valida)
 
   return (
     <>
       {/* Form per inserire una nuova allergia */}
       <Flex direction="row" gap="xl" className={classes.container} mb="xl">
         <Flex ml="lg" direction="column" className={classes.subContainer}>
-          <TextInput
-            mt="md"
-            label="Substance"
-            withAsterisk
-            placeholder="e.g. Penicillin, Peanuts"
-            {...register("allergies.0.substance")}
-            error={errors.allergies?.[0]?.substance?.message}
+          <Controller
+            control={control}
+            name="allergies.0.substance"
+            render={({ field }) => (
+              <MedicationSelect
+                label="Allergy"
+                termsType={TermsTypeEnum.ALLERGY}
+                placeholder="e.g. Penicillin, Peanuts"
+                value={field.value}
+                onChange={field.onChange}
+                onCodeChange={(code) => {
+                  // Imposta il codice nel campo code quando viene selezionato un elemento
+                  setValue("allergies.0.code", code);
+                }}
+                error={errors.allergies?.[0]?.substance?.message}
+              />
+            )}
           />
 
           <Controller

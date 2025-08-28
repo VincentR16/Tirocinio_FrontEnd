@@ -1,31 +1,40 @@
-import {
-  Flex,
-  TextInput,
-  Select,
-  Textarea,
-} from "@mantine/core";
+import { Flex, TextInput, Select, Textarea } from "@mantine/core";
 import { DatePickerInput } from "@mantine/dates";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
 import { Controller } from "react-hook-form";
+import { TermsTypeEnum } from "../../types/TermsType";
+import { MedicationSelect } from "../MedicalSelect";
 
 export default function MedicationInfo() {
   const {
     register,
     control,
+    setValue,
     formState: { errors },
   } = useEhrContext();
   return (
     <>
       <Flex direction="row" className={classes.container}>
         <Flex ml="lg" direction="column" className={classes.subContainer}>
-          <TextInput
-            mt="md"
-            label="Medication"
-            placeholder="e.g. Ibuprofen 200mg"
-            withAsterisk
-            {...register("medication")}
-            error={errors.medication?.message}
+          
+          <Controller
+            control={control}
+            name="medication"
+            render={({ field }) => (
+              <MedicationSelect
+                label="Medication"
+                termsType={TermsTypeEnum.MEDICATION}
+                placeholder="e.g. Aspirin, Metformin"
+                value={field.value}
+                onChange={field.onChange}
+                onCodeChange={(code) => {
+                  // Imposta il codice di sistema quando viene selezionato un elemento
+                  setValue("medicationId", code);
+                }}
+                error={errors.medication?.message}
+              />
+            )}
           />
 
           <Controller

@@ -7,7 +7,7 @@ export async function getTermsApi(
   type: TermsType,
   limit = 10
 ): Promise<TermsResponse[]> {
-  if (!query || query.length < 2) return [];
+  if (!query || query.length < 1) return [];
 
   try {
     const response = await axios.get<TermsResponse[]>(

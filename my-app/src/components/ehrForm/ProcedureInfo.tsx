@@ -1,24 +1,38 @@
 import { Flex, TextInput, Select, Textarea } from "@mantine/core";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
-import  { Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import { MedicationSelect } from "../MedicalSelect";
+import { TermsTypeEnum } from "../../types/TermsType";
 
 export default function ProcedureInfo() {
   const {
     register,
     control,
+    setValue,
     formState: { errors },
   } = useEhrContext();
   return (
     <Flex direction="row" className={classes.container}>
       <Flex ml="lg" direction="column" className={classes.subContainer}>
-        <TextInput
-          mt="md"
-          label="Procedure Code"
-          placeholder="e.g. Appendectomy, MRI scan"
-          withAsterisk
-          {...register("procedureCode")}
-          error={errors.procedureCode?.message}
+
+        <Controller
+          control={control}
+          name="procedureCode"
+          render={({ field }) => (
+            <MedicationSelect
+              label="Procedure Code"
+              termsType={TermsTypeEnum.PROCEDURE}
+              placeholder="e.g. Blood draw,X-ray chest"
+              value={field.value}
+              onChange={field.onChange}
+              onCodeChange={(code) => {
+                // Imposta il codice di sistema quando viene selezionato un elemento
+                setValue("procedureId", code);
+              }}
+              error={errors.procedureCode?.message}
+            />
+          )}
         />
 
         <Controller
@@ -51,12 +65,9 @@ export default function ProcedureInfo() {
           {...register("performer")}
           error={errors.performer?.message}
         />
-
       </Flex>
 
       <Flex direction="column" className={classes.subContainer}>
-       
-
         <Textarea
           mt="md"
           label="Reason"

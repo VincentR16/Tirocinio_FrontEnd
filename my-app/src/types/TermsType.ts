@@ -4,6 +4,6 @@ export const TermsTypeEnum = {
     CONDITION: 'condition',
     PROCEDURE:  'procedure',
     MEDICATION: 'medication'
-};
+} as const;
 
 export type TermsType = (typeof TermsTypeEnum)[keyof typeof TermsTypeEnum];

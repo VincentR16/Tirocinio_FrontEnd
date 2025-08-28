@@ -2,7 +2,6 @@
 import {
   Flex,
   Select,
-  TextInput,
   NumberInput,
   Textarea,
   Stack,
@@ -10,17 +9,21 @@ import {
   Button,
   Pill,
   Text,
+  TextInput,
 } from "@mantine/core";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
 import { Controller, useFieldArray } from "react-hook-form";
 import { useEffect } from "react";
 import { notifications } from "@mantine/notifications";
+import { MedicationSelect } from "../MedicalSelect";
+import { TermsTypeEnum } from "../../types/TermsType";
 
 const emptyObservation = {
   statusObservation: "",
   categoryObservation: "",
   code: "",
+  codeObservation: "", // Aggiungi questo campo per salvare il codice di sistema
   value: 0,
   unit: "",
   effectiveDateTime: "",
@@ -33,7 +36,6 @@ export default function ObservationInfo() {
   const {
     register,
     control,
-    handleNextStep,
     watch,
     setValue,
     getValues,
@@ -56,11 +58,64 @@ export default function ObservationInfo() {
 
   const addObservation = async () => {
     try {
-      // Valida solo il form corrente
-      await handleNextStep();
-
       const values = getValues();
       const currentObservationData = values.observations[0];
+
+      // Validazione manuale dei campi obbligatori
+      if (!currentObservationData.statusObservation?.trim()) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "Status is required",
+          autoClose: 3500,
+          position: "bottom-right",
+        });
+        return;
+      }
+
+      if (!currentObservationData.categoryObservation?.trim()) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "Category is required",
+          autoClose: 3500,
+          position: "bottom-right",
+        });
+        return;
+      }
+
+      if (!currentObservationData.code?.trim()) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "Code is required",
+          autoClose: 3500,
+          position: "bottom-right",
+        });
+        return;
+      }
+
+      if (!currentObservationData.codeObservation?.trim()) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "Please select a valid code from the list",
+          autoClose: 3500,
+          position: "bottom-right",
+        });
+        return;
+      }
+
+      if (!currentObservationData.unit?.trim()) {
+        notifications.show({
+          title: "Error!",
+          color: "red",
+          message: "Unit is required",
+          autoClose: 3500,
+          position: "bottom-right",
+        });
+        return;
+      }
 
       // Controlla se c'è già un'osservazione con lo stesso codice
       const existingObservations = fields.slice(1); // Escludi il form corrente (indice 0)
@@ -81,19 +136,27 @@ export default function ObservationInfo() {
         return;
       }
 
-      // Aggiungi l'osservazione alla lista (diventerà una pillola)
+      // Aggiungi l'osservazione alla lista
       append({ ...currentObservationData });
 
-      // Reset solo del primo elemento dell'array (form corrente)
-      // Usa setValue per aggiornare solo l'indice 0
+      // Reset del form corrente
       Object.keys(emptyObservation).forEach((key) => {
         setValue(
           `observations.0.${key}` as any,
-          (emptyObservation as any)[key]
+          (emptyObservation as any)[key],
+          { shouldValidate: false }
         );
       });
+
+      notifications.show({
+        title: "Success!",
+        color: "green",
+        message: "Observation added successfully",
+        autoClose: 2000,
+        position: "bottom-right",
+      });
     } catch (error) {
-      console.warn("Validation failed, cannot add observation", error);
+      console.warn("Failed to add observation", error);
     }
   };
 
@@ -109,12 +172,13 @@ export default function ObservationInfo() {
     .slice(1)
     .filter((observation) => observation.code?.trim() !== "");
 
-  // Controlla se il form corrente è compilato
+  // Controlla se il form corrente è compilato e valido
   const isCurrentFormValid =
     currentObservation?.code?.trim() !== "" &&
     currentObservation?.statusObservation?.trim() !== "" &&
     currentObservation?.categoryObservation?.trim() !== "" &&
-    currentObservation?.unit?.trim() !== "";
+    currentObservation?.unit?.trim() !== "" &&
+    currentObservation?.codeObservation?.trim() !== ""; // Il codeSystem deve essere presente
 
   return (
     <>
@@ -152,7 +216,7 @@ export default function ObservationInfo() {
                 placeholder="Select category"
                 data={[
                   "vital-signs",
-                  "laboratory",
+                  "laboratory", 
                   "social-history",
                   "imaging",
                 ]}
@@ -166,13 +230,23 @@ export default function ObservationInfo() {
             )}
           />
 
-          <TextInput
-            mt="md"
-            withAsterisk
-            label="Code"
-            placeholder="e.g. Blood Pressure, Glucose"
-            {...register("observations.0.code")}
-            error={errors.observations?.[0]?.code?.message}
+          <Controller
+            control={control}
+            name="observations.0.code"
+            render={({ field }) => (
+              <MedicationSelect
+                label="Code"
+                termsType={TermsTypeEnum.OBSERVATION}
+                placeholder="e.g. Blood Pressure, Glucose"
+                value={field.value}
+                onChange={field.onChange}
+                onCodeChange={(code) => {
+                  // Imposta il codice di sistema quando viene selezionato un elemento
+                  setValue("observations.0.codeObservation", code);
+                }}
+                error={errors.observations?.[0]?.code?.message}
+              />
+            )}
           />
         </Flex>
 

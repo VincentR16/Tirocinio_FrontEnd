@@ -41,6 +41,7 @@ export const encounterSchema = z.object({
 
 // Allergy
 export const allergySchema = z.object({
+  code: z.string(),
   substance: z.string().min(1, "Substance is required"),
   criticality: z.string().optional(),
   typeAllergy: z.string().optional(),
@@ -54,6 +55,7 @@ const arrayAllergySchema = z.object({
 
 // Observations
 export const observationSchema = z.object({
+  codeObservation: z.string(),
   statusObservation: z.string().min(1, "Status is required"),
   value: z.number(),
   categoryObservation: z.string().min(1, "Category is required"),
@@ -69,6 +71,7 @@ const arrayObservationSchema = z.object({
 
 //Condition
 export const conditionSchema = z.object({
+  conditionId: z.string(),
   conditionCode: z.string().min(1, "Condition code is required"),
   clinicalStatus: z.string().min(1, "Clinical status is required"),
   severity: z.string().optional(),
@@ -79,6 +82,7 @@ export const conditionSchema = z.object({
 });
 
 export const procedureSchema = z.object({
+  procedureId: z.string(),
   procedureCode: z.string().min(1, "Procedure code is required"),
 
   statusProcedure: z
@@ -119,6 +123,7 @@ const routeEnum = z.enum([
 
 export const medicationSchema = z.object({
   medication: z.string().min(1, "Medication name is required"),
+  medicationId: z.string(),
 
   statusMedication: medicationStatusEnum,
 

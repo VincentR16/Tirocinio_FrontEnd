@@ -2,23 +2,37 @@ import { Flex, Select, Textarea, TextInput } from "@mantine/core";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
 import { Controller } from "react-hook-form";
+import { MedicationSelect } from "../MedicalSelect";
+import { TermsTypeEnum } from "../../types/TermsType";
 
 export default function ConditionInfo() {
   const {
     register,
     control,
+    setValue,
     formState: { errors },
   } = useEhrContext();
   return (
     <Flex direction="row" className={classes.container}>
       <Flex ml="lg" direction="column" className={classes.subContainer}>
-        <TextInput
-          mt="md"
-          label="Condition Code"
-          placeholder="e.g. Hypertension, Diabetes"
-          withAsterisk
-          {...register("conditionCode")}
-          error={errors.conditionCode?.message}
+        
+        <Controller
+          control={control}
+          name="conditionCode"
+          render={({ field }) => (
+            <MedicationSelect
+              label="Code"
+              termsType={TermsTypeEnum.CONDITION}
+              placeholder="e.g. Type 2 diabetes, Hypertension"
+              value={field.value}
+              onChange={field.onChange}
+              onCodeChange={(code) => {
+                // Imposta il codice di sistema quando viene selezionato un elemento
+                setValue("conditionId", code);
+              }}
+              error={errors.conditionCode?.message}
+            />
+          )}
         />
 
         <Controller
@@ -69,8 +83,6 @@ export default function ConditionInfo() {
       </Flex>
 
       <Flex direction="column" className={classes.subContainer}>
-
-
         <TextInput
           mt="md"
           label="Body Site"
