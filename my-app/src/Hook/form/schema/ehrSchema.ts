@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Patient
+// Patient Schema
 export const patientSchema = z.object({
   name: z.string().min(2, "Name too short"),
   surname: z.string().min(2, "Surname too short"),
@@ -17,7 +17,7 @@ export const patientSchema = z.object({
   phone: z.string().min(10, "Invalid phone number"),
 });
 
-// Encounter
+// Encounter Schema
 export const encounterSchema = z.object({
   statusEncounter: z.string().min(1, "Status is required"),
   class: z.string().min(1, "Class is required"),
@@ -39,9 +39,9 @@ export const encounterSchema = z.object({
   reason: z.string().optional(),
 });
 
-// Allergy
-export const allergySchema = z.object({
-  code: z.string(),
+// Allergy Schema (elemento singolo)
+export const allergyItemSchema = z.object({
+  code: z.string().min(1, "Code is required"),
   substance: z.string().min(1, "Substance is required"),
   criticality: z.string().optional(),
   typeAllergy: z.string().optional(),
@@ -49,15 +49,16 @@ export const allergySchema = z.object({
   category: z.string().min(1, "Category is required"),
 });
 
-const arrayAllergySchema = z.object({
-  allergies: z.array(allergySchema),
+// Schema per validare l'array di allergies (step validation)
+export const allergiesStepSchema = z.object({
+  allergies: z.array(allergyItemSchema).min(0, "At least one allergy is required"),
 });
 
-// Observations
-export const observationSchema = z.object({
-  codeObservation: z.string(),
+// Observation Schema (elemento singolo)
+export const observationItemSchema = z.object({
+  codeObservation: z.string().min(1, "Observation code is required"),
   statusObservation: z.string().min(1, "Status is required"),
-  value: z.number(),
+  value: z.number().min(0, "Value must be positive"),
   categoryObservation: z.string().min(1, "Category is required"),
   unit: z.string().min(1, "Unit is required"),
   performer: z.string().optional(),
@@ -65,13 +66,14 @@ export const observationSchema = z.object({
   comment: z.string().optional(),
 });
 
-const arrayObservationSchema = z.object({
-  observations: z.array(observationSchema),
+// Schema per validare l'array di observations (step validation)
+export const observationsStepSchema = z.object({
+  observations: z.array(observationItemSchema).min(0, "At least one observation is required"),
 });
 
-//Condition
+// Condition Schema
 export const conditionSchema = z.object({
-  conditionId: z.string(),
+  conditionId: z.string().min(1, "Condition ID is required"),
   conditionCode: z.string().min(1, "Condition code is required"),
   clinicalStatus: z.string().min(1, "Clinical status is required"),
   severity: z.string().optional(),
@@ -81,23 +83,21 @@ export const conditionSchema = z.object({
   note: z.string().optional(),
 });
 
+// Procedure Schema
 export const procedureSchema = z.object({
-  procedureId: z.string(),
+  procedureId: z.string().min(1, "Procedure ID is required"),
   procedureCode: z.string().min(1, "Procedure code is required"),
-
   statusProcedure: z
     .enum(["in-progress", "completed", "not-done"] as const)
     .refine((val) => !!val, {
       message: "Status is required",
     }),
-
   performer: z.string().optional(),
-
   reason: z.string().optional(),
-
   notes: z.string().optional(),
 });
 
+// Medication Enums
 const medicationStatusEnum = z.enum([
   "active",
   "completed",
@@ -121,54 +121,60 @@ const routeEnum = z.enum([
   "other",
 ]);
 
-export const medicationSchema = z.object({
+// Medication Schema (elemento singolo)
+export const medicationItemSchema = z.object({
   medication: z.string().min(1, "Medication name is required"),
-  medicationId: z.string(),
-
+  medicationId: z.string().min(1, "Medication ID is required"),
   statusMedication: medicationStatusEnum,
-
   dosageInstructions: z.string().min(1, "Dosage instructions are required"),
-
-  route: routeEnum.optional(), // non obbligatorio nel form
-
+  route: routeEnum.optional(),
   startDate: z.string().refine((val) => !isNaN(new Date(val).getTime()), {
     message: "Start date is required",
   }),
-
   endDate: z
     .string()
     .optional()
     .refine((val) => !val || !isNaN(new Date(val).getTime()), {
       message: "Invalid end date",
     }),
-
   reasonMedication: z.string().optional(),
 });
 
+// Schema per validare l'array di medications (step validation)
+export const medicationsStepSchema = z.object({
+  medications: z.array(medicationItemSchema).min(0, "At least one medication is required"),
+});
+
+// Schema per ogni step
 export const stepSchemas = [
-  patientSchema,
-  encounterSchema,
-  arrayAllergySchema,
-  arrayObservationSchema,
-  conditionSchema,
-  procedureSchema,
-  medicationSchema,
+  patientSchema,              // Step 0: Patient Info
+  encounterSchema,            // Step 1: Encounter Info  
+  allergiesStepSchema,        // Step 2: Allergies (array validation)
+  observationsStepSchema,     // Step 3: Observations (array validation)
+  conditionSchema,            // Step 4: Condition Info
+  procedureSchema,            // Step 5: Procedure Info
+  medicationsStepSchema,      // Step 6: Medications (array validation)
 ];
 
-// tipizzazione singola per ogni schema
+// Type definitions per i form singoli
 export type PatientFormValues = z.infer<typeof patientSchema>;
 export type EncounterFormValues = z.infer<typeof encounterSchema>;
-export type AllergyFormValues = z.infer<typeof arrayAllergySchema>;
-export type ObservationFormValues = z.infer<typeof arrayObservationSchema>;
+export type AllergyItem = z.infer<typeof allergyItemSchema>;
+export type ObservationItem = z.infer<typeof observationItemSchema>;
 export type ConditionFormValues = z.infer<typeof conditionSchema>;
 export type ProcedureFormValues = z.infer<typeof procedureSchema>;
-export type MedicationFormValues = z.infer<typeof medicationSchema>;
+export type MedicationItem = z.infer<typeof medicationItemSchema>;
 
-// tipo unificato per tutto il form (senza usare .merge)
+// Type per gli array
+export type AllergiesStepValues = z.infer<typeof allergiesStepSchema>;
+export type ObservationsStepValues = z.infer<typeof observationsStepSchema>;
+export type MedicationsStepValues = z.infer<typeof medicationsStepSchema>;
+
+// Tipo unificato per tutto il form finale
 export type EhrFormValues = PatientFormValues &
   EncounterFormValues &
-  AllergyFormValues &
-  ObservationFormValues &
+  AllergiesStepValues &
+  ObservationsStepValues &
   ConditionFormValues &
   ProcedureFormValues &
-  MedicationFormValues;
+  MedicationsStepValues;

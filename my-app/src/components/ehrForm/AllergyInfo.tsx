@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Flex,
   Select,
@@ -11,289 +10,201 @@ import {
 } from "@mantine/core";
 import classes from "../../pages/style/createEhr.module.css";
 import { useEhrContext } from "../../context/EhrContext";
-import { Controller, useFieldArray } from "react-hook-form";
-import { useEffect } from "react";
-import { notifications } from "@mantine/notifications";
+import { Controller, useForm } from "react-hook-form";
 import { MedicationSelect } from "../MedicalSelect";
 import { TermsTypeEnum } from "../../types/TermsType";
+import type { AllergyItem } from "../../context/EhrContext";
 
-const emptyAllergy = {
+// Form separato per il singolo elemento
+const emptyAllergy: AllergyItem = {
   substance: "",
-  code:"",
-  clinicalStatus: "",
+  code: "",
   criticality: "",
   typeAllergy: "",
   reactionDescription: "",
   category: "",
-  verificationStatus: "",
-  onsetDate: "",
-  recordedDate: "",
 };
 
 export default function AllergyInfo() {
+  const { allergies, addAllergy, removeAllergy } = useEhrContext();
+
+  // Form separato per gestire l'input della singola allergia
   const {
     control,
-    watch,
+    handleSubmit,
+    reset,
     setValue,
-    getValues,
+    watch,
     formState: { errors },
-  } = useEhrContext();
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "allergies",
+  } = useForm<AllergyItem>({
+    defaultValues: emptyAllergy,
   });
 
-  //Watch del form corrente (sempre indice 0)
-  const currentAllergy = watch("allergies.0");
+  const currentAllergy = watch();
 
-  useEffect(() => {
-    if (fields.length === 0) {
-      append(emptyAllergy);
-    }
-  }, [fields.length, append]);
-
-  const addAllergy = async () => {
-    try {
-      const values = getValues();
-      console.log("ecco,", values.allergies[0]);
-
-      
-      const currentAllergyData = values.allergies[0];
-
-      if (!currentAllergyData.category?.trim()) {
-        notifications.show({
-          title: "Error!",
-          color: "red",
-          message: "Category is required",
-          autoClose: 3500,
-          position: "bottom-right",
-        });
-        return;
-      }
-
-      // Aggiungi validazione per il codice se necessario
-      if (!currentAllergyData.code?.trim()) {
-        notifications.show({
-          title: "Error!",
-          color: "red",
-          message: "Code is required",
-          autoClose: 3500,
-          position: "bottom-right",
-        });
-        return;
-      }
-
-      // Controlla se c'è già un'allergia con la stessa sostanza
-      const existingAllergies = fields.slice(1); // Escludi il form corrente (indice 0)
-      const isDuplicate = existingAllergies.some(
-        (allergy) =>
-          allergy.substance?.toLowerCase().trim() ===
-          currentAllergyData.substance?.toLowerCase().trim()
-      );
-
-      if (isDuplicate) {
-        notifications.show({
-          title: "Error!",
-          color: "red",
-          message: "There is already a allergy with the same substance",
-          autoClose: 3500,
-          position: "bottom-right",
-        });
-        return;
-      }
-
-      // Aggiungi l'allergia alla lista
-      append({ ...currentAllergyData });
-
-      // Reset solo del primo elemento dell'array (form corrente)
-      // Usa setValue per aggiornare solo l'indice 0
-      Object.keys(emptyAllergy).forEach((key) => {
-        setValue(`allergies.0.${key}` as any, (emptyAllergy as any)[key]);
-      });
-
-      notifications.show({
-        title: "Success!",
-        color: "green",
-        message: "Allergy added successfully",
-        autoClose: 2000,
-        position: "bottom-right",
-      });
-    } catch (error) {
-      console.warn("Validation failed, cannot add allergy", error);
+  const onSubmit = (data: AllergyItem) => {
+    const success = addAllergy(data);
+    if (success) {
+      reset(emptyAllergy); // Reset del form dopo l'aggiunta
     }
   };
 
-  const removeAllergy = (indexToRemove: number) => {
-    // Non rimuovere mai l'indice 0 (il form corrente)
-    if (indexToRemove > 0) {
-      remove(indexToRemove);
-    }
-  };
-
-  // Allergie salvate (escludi il form corrente)
-  const savedAllergies = fields
-    .slice(1)
-    .filter((allergy) => allergy.substance?.trim() !== "");
-
-  // Controlla se il form corrente è compilato e valido
+  // Controlla se il form corrente è valido
   const isCurrentFormValid =
     currentAllergy?.substance?.trim() !== "" &&
     currentAllergy?.category?.trim() !== "" &&
-    currentAllergy?.code?.trim() !== ""; // Il codice deve essere presente (significa che è stata selezionata un'opzione valida)
+    currentAllergy?.code?.trim() !== "";
 
   return (
     <>
       {/* Form per inserire una nuova allergia */}
-      <Flex direction="row" gap="xl" className={classes.container} mb="xl">
-        <Flex ml="lg" direction="column" className={classes.subContainer}>
-          <Controller
-            control={control}
-            name="allergies.0.substance"
-            render={({ field }) => (
-              <MedicationSelect
-                label="Allergy"
-                termsType={TermsTypeEnum.ALLERGY}
-                placeholder="e.g. Penicillin, Peanuts"
-                value={field.value}
-                onChange={field.onChange}
-                onCodeChange={(code) => {
-                  // Imposta il codice nel campo code quando viene selezionato un elemento
-                  setValue("allergies.0.code", code);
-                }}
-                error={errors.allergies?.[0]?.substance?.message}
-              />
-            )}
-          />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Flex direction="row" gap="xl" className={classes.container} mb="xl">
+          <Flex ml="lg" direction="column" className={classes.subContainer}>
+            <Controller
+              control={control}
+              name="substance"
+              render={({ field }) => (
+                <MedicationSelect
+                  label="Allergy"
+                  termsType={TermsTypeEnum.ALLERGY}
+                  placeholder="e.g. Penicillin, Peanuts"
+                  value={field.value}
+                  onChange={field.onChange}
+                  onCodeChange={(code) => {
+                    setValue("code", code);
+                  }}
+                  error={errors.substance?.message}
+                />
+              )}
+            />
 
-          <Controller
-            control={control}
-            name="allergies.0.category"
-            render={({ field }) => (
-              <Select
-                mt="md"
-                withAsterisk
-                label="Category"
-                placeholder="Select category"
-                data={["food", "medication", "environment", "biologic"]}
-                value={field.value || ""}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                error={errors.allergies?.[0]?.category?.message}
-                clearable
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="category"
+              render={({ field }) => (
+                <Select
+                  mt="md"
+                  withAsterisk
+                  label="Category"
+                  placeholder="Select category"
+                  data={["food", "medication", "environment", "biologic"]}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                  error={errors.category?.message}
+                  clearable
+                />
+              )}
+            />
+          </Flex>
+
+          <Flex direction="column" className={classes.subContainer}>
+            <Controller
+              control={control}
+              name="criticality"
+              render={({ field }) => (
+                <Select
+                  mt="md"
+                  label="Criticality"
+                  placeholder="Select severity level"
+                  data={["low", "high", "unable-to-assess"]}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                  error={errors.criticality?.message}
+                  clearable
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="typeAllergy"
+              render={({ field }) => (
+                <Select
+                  mt="md"
+                  label="Type"
+                  placeholder="Select type"
+                  data={["allergy", "intolerance"]}
+                  value={field.value || ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  ref={field.ref}
+                  error={errors.typeAllergy?.message}
+                  clearable
+                />
+              )}
+            />
+          </Flex>
+
+          <Flex direction="column" className={classes.subContainer}>
+            <Controller
+              control={control}
+              name="reactionDescription"
+              render={({ field }) => (
+                <Textarea
+                  mt="md"
+                  label="Reaction Description"
+                  placeholder="e.g. Rash, Anaphylaxis"
+                  autosize
+                  minRows={4.5}
+                  maxRows={5}
+                  {...field}
+                  error={errors.reactionDescription?.message}
+                />
+              )}
+            />
+          </Flex>
         </Flex>
 
-        <Flex direction="column" className={classes.subContainer}>
-          <Controller
-            control={control}
-            name="allergies.0.criticality"
-            render={({ field }) => (
-              <Select
-                mt="md"
-                label="Criticality"
-                placeholder="Select severity level"
-                data={["low", "high", "unable-to-assess"]}
-                value={field.value || ""}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                error={errors.allergies?.[0]?.criticality?.message}
-                clearable
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="allergies.0.typeAllergy"
-            render={({ field }) => (
-              <Select
-                mt="md"
-                label="Type"
-                placeholder="Select type"
-                data={["allergy", "intolerance"]}
-                value={field.value || ""}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                error={errors.allergies?.[0]?.typeAllergy?.message}
-                clearable
-              />
-            )}
-          />
-        </Flex>
-
-        <Flex direction="column" className={classes.subContainer}>
-          <Controller
-            control={control}
-            name="allergies.0.reactionDescription"
-            render={({ field }) => (
-              <Textarea
-                mt="md"
-                label="Reaction Description"
-                placeholder="e.g. Rash, Anaphylaxis"
-                autosize
-                minRows={4.5}
-                maxRows={5}
-                {...field}
-                error={errors.allergies?.[0]?.reactionDescription?.message}
-              />
-            )}
-          />
-        </Flex>
-      </Flex>
-
-      <Stack>
-        <Center>
-          <Button
-            color="green"
-            w="12rem"
-            onClick={addAllergy}
-            disabled={!isCurrentFormValid}
-          >
-            Add Allergy
-          </Button>
-        </Center>
-
-        {/* Pillole delle allergie salvate */}
-        {savedAllergies.length > 0 && (
-          <Center mt="md">
-            <Stack align="center" gap="xs">
-              <Text size="sm" c="dimmed">
-                Added Allergies ({savedAllergies.length}):
-              </Text>
-              <Pill.Group>
-                {savedAllergies.map((allergy, index: number) => {
-                  const actualIndex = index + 1; // +1 perché saltiamo l'indice 0
-                  return (
-                    <Pill
-                      key={`${allergy.substance}-${actualIndex}`}
-                      withRemoveButton
-                      onRemove={() => removeAllergy(actualIndex)}
-                    >
-                      {allergy.substance}
-                      {allergy.category && ` (${allergy.category})`}
-                    </Pill>
-                  );
-                })}
-              </Pill.Group>
-            </Stack>
+        <Stack>
+          <Center>
+            <Button
+              color="green"
+              w="12rem"
+              type="submit"
+              disabled={!isCurrentFormValid}
+            >
+              Add Allergy
+            </Button>
           </Center>
-        )}
+        </Stack>
+      </form>
 
-        {savedAllergies.length === 0 && (
-          <Center mt="md">
+      {/* Lista delle allergie salvate */}
+      {allergies.length > 0 && (
+        <Center mt="md">
+          <Stack align="center" gap="xs">
             <Text size="sm" c="dimmed">
-              No allergies added yet. Fill the form above and click "Add
-              Allergy" or just click "Next step".
+              Added Allergies ({allergies.length}):
             </Text>
-          </Center>
-        )}
-      </Stack>
+            <Pill.Group>
+              {allergies.map((allergy, index) => (
+                <Pill
+                  key={`${allergy.substance}-${index}`}
+                  withRemoveButton
+                  onRemove={() => removeAllergy(index)}
+                >
+                  {allergy.substance}
+                  {allergy.category && ` (${allergy.category})`}
+                </Pill>
+              ))}
+            </Pill.Group>
+          </Stack>
+        </Center>
+      )}
+
+      {allergies.length === 0 && (
+        <Center mt="md">
+          <Text size="sm" c="dimmed">
+            No allergies added yet. Fill the form above and click "Add
+            Allergy" or just click "Next step".
+          </Text>
+        </Center>
+      )}
     </>
   );
 }

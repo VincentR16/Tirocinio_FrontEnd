@@ -33,8 +33,10 @@ import classes from "./style/createEhr.module.css";
 import { useEhrContext } from "../context/EhrContext";
 export default function CreateEhr() {
   const navigate = useNavigate();
-  const { active, setActive, prevStep, nextStep, handleNextStep, getValues} =
+  const { active, setActive, prevStep, nextStep, handleNextStep, getAllFormData } =
     useEhrContext();
+
+
 
   return (
     <>
@@ -129,11 +131,16 @@ export default function CreateEhr() {
             )}
 
             {active === 7 ? (
-              <Button 
-              onClick={()=> {
-                console.log("ecco il form",getValues())
-              }}
-               color="green">Salva</Button>
+              <Button
+                onClick={() => {
+                  const form = getAllFormData()
+                  
+                  console.log("Form filtrato:", form);
+                }}
+                color="green"
+              >
+                Save
+              </Button>
             ) : (
               <Button
                 onClick={async () => {
