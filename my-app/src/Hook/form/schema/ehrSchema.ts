@@ -85,10 +85,10 @@ export const conditionSchema = z.object({
 
 // Procedure Schema
 export const procedureSchema = z.object({
-  procedureId: z.string().min(1, "Procedure ID is required"),
-  procedureCode: z.string().min(1, "Procedure code is required"),
+  procedureId: z.string().optional(),
+  procedureCode: z.string().optional(),
   statusProcedure: z
-    .enum(["in-progress", "completed", "not-done"] as const)
+    .enum(["preparation","in-progress", "completed", "not-done", "unknown"] as const)
     .refine((val) => !!val, {
       message: "Status is required",
     }),

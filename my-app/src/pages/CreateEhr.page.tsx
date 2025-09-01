@@ -31,12 +31,14 @@ import ProcedureInfo from "../components/ehrForm/ProcedureInfo";
 import MedicationInfo from "../components/ehrForm/MedicationInfo";
 import classes from "./style/createEhr.module.css";
 import { useEhrContext } from "../context/EhrContext";
+import { notifications } from "@mantine/notifications";
+import useCreateEhr from "../hook/useCreateEhr";
+import type { EhrRequest } from "../types/EhrRequest";
 export default function CreateEhr() {
   const navigate = useNavigate();
-  const { active, setActive, prevStep, nextStep, handleNextStep, getAllFormData } =
+  const { active, setActive, prevStep, handleNextStep, mapFormToEhr } =
     useEhrContext();
-
-
+  const createEhr = useCreateEhr();
 
   return (
     <>
@@ -99,7 +101,9 @@ export default function CreateEhr() {
             <Stepper.Step
               icon={<Syringe />}
               label={active === 5 ? "Procedure" : ""}
-              description={active === 5 ? "Explain the procedure" : ""}
+              description={
+                active === 5 ? "Explain the procedure (Optional)" : ""
+              }
             >
               <ProcedureInfo />
             </Stepper.Step>
@@ -133,9 +137,8 @@ export default function CreateEhr() {
             {active === 7 ? (
               <Button
                 onClick={() => {
-                  const form = getAllFormData()
-                  
-                  console.log("Form filtrato:", form);
+                  const ehr: EhrRequest = mapFormToEhr();
+                  createEhr.mutate(ehr);
                 }}
                 color="green"
               >
@@ -144,13 +147,17 @@ export default function CreateEhr() {
             ) : (
               <Button
                 onClick={async () => {
-                  if (active === 2 || active === 3) {
-                    nextStep();
-                  } else {
+                  {
                     try {
                       await handleNextStep();
                     } catch (err) {
-                      console.warn("error in th validation", err);
+                      notifications.show({
+                        title: "Warning!",
+                        color: "yellow",
+                        message: "" + err,
+                        autoClose: 3500,
+                        position: "bottom-right",
+                      });
                     }
                   }
                 }}

@@ -1,4 +1,3 @@
-
 import {
   Flex,
   Select,
@@ -53,7 +52,7 @@ export default function MedicationInfo() {
       ...data,
       medicationId: data.medicationId || `med-${Date.now()}`,
     };
-    
+
     const success = addMedication(medicationWithId);
     if (success) {
       reset(emptyMedication); // Reset del form dopo l'aggiunta
@@ -109,7 +108,7 @@ export default function MedicationInfo() {
                     "intended",
                     "stopped",
                     "on-hold",
-                    "unknown"
+                    "unknown",
                   ]}
                   value={field.value || ""}
                   onChange={field.onChange}
@@ -121,6 +120,66 @@ export default function MedicationInfo() {
               )}
             />
 
+            <Controller
+              control={control}
+              name="startDate"
+              render={({ field }) => (
+                <DateInput
+                  mt="md"
+                  withAsterisk
+                  label="Start Date"
+                  placeholder="Select start date"
+                  value={field.value ? new Date(field.value) : null}
+                  onChange={(date) =>
+                    field.onChange(date ? date.toString().split("T")[0] : "")
+                  }
+                  error={errors.startDate?.message}
+                />
+              )}
+            />
+          </Flex>
+
+          {/* Seconda colonna */}
+          <Flex direction="column" className={classes.subContainer}>
+            <Controller
+              control={control}
+              name="dosageInstructions"
+              render={({ field }) => (
+                <Textarea
+                  mt="md"
+                  withAsterisk
+                  label="Dosage Instructions"
+                  placeholder="e.g. Take 1 tablet twice daily with meals"
+                  autosize
+                  minRows={4.5}
+                  maxRows={4.5}
+                  {...field}
+                  error={errors.dosageInstructions?.message}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="endDate"
+              render={({ field }) => (
+                <DateInput
+                  mt="md"
+                  label="End Date"
+                  placeholder="Select end date (optional)"
+                  value={field.value ? new Date(field.value) : null}
+                  onChange={(date) =>
+                    field.onChange(date ? date.toString().split("T")[0] : "")
+                  }
+                  error={errors.endDate?.message}
+                />
+              )}
+            />
+          </Flex>
+
+          {/* Terza colonna */}
+
+          <Flex direction="column" className={classes.subContainer}>
             <Controller
               control={control}
               name="route"
@@ -139,7 +198,7 @@ export default function MedicationInfo() {
                     "transdermal",
                     "rectal",
                     "sublingual",
-                    "other"
+                    "other",
                   ]}
                   value={field.value || ""}
                   onChange={field.onChange}
@@ -150,11 +209,6 @@ export default function MedicationInfo() {
                 />
               )}
             />
-          </Flex>
-
-          {/* Seconda colonna */}
-          <Flex direction="column" className={classes.subContainer}>
-            
             <Controller
               control={control}
               name="medicationId"
@@ -172,62 +226,6 @@ export default function MedicationInfo() {
 
             <Controller
               control={control}
-              name="startDate"
-              render={({ field }) => (
-                <DateInput
-                  mt="md"
-                  withAsterisk
-                  label="Start Date"
-                  placeholder="Select start date"
-                  value={field.value ? new Date(field.value) : null}
-                  onChange={(date) => 
-                    field.onChange(date ? date.toString().split('T')[0] : "")
-                  }
-                  error={errors.startDate?.message}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="endDate"
-              render={({ field }) => (
-                <DateInput
-                  mt="md"
-                  label="End Date"
-                  placeholder="Select end date (optional)"
-                  value={field.value ? new Date(field.value) : null}
-                  onChange={(date) => 
-                    field.onChange(date ? date.toString().split('T')[0] : "")
-                  }
-                  error={errors.endDate?.message}
-                />
-              )}
-            />
-          </Flex>
-
-          {/* Terza colonna */}
-          <Flex direction="column" className={classes.subContainer}>
-
-            <Controller
-              control={control}
-              name="dosageInstructions"
-              render={({ field }) => (
-                <Textarea
-                  mt="md"
-                  withAsterisk
-                  label="Dosage Instructions"
-                  placeholder="e.g. Take 1 tablet twice daily with meals"
-                  autosize
-                  minRows={3}
-                  maxRows={3}
-                  {...field}
-                  error={errors.dosageInstructions?.message}
-                />
-              )}
-            />
-            <Controller
-              control={control}
               name="reasonMedication"
               render={({ field }) => (
                 <Textarea
@@ -235,8 +233,8 @@ export default function MedicationInfo() {
                   label="Reason / Indication"
                   placeholder="Why is this medication prescribed?"
                   autosize
-                  minRows={2.5}
-                  maxRows={2.5}
+                  minRows={1}
+                  maxRows={1}
                   {...field}
                   error={errors.reasonMedication?.message}
                 />
@@ -274,9 +272,8 @@ export default function MedicationInfo() {
                   onRemove={() => removeMedication(index)}
                 >
                   {medication.medication}
-                  {medication.statusMedication && 
-                    ` (${medication.statusMedication})`
-                  }
+                  {medication.statusMedication &&
+                    ` (${medication.statusMedication})`}
                 </Pill>
               ))}
             </Pill.Group>

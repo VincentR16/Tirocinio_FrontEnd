@@ -68,6 +68,7 @@ type EhrContextType = {
     observations: ObservationItem[];
     medications: MedicationItem[];
   };
+  mapFormToEhr: () => EhrRequest;
   
 } & UseFormReturn<EhrFormValues>;
 

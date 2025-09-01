@@ -21,7 +21,7 @@ export default function ProcedureInfo() {
           name="procedureCode"
           render={({ field }) => (
             <MedicationSelect
-              label="Procedure Code"
+              label="Procedure Code (optional)"
               termsType={TermsTypeEnum.PROCEDURE}
               placeholder="e.g. Blood draw,X-ray chest"
               value={field.value}
@@ -42,16 +42,14 @@ export default function ProcedureInfo() {
             <Select
               mt="md"
               label="Status"
+              withAsterisk
               placeholder="Select status"
               data={[
                 "preparation",
                 "in-progress",
                 "completed",
-                "stopped",
-                "entered-in-error",
                 "unknown",
               ]}
-              withAsterisk
               {...field}
               error={errors.statusProcedure?.message}
             />

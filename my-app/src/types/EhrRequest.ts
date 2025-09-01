@@ -1,11 +1,20 @@
-import type { AllergyIntolerance, Condition, Encounter, MedicationStatement, Observation, Patient, Procedure } from "fhir/r4"
+import type {
+  AllergyIntolerance,
+  Condition,
+  Encounter,
+  MedicationRequest,
+  Observation,
+  Patient,
+  Procedure,
+} from "fhir/r4";
 
 export type EhrRequest = {
-    patient: Patient,
-    ecounter: Encounter,
-    allergy: AllergyIntolerance,
-    observation: Observation,
-    condition: Condition,
-    procedure: Procedure,
-    medicalStatement: MedicationStatement,
-}
+  patient: Patient;
+  encounter: Encounter;
+  condition: Condition;
+  procedure: Procedure;
+  allergies: AllergyIntolerance[];
+  observations: Observation[];
+  medications: MedicationRequest[];
+  patientEmail: string;
+};
