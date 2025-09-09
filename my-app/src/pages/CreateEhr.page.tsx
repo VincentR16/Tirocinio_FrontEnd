@@ -1,18 +1,15 @@
 import {
-  ActionIcon,
   Button,
   Center,
   Flex,
   Paper,
   Stack,
   Stepper,
-  Tooltip,
   Group,
 } from "@mantine/core";
 import { IconCircleCheck } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+
 import {
-  ArrowLeft,
   User,
   Stethoscope,
   Biohazard,
@@ -35,25 +32,13 @@ import { notifications } from "@mantine/notifications";
 import useCreateEhr from "../hook/useCreateEhr";
 import type { EhrRequest } from "../types/EhrRequest";
 export default function CreateEhr() {
-  const navigate = useNavigate();
   const { active, setActive, prevStep, handleNextStep, mapFormToEhr } =
     useEhrContext();
   const createEhr = useCreateEhr();
 
   return (
     <>
-      <Tooltip label="Go back">
-        <ActionIcon
-          className={classes.arrow}
-          size="lg"
-          variant="subtle"
-          onClick={() => navigate("/home")}
-        >
-          <ArrowLeft style={{ width: "70%", height: "70%" }} />
-        </ActionIcon>
-      </Tooltip>
-
-      <Paper p="xl" radius="md" shadow="sm" className={classes.paperContainer}>
+      <Paper p="xl" mt="xl" radius="md" shadow="sm" className={classes.paperContainer}>
         <Flex direction="column" className={classes.formContainer}>
           <Stepper
             active={active}

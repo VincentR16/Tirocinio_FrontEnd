@@ -1,15 +1,16 @@
 import { useState } from "react";
 import {
   IconFingerprint,
-  IconGauge,
   IconHome2,
   IconLogout,
+  IconPlus,
   IconSettings,
   IconUser,
 } from "@tabler/icons-react";
 import { Stack, Tooltip, UnstyledButton } from "@mantine/core";
 import classes from "./style/NavbarToolTip.module.css";
 import { useNavigate } from "react-router-dom";
+
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -38,7 +39,7 @@ type SidebarProps = {
 
 const mockdata = [
   { icon: IconHome2, label: "Home",path: "/home"},
-  { icon: IconGauge, label: "Dashboard",path: "/home"},
+  { icon: IconPlus, label: "Add Ehr",path: "ehr/create"},
   { icon: IconUser, label: "Profile",path: "/home/profile" },
   { icon: IconFingerprint, label: "Security",path: "/home"},
   { icon: IconSettings, label: "Settings",path: "/home"},
