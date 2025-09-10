@@ -1,15 +1,30 @@
-import { ActionIcon, Flex, Group, Paper, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Divider,
+  Flex,
+  Group,
+  Paper,
+  Text,
+} from "@mantine/core";
 import {
   IconClipboardText,
   IconEdit,
   IconExternalLink,
   IconFileTypePdf,
 } from "@tabler/icons-react";
-//qui bisogna aggiungere le props per far si che si abbiam nome email e data di creazione corretta
-export function EhrCard() {
+
+interface EhrCardProps {
+  email: string;
+  name: string;
+  surname: string;
+  date: string;
+}
+
+export function EhrCard({ email, name, surname, date }: EhrCardProps) {
   return (
     <Paper
-      h="70px"
+      mt="5px"
+      h="80px"
       shadow="xs"
       withBorder
       p="md"
@@ -30,30 +45,36 @@ export function EhrCard() {
             size="32px"
           />
 
-          <Flex direction="column" ml="lg">
+
+            <Divider orientation="vertical"></Divider>
+
+
+          <Flex direction="column" ml="xl">
             <Text size="sm" fw={400}>
               Patient Name
             </Text>
-            <Text size="xs" c="dimmed">
-              Mario Rossi
+            <Text miw="130px" maw="130px" size="xs" c="dimmed">
+              {name} {surname}
             </Text>
           </Flex>
 
-          <Flex direction="column" ml="lg">
+         
+
+          <Flex direction="column" ml="xl">
             <Text size="sm" fw={400}>
               Email
             </Text>
-            <Text size="xs" c="dimmed">
-              MarioRossi@gmail.com
+            <Text miw="200px" maw="200px" size="xs" c="dimmed">
+              {email}
             </Text>
           </Flex>
 
-          <Flex direction="column" ml="lg">
+          <Flex direction="column" ml="xl">
             <Text size="sm" fw={400}>
               Created at
             </Text>
-            <Text size="xs" c="dimmed">
-              16/08/2020
+            <Text  size="xs" c="dimmed">
+              {date}
             </Text>
           </Flex>
         </Flex>

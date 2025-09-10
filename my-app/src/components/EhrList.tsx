@@ -1,19 +1,25 @@
-import { Flex, Loader,Text } from "@mantine/core";
-import usePagination from "../hook/usePagination";
+import { Flex, Loader, Text } from "@mantine/core";
 import { EhrCard } from "./EhrCard";
+import type { PaginatedResponse } from "../types/PaginatedEhr.type";
 
 interface EhrListPorps {
-  query: string;
-  page: number;
+  isLoading: boolean
+  error: Error | null
+  data: PaginatedResponse | undefined
 }
 
-export function EhrList({ query, page }: EhrListPorps) {
+export function EhrList({ data,isLoading,error }: EhrListPorps) {
 
-  const { data, isLoading, error } = usePagination(query, page);
-   
   if (isLoading) {
     return (
-      <Flex mih="66vh" w="100%" mt="lg" direction="column" align="center" justify="center">
+      <Flex
+        mih="66vh"
+        w="100%"
+        mt="lg"
+        direction="column"
+        align="center"
+        justify="center"
+      >
         <Loader size="lg" />
         <Text mt="md">Caricamento EHR...</Text>
       </Flex>
@@ -22,18 +28,45 @@ export function EhrList({ query, page }: EhrListPorps) {
 
   if (error) {
     return (
-      <Flex mih="66vh" w="100%" mt="lg" direction="column" align="center" justify="center">
+      <Flex
+        mih="66vh"
+        w="100%"
+        mt="lg"
+        direction="column"
+        align="center"
+        justify="center"
+      >
         <Text c="red">Errore nel caricamento: {error.message}</Text>
       </Flex>
     );
   }
 
-    return (
-    <Flex mih="66vh" w="100%" mt="lg" direction="column" align="center" gap="lg">
+  return (
+    <Flex
+      mih="66vh"
+      w="100%"
+      mt="lg"
+      direction="column"
+      align="center"
+      gap="lg"
+    >
       {data?.ehr.map((ehr) => (
-        <EhrCard key={ehr.id}/>
+        <EhrCard
+          key={ehr.id}
+          name={
+            ehr.patient?.name?.[0]?.given?.[0]?.toString() ||
+            "Nome non disponibile"
+          }
+          surname={
+            ehr.patient?.name?.[0]?.family?.toString() ||
+            "Nome non disponibile"
+          }
+          email={
+            ehr.patientEmail
+          }
+          date={ehr.createdAt.toString()}
+        />
       ))}
     </Flex>
   );
-
 }

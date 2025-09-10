@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
 import { EhrList } from "../components/EhrList";
 import { useState } from "react";
+import usePagination from "../hook/usePagination";
 
 export default function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, error } = usePagination(searchQuery, currentPage);
 
   return (
     <>
@@ -19,14 +21,14 @@ export default function Home() {
           onChange={(event) => setSearchQuery(event.currentTarget.value)}
         ></SearchBar>
 
-        <EhrList query={""} page={currentPage}></EhrList>
+        <EhrList data={data} isLoading={isLoading} error={error}></EhrList>
 
         <Space h=""></Space>
         <Pagination
           value={currentPage}
           onChange={setCurrentPage}
           mt="xl"
-          total={1}
+          total={data?.pagination?.totalPages || 1}
         ></Pagination>
 
         <Tooltip label="Add EHR">
