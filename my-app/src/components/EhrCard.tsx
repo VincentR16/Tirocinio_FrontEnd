@@ -1,11 +1,4 @@
-import {
-  ActionIcon,
-  Divider,
-  Flex,
-  Group,
-  Paper,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Divider, Flex, Group, Paper, Text } from "@mantine/core";
 import {
   IconClipboardText,
   IconEdit,
@@ -18,9 +11,11 @@ interface EhrCardProps {
   name: string;
   surname: string;
   date: string;
+  doctorName: string;
+  doctorSurname: string
 }
 
-export function EhrCard({ email, name, surname, date }: EhrCardProps) {
+export function EhrCard({ email, name, surname, date, doctorName,doctorSurname }: EhrCardProps) {
   return (
     <Paper
       mt="5px"
@@ -45,38 +40,44 @@ export function EhrCard({ email, name, surname, date }: EhrCardProps) {
             size="32px"
           />
 
-
-            <Divider orientation="vertical"></Divider>
-
+          <Divider orientation="vertical"></Divider>
 
           <Flex direction="column" ml="xl">
             <Text size="sm" fw={400}>
               Patient Name
             </Text>
-            <Text miw="130px" maw="130px" size="xs" c="dimmed">
+            <Text miw="125px" maw="125px" size="xs" c="dimmed">
               {name} {surname}
             </Text>
           </Flex>
-
-         
 
           <Flex direction="column" ml="xl">
             <Text size="sm" fw={400}>
               Email
             </Text>
-            <Text miw="200px" maw="200px" size="xs" c="dimmed">
+            <Text miw="150px" maw="150px" size="xs" c="dimmed">
               {email}
             </Text>
           </Flex>
 
           <Flex direction="column" ml="xl">
             <Text size="sm" fw={400}>
-              Created at
+              Created at:
             </Text>
-            <Text  size="xs" c="dimmed">
+            <Text size="xs" c="dimmed">
               {date}
             </Text>
           </Flex>
+
+          <Flex direction="column" ml="xl">
+            <Text size="sm" fw={400}>
+              Created by:
+            </Text>
+            <Text size="xs" c="dimmed">
+              {doctorName} {doctorSurname}
+            </Text>
+          </Flex>
+
         </Flex>
 
         <Group gap="xs">

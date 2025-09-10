@@ -9,7 +9,7 @@ export function SearchBar(props: TextInputProps) {
       style={{ width: '100%', maxWidth: '700px' }}
       radius="xl"
       size="md"
-      placeholder="Search patient by name or email"
+      placeholder="Search by name or email"
       rightSectionWidth={42}
       leftSection={<IconSearch size={18} stroke={1.5} />}
       rightSection={
