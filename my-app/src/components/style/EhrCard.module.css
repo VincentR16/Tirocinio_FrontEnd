@@ -1,0 +1,5 @@
+.ehrCard:hover {
+  box-shadow: var(--mantine-shadow-md) !important;
+  transform: translateY(-2px) !important;
+  transition: all 0.2s ease;
+}

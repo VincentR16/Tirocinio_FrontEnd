@@ -51,7 +51,9 @@ export const allergyItemSchema = z.object({
 
 // Schema per validare l'array di allergies (step validation)
 export const allergiesStepSchema = z.object({
-  allergies: z.array(allergyItemSchema).min(0, "At least one allergy is required"),
+  allergies: z
+    .array(allergyItemSchema)
+    .min(0, "At least one allergy is required"),
 });
 
 // Observation Schema (elemento singolo)
@@ -68,19 +70,36 @@ export const observationItemSchema = z.object({
 
 // Schema per validare l'array di observations (step validation)
 export const observationsStepSchema = z.object({
-  observations: z.array(observationItemSchema).min(0, "At least one observation is required"),
+  observations: z
+    .array(observationItemSchema)
+    .min(0, "At least one observation is required"),
 });
 
-// Condition Schema
-export const conditionSchema = z.object({
-  conditionId: z.string().min(1, "Condition ID is required"),
-  conditionCode: z.string().min(1, "Condition code is required"),
-  clinicalStatus: z.string().min(1, "Clinical status is required"),
-  severity: z.string().optional(),
-  category: z.string().optional(),
-  bodySite: z.string().optional(),
-  recorder: z.string().optional(),
-  note: z.string().optional(),
+export const conditionSchema = z
+  .object({
+    conditionId: z.string().optional(),
+    conditionCode: z.string().optional(),
+    clinicalStatus: z.string().optional(),
+    severity: z.string().optional(),
+    category: z.string().optional(),
+    bodySite: z.string().optional(),
+    recorder: z.string().optional(),
+    note: z.string().optional(),
+  })
+  .refine((data) => {
+  const hasAnyField = Object.values(data).some(value => 
+    value !== undefined && value !== null && value.trim() !== ""
+  );
+  
+  if (!hasAnyField) return true;
+  
+  const requiredFields = ['conditionId', 'conditionCode', 'clinicalStatus'] as const;
+  return requiredFields.every(field => {
+    const value = data[field as keyof typeof data];
+    return value && value.trim() !== "";
+  });
+}, {
+  message: "If any field is filled, conditionId, conditionCode, and clinicalStatus are required",
 });
 
 // Procedure Schema
@@ -88,13 +107,32 @@ export const procedureSchema = z.object({
   procedureId: z.string().optional(),
   procedureCode: z.string().optional(),
   statusProcedure: z
-    .enum(["preparation","in-progress", "completed", "not-done", "unknown"] as const)
-    .refine((val) => !!val, {
-      message: "Status is required",
-    }),
+    .enum([
+      "preparation",
+      "in-progress", 
+      "completed",
+      "not-done",
+      "unknown",
+    ] as const)
+    .optional(),
   performer: z.string().optional(),
   reason: z.string().optional(),
   notes: z.string().optional(),
+}).refine((data) => {
+  // Controlla se almeno un campo è compilato
+  const hasAnyField = Object.values(data).some(value => 
+    value !== undefined && value !== null && 
+    (typeof value === 'string' ? value.trim() !== "" : true)
+  );
+  
+  // Se nessun campo è compilato, va bene
+  if (!hasAnyField) return true;
+  
+  // Se almeno un campo è compilato, procedureCode e statusProcedure sono obbligatori
+  return data.procedureCode && data.procedureCode.trim() !== "" &&
+         data.statusProcedure !== undefined;
+}, {
+  message: "If any field is filled, procedureCode and statusProcedure are required"
 });
 
 // Medication Enums
@@ -142,18 +180,20 @@ export const medicationItemSchema = z.object({
 
 // Schema per validare l'array di medications (step validation)
 export const medicationsStepSchema = z.object({
-  medications: z.array(medicationItemSchema).min(0, "At least one medication is required"),
+  medications: z
+    .array(medicationItemSchema)
+    .min(0, "At least one medication is required"),
 });
 
 // Schema per ogni step
 export const stepSchemas = [
-  patientSchema,              // Step 0: Patient Info
-  encounterSchema,            // Step 1: Encounter Info  
-  allergiesStepSchema,        // Step 2: Allergies (array validation)
-  observationsStepSchema,     // Step 3: Observations (array validation)
-  conditionSchema,            // Step 4: Condition Info
-  procedureSchema,            // Step 5: Procedure Info
-  medicationsStepSchema,      // Step 6: Medications (array validation)
+  patientSchema, // Step 0: Patient Info
+  encounterSchema, // Step 1: Encounter Info
+  allergiesStepSchema, // Step 2: Allergies (array validation)
+  observationsStepSchema, // Step 3: Observations (array validation)
+  conditionSchema, // Step 4: Condition Info
+  procedureSchema, // Step 5: Procedure Info
+  medicationsStepSchema, // Step 6: Medications (array validation)
 ];
 
 // Type definitions per i form singoli

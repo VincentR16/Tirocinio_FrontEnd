@@ -23,6 +23,8 @@ interface EhrListPorps {
 
 export function EhrList({ data, isLoading, error }: EhrListPorps) {
   const navigate = useNavigate();
+  console.log("ecco i dati", data?.ehr)
+
 
   if (isLoading) {
     return (

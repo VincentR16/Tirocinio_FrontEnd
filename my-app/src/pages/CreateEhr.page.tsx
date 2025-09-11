@@ -28,7 +28,6 @@ import ProcedureInfo from "../components/ehrForm/ProcedureInfo";
 import MedicationInfo from "../components/ehrForm/MedicationInfo";
 import classes from "./style/createEhr.module.css";
 import { useEhrContext } from "../context/EhrContext";
-import { notifications } from "@mantine/notifications";
 import useCreateEhr from "../hook/useCreateEhr";
 import type { EhrRequest } from "../types/EhrRequest";
 export default function CreateEhr() {
@@ -49,21 +48,21 @@ export default function CreateEhr() {
             <Stepper.Step
               icon={<User></User>}
               label={active === 0 ? "Patient" : ""}
-              description={active === 0 ? "Create a Patient" : ""}
+              description={active === 0 ? "Create a Patient (Required)" : ""}
             >
               <PatientInfo />
             </Stepper.Step>
             <Stepper.Step
               icon={<Stethoscope></Stethoscope>}
               label={active === 1 ? "Encounter" : ""}
-              description={active === 1 ? "Describe the encounter" : ""}
+              description={active === 1 ? "Describe the encounter (Required)" : ""}
             >
               <EncounterInfo />
             </Stepper.Step>
             <Stepper.Step
               icon={<Biohazard></Biohazard>}
               label={active === 2 ? "Allergy" : ""}
-              description={active === 2 ? "Patient's allergy (Optional)" : ""}
+              description={active === 2 ? "Patient's allergy" : ""}
             >
               <AllergyInfo />
             </Stepper.Step>
@@ -87,7 +86,7 @@ export default function CreateEhr() {
               icon={<Syringe />}
               label={active === 5 ? "Procedure" : ""}
               description={
-                active === 5 ? "Explain the procedure (Optional)" : ""
+                active === 5 ? "Explain the procedure" : ""
               }
             >
               <ProcedureInfo />
@@ -133,17 +132,7 @@ export default function CreateEhr() {
               <Button
                 onClick={async () => {
                   {
-                    try {
                       await handleNextStep();
-                    } catch (err) {
-                      notifications.show({
-                        title: "Warning!",
-                        color: "yellow",
-                        message: "" + err,
-                        autoClose: 3500,
-                        position: "bottom-right",
-                      });
-                    }
                   }
                 }}
               >

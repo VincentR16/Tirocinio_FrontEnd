@@ -256,9 +256,16 @@ export function EhrProvider({ children }: { children: ReactNode }) {
           form.setError(path as any, {
             message: issue.message,
           });
+          notifications.show({
+            title: "Warning!",
+            color: "yellow",
+            message: "" + err.message,
+            autoClose: 3500,
+            position: "bottom-right",
+          });
         }
       }
-      throw new Error("Form validation failed");
+      //todo finire questo metodo gestendo bene l erorre per lo step di condition e per lo step di procedure
     }
   };
 
@@ -545,7 +552,8 @@ export function EhrProvider({ children }: { children: ReactNode }) {
       (m): MedicationRequest => ({
         resourceType: "MedicationRequest",
         id: crypto.randomUUID(),
-        status:  m.statusMedication === "intended" ? "draft" : m.statusMedication,
+        status:
+          m.statusMedication === "intended" ? "draft" : m.statusMedication,
         intent: "order",
         subject: { reference: `Patient/${patientId}` },
         encounter: { reference: `Encounter/${encounterId}` },

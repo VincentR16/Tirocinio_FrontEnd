@@ -1,97 +1,198 @@
-import { ActionIcon, Divider, Flex, Group, Paper, Text } from "@mantine/core";
 import {
+  ActionIcon,
+  Badge,
+  Center,
+  Divider,
+  Flex,
+  Group,
+  Paper,
+  Text,
+  Tooltip,
+} from "@mantine/core";
+import {
+  IconCalendar,
   IconClipboardText,
   IconEdit,
   IconExternalLink,
   IconFileTypePdf,
+  IconMail,
+  IconStethoscope,
+  IconUser,
 } from "@tabler/icons-react";
-
+import classes from "./style/EhrCard.module.css"
 interface EhrCardProps {
   email: string;
   name: string;
   surname: string;
   date: string;
   doctorName: string;
-  doctorSurname: string
+  doctorSurname: string;
 }
 
-export function EhrCard({ email, name, surname, date, doctorName,doctorSurname }: EhrCardProps) {
+export function EhrCard({
+  email,
+  name,
+  surname,
+  date,
+  doctorName,
+  doctorSurname,
+}: EhrCardProps) {
   return (
     <Paper
-      mt="5px"
-      h="80px"
       shadow="xs"
+      className={classes.ehrCard}
       withBorder
-      p="md"
-      radius="md"
-      style={{ width: "100%", maxWidth: "1200px" }}
+      p="lg"
+      radius="lg"
+      mah="90px"
+      style={{
+        width: "100%",
+        maxWidth: "1200px",
+        transition: "all 0.2s ease",
+      }}
     >
       <Flex
         direction="row"
         align="center"
         justify="space-between"
         w="100%"
-        h="100%"
+        gap="md"
       >
-        <Flex direction="row" align="center" gap="md">
-          <IconClipboardText
-            color="var(--mantine-color-blue-filled)"
-            strokeWidth={1.5}
-            size="32px"
-          />
+        <Flex align="center" gap="xs" style={{ flexShrink: 0 }}>
+          <Paper
+            radius="md"
+            p="sm"
+            bg="blue.0"
+            style={{
+              border: "1px solid var(--mantine-color-blue-2)",
+            }}
+          >
+            <Center>
+              <IconClipboardText
+                color="var(--mantine-color-blue-6)"
+                strokeWidth={1.5}
+                size="24px"
+              />
+            </Center>
+          </Paper>
 
-          <Divider orientation="vertical"></Divider>
+          <Divider orientation="vertical" size="xs" color="gray.3" />
+        </Flex>
 
-          <Flex direction="column" ml="xl">
-            <Text size="sm" fw={400}>
-              Patient Name
-            </Text>
-            <Text miw="125px" maw="125px" size="xs" c="dimmed">
+        <Flex
+          direction="row"
+          align="center"
+          gap="md"
+          style={{ flex: 1, minWidth: 0 }}
+        >
+          <Flex direction="column" gap="xs" style={{ minWidth: 140 }}>
+            <Flex align="center" gap="xs">
+              <IconUser size={16} color="var(--mantine-color-gray-6)" />
+              <Text size="sm" fw={600} c="gray.7">
+                Patient
+              </Text>
+            </Flex>
+            <Text size="sm" fw={500} truncate="end">
               {name} {surname}
             </Text>
           </Flex>
 
-          <Flex direction="column" ml="xl">
-            <Text size="sm" fw={400}>
-              Email
-            </Text>
-            <Text miw="150px" maw="150px" size="xs" c="dimmed">
+          <Flex direction="column" gap="xs" style={{ minWidth: 180 }}>
+            <Flex align="center" gap="xs">
+              <IconMail size={16} color="var(--mantine-color-gray-6)" />
+              <Text size="sm" miw="180px" fw={600} c="gray.7">
+                Email
+              </Text>
+            </Flex>
+            <Text size="sm" c="dimmed" truncate="end">
               {email}
             </Text>
           </Flex>
 
-          <Flex direction="column" ml="xl">
-            <Text size="sm" fw={400}>
-              Created at:
-            </Text>
-            <Text size="xs" c="dimmed">
-              {date}
-            </Text>
+          <Flex direction="column" gap="xs" style={{ minWidth: 120 }}>
+            <Flex align="center" gap="xs">
+              <IconCalendar size={16} color="var(--mantine-color-gray-6)" />
+              <Text size="sm" fw={600} c="gray.7">
+                Created on
+              </Text>
+            </Flex>
+            <Center>
+              <Text size="sm" c="dimmed">
+                {new Date(date).toLocaleDateString("it-IT")}
+              </Text>
+            </Center>
           </Flex>
 
-          <Flex direction="column" ml="xl">
-            <Text size="sm" fw={400}>
-              Created by:
-            </Text>
-            <Text size="xs" c="dimmed">
-              {doctorName} {doctorSurname}
-            </Text>
+          <Flex direction="column" gap="xs" style={{ minWidth: 140 }}>
+            <Flex align="center" gap="xs">
+              <IconStethoscope size={16} color="var(--mantine-color-gray-6)" />
+              <Text size="sm" fw={600} c="gray.7">
+                Doctor
+              </Text>
+            </Flex>
+            <Badge variant="light" color="green" size="sm" radius="sm">
+              Dr. {doctorName} {doctorSurname}
+            </Badge>
           </Flex>
-
         </Flex>
 
-        <Group gap="xs">
-          <ActionIcon variant="subtle" color="red" size="lg" radius="md">
-            <IconFileTypePdf size={22} />
-          </ActionIcon>
+        <Group gap="xs" style={{ flexShrink: 0 }}>
+          <Tooltip label="Download PDF" position="top">
+            <ActionIcon
+              variant="subtle"
+              color="red"
+              size="lg"
+              radius="md"
+              styles={{
+                root: {
+                  "&:hover": {
+                    backgroundColor: "var(--mantine-color-red-1)",
+                    transform: "scale(1.05)",
+                  },
+                },
+              }}
+            >
+              <IconFileTypePdf size={24} />
+            </ActionIcon>
+          </Tooltip>
 
-          <ActionIcon variant="subtle" color="blue" size="lg" radius="md">
-            <IconExternalLink size={22} />
-          </ActionIcon>
+          <Tooltip label="TODO" position="top">
+            <ActionIcon
+              variant="subtle"
+              color="blue"
+              size="lg"
+              radius="md"
+              styles={{
+                root: {
+                  "&:hover": {
+                    backgroundColor: "var(--mantine-color-blue-1)",
+                    transform: "scale(1.05)",
+                  },
+                },
+              }}
+            >
+              <IconExternalLink size={24} />
+            </ActionIcon>
+          </Tooltip>
 
-          <ActionIcon variant="subtle" color="gray" size="lg" radius="md">
-            <IconEdit size={22} />
-          </ActionIcon>
+          <Tooltip label="Edit" position="top">
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="lg"
+              radius="md"
+              styles={{
+                root: {
+                  "&:hover": {
+                    backgroundColor: "var(--mantine-color-gray-1)",
+                    transform: "scale(1.05)",
+                  },
+                },
+              }}
+            >
+              <IconEdit size={24} />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Flex>
     </Paper>
