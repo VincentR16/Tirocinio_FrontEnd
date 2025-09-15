@@ -1,17 +1,19 @@
 import { ActionIcon, Flex, Pagination, Space, Tooltip } from "@mantine/core";
 import { Plus } from "lucide-react";
 import classes from "./style/home.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
 import { EhrList } from "../components/EhrList";
 import { useState } from "react";
 import usePagination from "../hook/usePagination";
+import type { SidebarContext } from "./RootLayout.page";
 
 export default function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error } = usePagination(searchQuery, currentPage);
+  const { setSidebarActive } = useOutletContext<SidebarContext>();
 
   return (
     <>
@@ -44,7 +46,10 @@ export default function Home() {
               bottom: 20,
               right: 20,
             }}
-            onClick={() => navigate("ehr/create")}
+            onClick={() => {
+              navigate("ehr/create");
+              setSidebarActive(1);
+            }}
           >
             <Plus style={{ width: "70%", height: "70%" }} />
           </ActionIcon>

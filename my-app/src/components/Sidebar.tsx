@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   IconFingerprint,
   IconHome2,
@@ -34,29 +33,30 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 type SidebarProps = {
+  sidebarActive: number;
+  setSidebarActive: React.Dispatch<React.SetStateAction<number>>;
   onLogout: () => void;
 };
 
 const mockdata = [
-  { icon: IconHome2, label: "Home",path: "/home"},
-  { icon: IconPlus, label: "Add Ehr",path: "ehr/create"},
-  { icon: IconUser, label: "Profile",path: "/home/profile" },
-  { icon: IconFingerprint, label: "Security",path: "/home"},
-  { icon: IconSettings, label: "Settings",path: "/home"},
+  { icon: IconHome2, label: "Home", path: "/home" },
+  { icon: IconPlus, label: "Add Ehr", path: "ehr/create" },
+  { icon: IconUser, label: "Profile", path: "/home/profile" },
+  { icon: IconFingerprint, label: "Security", path: "/home" },
+  { icon: IconSettings, label: "Settings", path: "/home" },
 ];
 
-export function Sidebar({onLogout}:SidebarProps) {
-  const [active, setActive] = useState(0);
-  const navigate = useNavigate()
+export function Sidebar({ onLogout, sidebarActive, setSidebarActive }: SidebarProps) {
+  const navigate = useNavigate();
 
   const links = mockdata.map((link, index) => (
     <NavbarLink
       {...link}
       key={link.label}
-      active={index === active}
+      active={index === sidebarActive}
       onClick={() => {
-        setActive(index);
-        navigate(link.path)
+        setSidebarActive(index);
+        navigate(link.path);
       }}
     />
   ));

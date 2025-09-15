@@ -19,8 +19,10 @@ import {
   IconStethoscope,
   IconUser,
 } from "@tabler/icons-react";
-import classes from "./style/EhrCard.module.css"
+import classes from "./style/EhrCard.module.css";
+import usePdf from "../hook/usePdf";
 interface EhrCardProps {
+  id: string;
   email: string;
   name: string;
   surname: string;
@@ -30,6 +32,7 @@ interface EhrCardProps {
 }
 
 export function EhrCard({
+  id,
   email,
   name,
   surname,
@@ -37,6 +40,8 @@ export function EhrCard({
   doctorName,
   doctorSurname,
 }: EhrCardProps) {
+  const downloadPdfMutation = usePdf();
+
   return (
     <Paper
       shadow="xs"
@@ -139,6 +144,9 @@ export function EhrCard({
         <Group gap="xs" style={{ flexShrink: 0 }}>
           <Tooltip label="Download PDF" position="top">
             <ActionIcon
+              onClick={() => {
+                downloadPdfMutation.mutate(id);
+              }}
               variant="subtle"
               color="red"
               size="lg"

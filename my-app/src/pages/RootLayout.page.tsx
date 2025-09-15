@@ -1,17 +1,31 @@
-import { AppShell, Burger, Button, Center, Flex, Group, Modal } from "@mantine/core";
+import {
+  AppShell,
+  Burger,
+  Button,
+  Center,
+  Flex,
+  Group,
+  Modal,
+} from "@mantine/core";
 import { Sidebar } from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
 import { Shield } from "lucide-react";
 import { useDisclosure } from "@mantine/hooks";
 import useLogout from "../hook/useLogout";
 import classes from "./style/layout.module.css";
+import { useState } from "react";
 
+export type SidebarContext = {
+  sidebarActive: number;
+  setSidebarActive: React.Dispatch<React.SetStateAction<number>>;
+};
 
 export default function RootLayout() {
-    const [opened, { toggle }] = useDisclosure(true);
-    const [openedModal, { open, close }] = useDisclosure(false);
-    const logout = useLogout();
-  
+  const [opened, { toggle }] = useDisclosure(true);
+  const [openedModal, { open, close }] = useDisclosure(false);
+  const [sidebarActive, setSidebarActive] = useState(0);
+  const logout = useLogout();
+
   return (
     <>
       <AppShell
@@ -47,13 +61,17 @@ export default function RootLayout() {
               </h3>
             </Center>
           </Flex>
+
         </AppShell.Header>
+
         <AppShell.Navbar>
-          <Sidebar onLogout={open}></Sidebar>
+          <Sidebar onLogout={open} sidebarActive={sidebarActive} setSidebarActive={setSidebarActive}></Sidebar>
         </AppShell.Navbar>
+
         <AppShell.Main>
-          <Outlet />
+          <Outlet context={{ sidebarActive, setSidebarActive } satisfies SidebarContext} />
         </AppShell.Main>
+
         <Modal
           opened={openedModal}
           onClose={close}
@@ -76,6 +94,7 @@ export default function RootLayout() {
             </Button>
           </Group>
         </Modal>
+        
       </AppShell>
     </>
   );

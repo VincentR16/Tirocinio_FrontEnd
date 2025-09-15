@@ -240,32 +240,54 @@ export function EhrProvider({ children }: { children: ReactNode }) {
     }
 
     const currentSchema = stepSchemas[active];
-
     try {
       await currentSchema.parseAsync(dataToValidate);
-
-      // Gli step degli array non procedono automaticamente se vuoti
-      // Ma permettono di procedere al prossimo step anche senza elementi
       nextStep();
     } catch (error) {
       if (error instanceof z.ZodError) {
+        console.warn("Validation issues:", error.issues);
+
+        let hasFieldErrors = false;
+
         for (const issue of error.issues) {
-          console.warn("Validation issues:", error.issues);
           const path = issue.path.join(".");
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          form.setError(path as any, {
-            message: issue.message,
-          });
-          notifications.show({
-            title: "Warning!",
-            color: "yellow",
-            message: "" + err.message,
-            autoClose: 3500,
-            position: "bottom-right",
-          });
+
+          // Se il path è vuoto, è un errore globale (come il tuo refine)
+          if (path === "") {
+            // Gestisci errore globale - potresti volerlo mostrare in un posto specifico
+            form.setError("root", {
+              message: issue.message,
+            });
+          } else {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            form.setError(path as any, {
+              message: issue.message,
+            });
+            hasFieldErrors = true;
+          }
         }
+
+        // Mostra notifica solo una volta, non per ogni errore
+        notifications.show({
+          title: "Validation Error",
+          color: "red", // rosso è più appropriato per errori
+          message: hasFieldErrors
+            ? "Please check the highlighted fields"
+            : "This section is optional. If you fill in any field, complete all required * fields.",
+          autoClose: 4000,
+          position: "bottom-right",
+        });
+      } else {
+        // Gestisci altri tipi di errore
+        console.error("Unexpected error:", error);
+        notifications.show({
+          title: "Error",
+          color: "red",
+          message: "An unexpected error occurred",
+          autoClose: 4000,
+          position: "bottom-right",
+        });
       }
-      //todo finire questo metodo gestendo bene l erorre per lo step di condition e per lo step di procedure
     }
   };
 
@@ -484,7 +506,7 @@ export function EhrProvider({ children }: { children: ReactNode }) {
     const procedure: Procedure = {
       resourceType: "Procedure",
       id: form.procedureId || crypto.randomUUID(),
-      status: form.statusProcedure,
+      status: form.statusProcedure ?? "unknown",
       subject: { reference: `Patient/${patient.id}` },
       encounter: { reference: `Encounter/${encounter.id}` },
       code: form.procedureCode

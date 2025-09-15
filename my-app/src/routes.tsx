@@ -28,7 +28,7 @@ export const routes = [
     path: "/home",
     element: (
       <ProtectedRoot>
-        <RootLayout />
+          <RootLayout />
       </ProtectedRoot>
     ),
     children: [
