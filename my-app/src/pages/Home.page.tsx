@@ -1,4 +1,4 @@
-import { ActionIcon, Flex, Pagination, Space, Tooltip } from "@mantine/core";
+import { ActionIcon, Flex, Pagination, Tooltip } from "@mantine/core";
 import { Plus } from "lucide-react";
 import classes from "./style/home.module.css";
 import { useNavigate, useOutletContext } from "react-router-dom";
@@ -25,11 +25,10 @@ export default function Home() {
 
         <EhrList data={data} isLoading={isLoading} error={error}></EhrList>
 
-        <Space h=""></Space>
+
         <Pagination
           value={currentPage}
           onChange={setCurrentPage}
-          mt="xl"
           total={data?.pagination?.totalPages || 1}
         ></Pagination>
 

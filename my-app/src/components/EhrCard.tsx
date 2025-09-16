@@ -21,7 +21,10 @@ import {
 } from "@tabler/icons-react";
 import classes from "./style/EhrCard.module.css";
 import usePdf from "../hook/usePdf";
+import type { EHR } from "../types/Ehr.types";
+import { useNavigate } from "react-router-dom";
 interface EhrCardProps {
+  ehr: EHR;
   id: string;
   email: string;
   name: string;
@@ -32,6 +35,7 @@ interface EhrCardProps {
 }
 
 export function EhrCard({
+  ehr,
   id,
   email,
   name,
@@ -41,6 +45,7 @@ export function EhrCard({
   doctorSurname,
 }: EhrCardProps) {
   const downloadPdfMutation = usePdf();
+  const navigate = useNavigate();
 
   return (
     <Paper
@@ -188,6 +193,7 @@ export function EhrCard({
               variant="subtle"
               color="gray"
               size="lg"
+              onClick={() => navigate("ehr/edit", { state: { ehr } })}
               radius="md"
               styles={{
                 root: {

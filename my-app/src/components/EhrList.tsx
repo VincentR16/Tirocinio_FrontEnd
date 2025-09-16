@@ -13,7 +13,8 @@ import {
 import { EhrCard } from "./EhrCard";
 import type { PaginatedResponse } from "../types/PaginatedEhr.type";
 import { IconFileText, IconPlus } from "@tabler/icons-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import type { SidebarContext } from "../pages/RootLayout.page";
 
 interface EhrListPorps {
   isLoading: boolean;
@@ -23,6 +24,7 @@ interface EhrListPorps {
 
 export function EhrList({ data, isLoading, error }: EhrListPorps) {
   const navigate = useNavigate();
+    const { setSidebarActive } = useOutletContext<SidebarContext>();
 
   if (isLoading) {
     return (
@@ -148,7 +150,7 @@ export function EhrList({ data, isLoading, error }: EhrListPorps) {
                   },
                 },
               }}
-              onClick={() => navigate("ehr/create")}
+              onClick={() => {navigate("ehr/create"); setSidebarActive(1)}}
             >
               Create new EHR
             </Button>
@@ -180,8 +182,9 @@ export function EhrList({ data, isLoading, error }: EhrListPorps) {
 
   return (
     <Flex
-      mih="66vh"
+      mih="72vh"
       w="100%"
+      miw="100%"
       mt="lg"
       direction="column"
       align="center"
@@ -190,6 +193,7 @@ export function EhrList({ data, isLoading, error }: EhrListPorps) {
       {data?.ehr.map((ehr) => (
         <EhrCard
           key={ehr.id}
+          ehr={ehr}
           id={ehr.id}
           name={
             ehr.patient?.name?.[0]?.given?.[0]?.toString() ||

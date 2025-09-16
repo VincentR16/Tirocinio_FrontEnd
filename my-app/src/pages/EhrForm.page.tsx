@@ -30,7 +30,9 @@ import classes from "./style/createEhr.module.css";
 import { useEhrContext } from "../context/EhrContext";
 import useCreateEhr from "../hook/useCreateEhr";
 import type { EhrRequest } from "../types/EhrRequest";
-export default function CreateEhr() {
+
+
+export default function EhrForm() {
   const { active, setActive, prevStep, handleNextStep, mapFormToEhr } =
     useEhrContext();
   const createEhr = useCreateEhr();
