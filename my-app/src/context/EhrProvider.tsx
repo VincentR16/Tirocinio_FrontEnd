@@ -19,9 +19,11 @@ import type {
   Observation,
   MedicationRequest,
 } from "fhir/r4";
+import type { EHR } from "../types/Ehr.types";
 
 export function EhrProvider({ children }: { children: ReactNode }) {
-  const [ehrRequest, setEhr] = useState<EhrRequest | undefined>();
+  const [ehr, setEhr] = useState<EHR | undefined>(undefined);
+  const [ehrRequest, setEhrRequest] = useState<EhrRequest | undefined>();
   const form = useEhrForm();
   const [active, setActive] = useState(0);
 
@@ -30,12 +32,22 @@ export function EhrProvider({ children }: { children: ReactNode }) {
   const [observations, setObservations] = useState<ObservationItem[]>([]);
   const [medications, setMedications] = useState<MedicationItem[]>([]);
 
+
+
+
+
+
+
+
+
+
+
+
+  
   const nextStep = () =>
     setActive((current) => (current < 7 ? current + 1 : current));
-
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
-
   // Funzioni per gestire le allergies
   const addAllergy = (allergy: AllergyItem): boolean => {
     // Validazione
@@ -753,8 +765,10 @@ export function EhrProvider({ children }: { children: ReactNode }) {
     <EhrContext.Provider
       value={{
         ...form,
-        ehrRequest,
+        ehr,
         setEhr,
+        ehrRequest,
+        setEhrRequest: setEhrRequest,
         handleNextStep,
         prevStep,
         nextStep,

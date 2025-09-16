@@ -8,6 +8,7 @@ import ProtectedRoot from "./utils/ProtectedRoot";
 import InitialRedirect from "./utils/InitialRedirect";
 import EhrForm from "./pages/EhrForm.page";
 import { EhrProvider } from "./context/EhrProvider";
+import TwoFactorAuthPage from "./pages/TwoFactorAuth.page";
 
 export const routes = [
   {
@@ -28,7 +29,7 @@ export const routes = [
     path: "/home",
     element: (
       <ProtectedRoot>
-          <RootLayout />
+        <RootLayout />
       </ProtectedRoot>
     ),
     children: [
@@ -49,12 +50,8 @@ export const routes = [
         ),
       },
       {
-        path: "ehr/edit",
-        element: (
-          <EhrProvider>
-            <EhrForm />
-          </EhrProvider>
-        ),
+        path: "two-factor-auth",
+        element: <TwoFactorAuthPage />,
       },
     ],
   },

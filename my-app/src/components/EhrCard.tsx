@@ -12,7 +12,6 @@ import {
 import {
   IconCalendar,
   IconClipboardText,
-  IconEdit,
   IconExternalLink,
   IconFileTypePdf,
   IconMail,
@@ -22,7 +21,6 @@ import {
 import classes from "./style/EhrCard.module.css";
 import usePdf from "../hook/usePdf";
 import type { EHR } from "../types/Ehr.types";
-import { useNavigate } from "react-router-dom";
 interface EhrCardProps {
   ehr: EHR;
   id: string;
@@ -35,7 +33,6 @@ interface EhrCardProps {
 }
 
 export function EhrCard({
-  ehr,
   id,
   email,
   name,
@@ -45,7 +42,6 @@ export function EhrCard({
   doctorSurname,
 }: EhrCardProps) {
   const downloadPdfMutation = usePdf();
-  const navigate = useNavigate();
 
   return (
     <Paper
@@ -188,7 +184,7 @@ export function EhrCard({
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip label="Edit" position="top">
+          {/*<Tooltip label="Edit" position="top">
             <ActionIcon
               variant="subtle"
               color="gray"
@@ -206,7 +202,8 @@ export function EhrCard({
             >
               <IconEdit size={24} />
             </ActionIcon>
-          </Tooltip>
+          </Tooltip>*/}
+
         </Group>
       </Flex>
     </Paper>

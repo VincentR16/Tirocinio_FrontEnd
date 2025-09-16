@@ -1,5 +1,5 @@
 import {
-  IconFingerprint,
+  IconAuth2fa,
   IconHome2,
   IconLogout,
   IconPlus,
@@ -42,7 +42,7 @@ const mockdata = [
   { icon: IconHome2, label: "Home", path: "/home" },
   { icon: IconPlus, label: "Add Ehr", path: "ehr/create" },
   { icon: IconUser, label: "Profile", path: "/home/profile" },
-  { icon: IconFingerprint, label: "Security", path: "/home" },
+  { icon: IconAuth2fa, label: "Security", path: "/home/two-factor-auth" },
   { icon: IconSettings, label: "Settings", path: "/home" },
 ];
 

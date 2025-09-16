@@ -2,7 +2,6 @@ import { createContext, useContext } from "react";
 
 
 type QrContextType = {
-
   //serve per gestire l apertura e la chiusura del modal del 2FA
   openedCode: boolean;
   openCode: () => void;

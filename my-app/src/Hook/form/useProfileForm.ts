@@ -20,10 +20,10 @@ export function useProfileForm() {
       ospidal: user?.doctor?.ospidal ?? "",
     },
     validate: {
-      name: (val) => (val.trim().length > 0 ? null : "Il nome è obbligatorio"),
+      name: (val) => (val.trim().length > 0 ? null : "name is required"),
 
       surname: (val) =>
-        val.trim().length > 0 ? null : "Il cognome è obbligatorio",
+        val.trim().length > 0 ? null : "Surname is required",
 
       email: (val) =>
         /^\S+@\S+\.\S+$/.test(val)
@@ -42,16 +42,16 @@ export function useProfileForm() {
           ? null
           : "Seleziona il genere",
 
-      birthDate: (val) => (val ? null : "La data di nascita è obbligatoria"),
+      birthDate: (val) => (val ? null : "date of birth is required"),
 
       phone: (val) =>
         /^\+\d{2} \d{3} \d{3}-\d{4}$/.test(val)
           ? null
-          : "Inserisci un numero di telefono valido (+39 000 000-0000)",
+          : "phone number is not valid (+39 000 000-0000)",
       ospidal: (val) =>
         typeof val === "string" && val.trim().length > 0
           ? null
-          : "Il nome dell'ospedale è obbligatorio",
+          : "Ospidal name is required",
     },
   });
 }

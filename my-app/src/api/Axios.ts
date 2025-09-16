@@ -24,6 +24,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (err) {
         console.error("Refresh token failed:", err);
+        localStorage.setItem("isAuthenticated","false")
         //window.location.href = "/welcome";
       }
     }
