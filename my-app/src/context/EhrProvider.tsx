@@ -32,18 +32,6 @@ export function EhrProvider({ children }: { children: ReactNode }) {
   const [observations, setObservations] = useState<ObservationItem[]>([]);
   const [medications, setMedications] = useState<MedicationItem[]>([]);
 
-
-
-
-
-
-
-
-
-
-
-
-  
   const nextStep = () =>
     setActive((current) => (current < 7 ? current + 1 : current));
   const prevStep = () =>
@@ -314,6 +302,50 @@ export function EhrProvider({ children }: { children: ReactNode }) {
     };
   };
 
+  const ACT_CLASS_MAP: Record<string, { code: string; display: string }> = {
+    inpatient: { code: "IMP", display: "inpatient" },
+    outpatient: { code: "AMB", display: "ambulatory" },
+    emergency: { code: "EMER", display: "emergency" },
+    home: { code: "HH", display: "home health" },
+    virtual: { code: "VR", display: "virtual" },
+  };
+
+  const toActClass = (v?: string) =>
+    ACT_CLASS_MAP[v?.toLowerCase() || ""] ?? ACT_CLASS_MAP.outpatient;
+
+  const isoDateOrUndefined = (s?: string) => {
+    if (!s || s.trim() === "") return undefined;
+    // se è solo YYYY-MM-DD la lascio così (valida per FHIR 'date'),
+    // se sembra YYYY-MM-DD hh:mm aggiungo 'T' e 'Z'
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    if (/^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}(:\d{2})?$/.test(s)) {
+      const t = s.trim().replace(" ", "T");
+      return t.endsWith("Z") ? t : `${t}Z`;
+    }
+    return s; // se già ISO la passo
+  };
+
+  const CONDITION_CATEGORIES = new Set([
+    "encounter-diagnosis",
+    "problem-list-item",
+  ]);
+  const CONDITION_CLINICAL = new Set([
+    "active",
+    "recurrence",
+    "relapse",
+    "inactive",
+    "remission",
+    "resolved",
+  ]);
+
+  const safeConditionCategory = (c?: string) =>
+    CONDITION_CATEGORIES.has((c || "").trim())
+      ? c!.trim()
+      : "encounter-diagnosis";
+
+  const safeClinicalStatus = (c?: string) =>
+    CONDITION_CLINICAL.has((c || "").trim()) ? c!.trim() : undefined;
+
   function mapFormToEhr(): EhrRequest {
     const form = getAllFormData();
 
@@ -392,27 +424,14 @@ export function EhrProvider({ children }: { children: ReactNode }) {
       subject: { reference: `Patient/${patient.id}` },
       class: {
         system: "http://terminology.hl7.org/CodeSystem/v3-ActCode",
-        code: form.class,
-        display: form.class,
+        ...toActClass(form.class),
       },
-      type: form.type
-        ? [
-            {
-              coding: [
-                {
-                  system: "http://snomed.info/sct",
-                  code: form.type,
-                  display: form.type,
-                },
-              ],
-            },
-          ]
-        : undefined,
+      type: form.type ? [{ text: form.type }] : undefined,
       period:
         form.start || form.end
           ? {
-              start: form.start,
-              end: form.end,
+              start: isoDateOrUndefined(form.start),
+              end: isoDateOrUndefined(form.end),
             }
           : undefined,
       location: form.locationEncounter
@@ -444,14 +463,13 @@ export function EhrProvider({ children }: { children: ReactNode }) {
       id: form.conditionId || crypto.randomUUID(),
       subject: { reference: `Patient/${patient.id}` },
       encounter: { reference: `Encounter/${encounter.id}` },
-      clinicalStatus: form.clinicalStatus
+      clinicalStatus: safeClinicalStatus(form.clinicalStatus)
         ? {
             coding: [
               {
                 system:
                   "http://terminology.hl7.org/CodeSystem/condition-clinical",
-                code: form.clinicalStatus,
-                display: form.clinicalStatus,
+                code: safeClinicalStatus(form.clinicalStatus),
               },
             ],
           }
@@ -485,7 +503,7 @@ export function EhrProvider({ children }: { children: ReactNode }) {
                 {
                   system:
                     "http://terminology.hl7.org/CodeSystem/condition-category",
-                  code: form.category,
+                  code: safeConditionCategory(form.category),
                   display: form.category,
                 },
               ],
