@@ -12,11 +12,11 @@ import {
 import {
   IconCalendar,
   IconClipboardText,
-  IconExternalLink,
   IconFileTypePdf,
   IconMail,
   IconStethoscope,
   IconUser,
+  IconSend,
 } from "@tabler/icons-react";
 import classes from "./style/EhrCard.module.css";
 import usePdf from "../hook/usePdf";
@@ -146,7 +146,7 @@ export function EhrCard({
           <Tooltip label="Download PDF" position="top">
             <ActionIcon
               onClick={() => {
-                downloadPdfMutation.mutate(id);
+                downloadPdfMutation.mutate({ id, name, surname });
               }}
               variant="subtle"
               color="red"
@@ -165,7 +165,7 @@ export function EhrCard({
             </ActionIcon>
           </Tooltip>
 
-          <Tooltip label="TODO" position="top">
+          <Tooltip label="Send" position="top">
             <ActionIcon
               variant="subtle"
               color="blue"
@@ -180,30 +180,9 @@ export function EhrCard({
                 },
               }}
             >
-              <IconExternalLink size={24} />
+              <IconSend size={24} />
             </ActionIcon>
           </Tooltip>
-
-          {/*<Tooltip label="Edit" position="top">
-            <ActionIcon
-              variant="subtle"
-              color="gray"
-              size="lg"
-              onClick={() => navigate("ehr/edit", { state: { ehr } })}
-              radius="md"
-              styles={{
-                root: {
-                  "&:hover": {
-                    backgroundColor: "var(--mantine-color-gray-1)",
-                    transform: "scale(1.05)",
-                  },
-                },
-              }}
-            >
-              <IconEdit size={24} />
-            </ActionIcon>
-          </Tooltip>*/}
-
         </Group>
       </Flex>
     </Paper>

@@ -4,20 +4,19 @@ import { notifications } from "@mantine/notifications";
 
 export default function usePdf() {
   return useMutation({
-    mutationFn: async (id: string) => {
-      const blob = await pdfApi(id);
-      return blob;
+    mutationFn: async (data: { id: string; name: string; surname: string }) => {
+      const blob = await pdfApi(data.id);
+      return { blob, name: data.name, surname: data.surname };
     },
-    onSuccess: (blob: Blob, id: string) => {
-      
+    onSuccess: (result) => {
       // Download automatico
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const url = window.URL.createObjectURL(result.blob);
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `ehr-${id}.pdf`;
+      a.download = `EHR-${result.name} ${result.surname}.pdf`;
       a.click();
       window.URL.revokeObjectURL(url);
-      
+
       notifications.show({
         title: "Download Successful!",
         color: "green",
@@ -28,7 +27,7 @@ export default function usePdf() {
     },
     onError: (error) => {
       console.error("❌ PDF download failed:", error.message);
-      
+
       notifications.show({
         title: "Download Failed!",
         color: "red",
@@ -36,6 +35,6 @@ export default function usePdf() {
         autoClose: 5000,
         position: "bottom-right",
       });
-    }
+    },
   });
 }
