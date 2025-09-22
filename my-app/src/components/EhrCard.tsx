@@ -21,6 +21,7 @@ import {
 import classes from "./style/EhrCard.module.css";
 import usePdf from "../hook/usePdf";
 import type { EHR } from "../types/Ehr.types";
+import { useSendContext } from "../context/SendContext";
 interface EhrCardProps {
   ehr: EHR;
   id: string;
@@ -42,6 +43,7 @@ export function EhrCard({
   doctorSurname,
 }: EhrCardProps) {
   const downloadPdfMutation = usePdf();
+  const { setName, setSurname, setId, openModal } = useSendContext();
 
   return (
     <Paper
@@ -167,6 +169,12 @@ export function EhrCard({
 
           <Tooltip label="Send" position="top">
             <ActionIcon
+              onClick={() => {
+                setName(name);
+                setSurname(surname);
+                setId(id);
+                openModal();
+              }}
               variant="subtle"
               color="blue"
               size="lg"

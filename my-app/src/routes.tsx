@@ -9,6 +9,7 @@ import InitialRedirect from "./utils/InitialRedirect";
 import EhrForm from "./pages/EhrForm.page";
 import { EhrProvider } from "./context/EhrProvider";
 import TwoFactorAuthPage from "./pages/TwoFactorAuth.page";
+import { SendProvider } from "./context/SendProvider";
 
 export const routes = [
   {
@@ -35,7 +36,11 @@ export const routes = [
     children: [
       {
         path: "",
-        element: <Home />,
+        element: (
+          <SendProvider>
+            <Home />
+          </SendProvider>
+        ),
       },
       {
         path: "profile",
