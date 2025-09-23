@@ -7,6 +7,7 @@ import { EhrList } from "../components/EhrList";
 import { useState } from "react";
 import usePagination from "../hook/usePagination";
 import type { SidebarContext } from "./RootLayout.page";
+import SendModal from "../components/SendModal";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -24,7 +25,6 @@ export default function Home() {
         ></SearchBar>
 
         <EhrList data={data} isLoading={isLoading} error={error}></EhrList>
-
 
         <Pagination
           value={currentPage}
@@ -54,6 +54,7 @@ export default function Home() {
           </ActionIcon>
         </Tooltip>
       </Flex>
+      <SendModal></SendModal>
     </>
   );
 }
