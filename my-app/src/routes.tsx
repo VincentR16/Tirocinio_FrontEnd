@@ -10,6 +10,7 @@ import EhrForm from "./pages/EhrForm.page";
 import { EhrProvider } from "./context/EhrProvider";
 import TwoFactorAuthPage from "./pages/TwoFactorAuth.page";
 import { SendProvider } from "./context/SendProvider";
+import ComunicationPage from "./pages/Comunication.page";
 
 export const routes = [
   {
@@ -27,7 +28,7 @@ export const routes = [
     ),
   },
   {
-    path: "/home",
+    path: "/Medtrust",
     element: (
       <SendProvider>
         <ProtectedRoot>
@@ -45,7 +46,7 @@ export const routes = [
         element: <Profile />,
       },
       {
-        path: "ehr/create",
+        path: "create-Ehr",
         element: (
           <EhrProvider>
             <EhrForm />
@@ -55,6 +56,10 @@ export const routes = [
       {
         path: "two-factor-auth",
         element: <TwoFactorAuthPage />,
+      },
+      {
+        path: "comunication-history",
+        element: <ComunicationPage />,
       },
     ],
   },

@@ -10,7 +10,7 @@ export default function useCreateEhr() {
   return useMutation({
     mutationFn: async (request: EhrRequest) => {
       const res = await createEhrApi(request);
-      navigate("/home");
+      navigate("/Medtrust");
       console.log("Ehr creation success", res);
     },
 

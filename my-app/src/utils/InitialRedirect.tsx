@@ -35,5 +35,5 @@ export default function InitialRedirect() {
     );
 
   //se l utente ha ancora questi token e sono validi viene renderizzaro in home altrimenti in welcome dove fare il login
-  return <Navigate to={isAuthenticated ? "/home" : "/welcome"} replace />;
+  return <Navigate to={isAuthenticated ? "/Medtrust" : "/welcome"} replace />;
 }

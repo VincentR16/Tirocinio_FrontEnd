@@ -15,7 +15,7 @@ export default function useTwoFactorAuth() {
       const res = await twoFactorAuthApi(request);
 
       setIsAuthenticated(true);
-      navigate("/home");
+      navigate("/Medtrust");
       console.log("User Authenticated!", res);
     },
     onSuccess: () => {

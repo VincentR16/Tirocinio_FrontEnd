@@ -3,13 +3,12 @@ import {
   IconHome2,
   IconLogout,
   IconPlus,
-  IconSettings,
+  IconHistory,
   IconUser,
 } from "@tabler/icons-react";
 import { Stack, Tooltip, UnstyledButton } from "@mantine/core";
 import classes from "./style/NavbarToolTip.module.css";
 import { useNavigate } from "react-router-dom";
-
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -39,14 +38,18 @@ type SidebarProps = {
 };
 
 const mockdata = [
-  { icon: IconHome2, label: "Home", path: "/home" },
-  { icon: IconPlus, label: "Add Ehr", path: "ehr/create" },
-  { icon: IconUser, label: "Profile", path: "/home/profile" },
-  { icon: IconAuth2fa, label: "Security", path: "/home/two-factor-auth" },
-  { icon: IconSettings, label: "Settings", path: "/home" },
+  { icon: IconHome2, label: "Home", path: "/MedTrust" },
+  { icon: IconPlus, label: "Add Ehr", path: "create-Ehr" },
+  { icon: IconHistory, label: "Comunication history", path: "comunication-history" },
+  { icon: IconUser, label: "Profile", path: "profile" },
+  { icon: IconAuth2fa, label: "Security", path: "two-factor-auth" },
 ];
 
-export function Sidebar({ onLogout, sidebarActive, setSidebarActive }: SidebarProps) {
+export function Sidebar({
+  onLogout,
+  sidebarActive,
+  setSidebarActive,
+}: SidebarProps) {
   const navigate = useNavigate();
 
   const links = mockdata.map((link, index) => (

@@ -46,7 +46,7 @@ export default function Home() {
               right: 20,
             }}
             onClick={() => {
-              navigate("ehr/create");
+              navigate("create-Ehr");
               setSidebarActive(1);
             }}
           >

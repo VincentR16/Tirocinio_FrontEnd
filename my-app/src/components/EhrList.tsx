@@ -150,7 +150,7 @@ export function EhrList({ data, isLoading, error }: EhrListPorps) {
                   },
                 },
               }}
-              onClick={() => {navigate("ehr/create"); setSidebarActive(1)}}
+              onClick={() => {navigate("create-Ehr"); setSidebarActive(1)}}
             >
               Create new EHR
             </Button>
