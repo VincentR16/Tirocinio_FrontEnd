@@ -14,6 +14,7 @@ import { useDisclosure } from "@mantine/hooks";
 import useLogout from "../hook/useLogout";
 import classes from "./style/layout.module.css";
 import { useState } from "react";
+import SendModal from "../components/SendModal";
 
 export type SidebarContext = {
   sidebarActive: number;
@@ -29,6 +30,7 @@ export default function RootLayout() {
   return (
     <>
       <AppShell
+        className={classes.container}
         padding="lg"
         header={{ height: 60 }}
         navbar={{
@@ -61,15 +63,22 @@ export default function RootLayout() {
               </h3>
             </Center>
           </Flex>
-
         </AppShell.Header>
 
         <AppShell.Navbar>
-          <Sidebar onLogout={open} sidebarActive={sidebarActive} setSidebarActive={setSidebarActive}></Sidebar>
+          <Sidebar
+            onLogout={open}
+            sidebarActive={sidebarActive}
+            setSidebarActive={setSidebarActive}
+          ></Sidebar>
         </AppShell.Navbar>
 
-        <AppShell.Main>
-          <Outlet context={{ sidebarActive, setSidebarActive } satisfies SidebarContext} />
+        <AppShell.Main className={classes.container}>
+          <Outlet
+            context={
+              { sidebarActive, setSidebarActive } satisfies SidebarContext
+            }
+          />
         </AppShell.Main>
 
         <Modal
@@ -94,7 +103,7 @@ export default function RootLayout() {
             </Button>
           </Group>
         </Modal>
-        
+        <SendModal></SendModal>
       </AppShell>
     </>
   );

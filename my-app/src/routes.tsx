@@ -29,18 +29,16 @@ export const routes = [
   {
     path: "/home",
     element: (
-      <ProtectedRoot>
-        <RootLayout />
-      </ProtectedRoot>
+      <SendProvider>
+        <ProtectedRoot>
+          <RootLayout />
+        </ProtectedRoot>
+      </SendProvider>
     ),
     children: [
       {
         path: "",
-        element: (
-          <SendProvider>
-            <Home />
-          </SendProvider>
-        ),
+        element: <Home />,
       },
       {
         path: "profile",
