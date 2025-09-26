@@ -1,145 +1,64 @@
 import {
-  Anchor,
   Center,
   Flex,
-  Group,
+  Loader,
+  Pagination,
   Paper,
-  Progress,
   SegmentedControl,
   Table,
   Text,
 } from "@mantine/core";
-import { IconCircleArrowDownRight, IconSend } from "@tabler/icons-react";
+import {
+  IconCircleArrowDownRight,
+  IconClipboard,
+  IconSend,
+} from "@tabler/icons-react";
 import classes from "./style/comunication.module.css";
 import { useState } from "react";
-
-const data = [
-  {
-    title: "Foundation",
-    author: "Isaac Asimov",
-    year: 1951,
-    reviews: { positive: 2223, negative: 259 },
-  },
-  {
-    title: "Frankenstein",
-    author: "Mary Shelley",
-    year: 1818,
-    reviews: { positive: 5677, negative: 1265 },
-  },
-  {
-    title: "Solaris",
-    author: "Stanislaw Lem",
-    year: 1961,
-    reviews: { positive: 3487, negative: 1845 },
-  },
-  {
-    title: "Dune",
-    author: "Frank Herbert",
-    year: 1965,
-    reviews: { positive: 8576, negative: 663 },
-  },
-  {
-    title: "The Left Hand of Darkness",
-    author: "Ursula K. Le Guin",
-    year: 1969,
-    reviews: { positive: 6631, negative: 993 },
-  },
-  {
-    title: "A Scanner Darkly",
-    author: "Philip K Dick",
-    year: 1977,
-    reviews: { positive: 8124, negative: 1847 },
-  },
-  {
-    title: "A Scanner Darkly",
-    author: "Philip K Dick",
-    year: 1977,
-    reviews: { positive: 8124, negative: 1847 },
-  },
-  {
-    title: "A Scanner Darkly",
-    author: "Philip K Dick",
-    year: 1977,
-    reviews: { positive: 8124, negative: 1847 },
-  },
-  {
-    title: "A Scanner Darkly",
-    author: "Philip K Dick",
-    year: 1977,
-    reviews: { positive: 8124, negative: 1847 },
-  },
-  {
-    title: "A Scanner Darkly",
-    author: "Philip K Dick",
-    year: 1977,
-    reviews: { positive: 8124, negative: 1847 },
-  },
-  {
-    title: "A Scanner Darkly",
-    author: "Philip K Dick",
-    year: 1977,
-    reviews: { positive: 8124, negative: 1847 },
-  },
-];
+import {
+  ComunicationTypeEnum,
+  type ComunicationType,
+} from "../types/ComunicationType.enum";
+import useGetComunication from "../hook/useGetComunication";
 
 export default function ComunicationPage() {
-  const [value, setValue] = useState("Outcoming");
+  const [valueType, setValueType] = useState<ComunicationType>(
+    ComunicationTypeEnum.OUTGOING
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, error } = useGetComunication(valueType, currentPage);
+  console.log("ecco user", data?.comunications[0].doctor);
 
-  const rows = data.map((row) => {
-    const totalReviews = row.reviews.negative + row.reviews.positive;
-    const positiveReviews = (row.reviews.positive / totalReviews) * 100;
-    const negativeReviews = (row.reviews.negative / totalReviews) * 100;
-
+  const rows = data?.comunications.map((row) => {
     return (
-      <Table.Tr key={row.title}>
+      <Table.Tr key={row.id}>
+        <Table.Td>{row.id}</Table.Td>
         <Table.Td>
-          <Anchor component="button" fz="sm">
-            {row.title}
-          </Anchor>
+          <Text>{row.createdAt.toString()}</Text>
         </Table.Td>
-        <Table.Td>{row.year}</Table.Td>
         <Table.Td>
-          <Anchor component="button" fz="sm">
-            {row.author}
-          </Anchor>
+          {row.doctor.user.name} {row.doctor.user.surname}
         </Table.Td>
-        <Table.Td>{Intl.NumberFormat().format(totalReviews)}</Table.Td>
+        <Table.Td>{row.hospital}</Table.Td>
+        <Table.Td>{row.status}</Table.Td>
         <Table.Td>
-          <Group justify="space-between">
-            <Text fz="xs" c="teal" fw={700}>
-              {positiveReviews.toFixed(0)}%
-            </Text>
-            <Text fz="xs" c="red" fw={700}>
-              {negativeReviews.toFixed(0)}%
-            </Text>
-          </Group>
-          <Progress.Root>
-            <Progress.Section
-              className={classes.progressSection}
-              value={positiveReviews}
-              color="teal"
-            />
-
-            <Progress.Section
-              className={classes.progressSection}
-              value={negativeReviews}
-              color="red"
-            />
-          </Progress.Root>
+          <Center>
+            <IconClipboard />
+          </Center>
         </Table.Td>
       </Table.Tr>
     );
   });
 
   return (
-    <Flex direction="column" w="100%">
+    <Flex mih="89vh" direction="column" w="100%">
       <Center>
-        <Paper p={3.5} radius="lg" shadow="lg">
+        <Paper p={4} radius="lg" shadow="lg">
           <SegmentedControl
-            value={value}
-            onChange={setValue}
+            value={valueType}
+            onChange={(value) => setValueType(value as ComunicationType)}
             className={classes.segmentRoot}
-            size="lg"
+            size="md"
             styles={{
               indicator: {
                 backgroundColor: "#228be6",
@@ -147,15 +66,25 @@ export default function ComunicationPage() {
             }}
             data={[
               {
-                value: "Outcoming",
+                value: ComunicationTypeEnum.OUTGOING,
                 label: (
                   <Center style={{ gap: 10 }}>
                     <IconSend
-                      color={value === "Outcoming" ? "white" : "black"}
+                      color={
+                        valueType === ComunicationTypeEnum.OUTGOING
+                          ? "white"
+                          : "black"
+                      }
                       size={16}
                     />
-                    <Text c={value === "Outcoming" ? "white" : "black"}>
-                      Outcoming
+                    <Text
+                      c={
+                        valueType === ComunicationTypeEnum.OUTGOING
+                          ? "white"
+                          : "black"
+                      }
+                    >
+                      Outgoing
                     </Text>
                   </Center>
                 ),
@@ -165,10 +94,20 @@ export default function ComunicationPage() {
                 label: (
                   <Center style={{ gap: 10 }}>
                     <IconCircleArrowDownRight
-                      color={value === "Incoming" ? "white" : "black"}
+                      color={
+                        valueType === ComunicationTypeEnum.INCOMING
+                          ? "white"
+                          : "black"
+                      }
                       size={16}
                     />
-                    <Text c={value === "Incoming" ? "white" : "black"}>
+                    <Text
+                      c={
+                        valueType === ComunicationTypeEnum.INCOMING
+                          ? "white"
+                          : "black"
+                      }
+                    >
                       Incoming
                     </Text>
                   </Center>
@@ -179,20 +118,51 @@ export default function ComunicationPage() {
         </Paper>
       </Center>
 
-      <Table.ScrollContainer mt="lg" minWidth={800}>
-        <Table verticalSpacing="xs">
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>Book title</Table.Th>
-              <Table.Th>Year</Table.Th>
-              <Table.Th>Author</Table.Th>
-              <Table.Th>Reviews</Table.Th>
-              <Table.Th>Reviews distribution</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
-      </Table.ScrollContainer>
+      {error && (
+        <Center>
+          <Text c="red">
+            {error.message ||
+              "Si è verificato un errore nel caricamento dei dati"}
+          </Text>
+        </Center>
+      )}
+
+      {isLoading ? (
+        <Center h={400}>
+          <Loader size="lg" />
+        </Center>
+      ) : (
+        <>
+          <Paper p={15} mt={30} shadow="md" radius="lg">
+            <Table.ScrollContainer minWidth={800}>
+              <Table verticalSpacing="xs">
+                <Table.Thead>
+                  <Table.Tr>
+                    
+                    <Table.Th>Comunication Id</Table.Th>
+                    <Table.Th>Date</Table.Th>
+                    <Table.Th>From:</Table.Th>
+                    <Table.Th>To:</Table.Th>
+                    <Table.Th>Status</Table.Th>
+                    <Table.Th>Message</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>{rows}</Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          </Paper>
+        </>
+      )}
+      <Center mt="auto" py="md">
+        <Pagination
+
+          value={currentPage}
+          onChange={setCurrentPage}
+          total={data?.pagination?.totalPages || 1}
+        ></Pagination>
+      </Center>
     </Flex>
   );
 }
+
+                    //! al posto di id mettere nome e cognome paziente e id ehr aggiustare prima il back end

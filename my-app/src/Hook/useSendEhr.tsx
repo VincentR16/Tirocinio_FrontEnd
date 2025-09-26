@@ -1,20 +1,36 @@
 import { useMutation } from "@tanstack/react-query";
 import { sendEhrApi } from "../api/sendEhrApi";
 import { notifications } from "@mantine/notifications";
+import { Button, Text, Stack } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 export default function useSendEhr() {
+  const navigate = useNavigate()
   return useMutation({
-    mutationFn: async (data: {id:string, hospital: string}) => {
-      const result = await sendEhrApi(data.id,data.hospital);
+    mutationFn: async (data: { id: string; hospital: string }) => {
+      const result = await sendEhrApi(data.id, data.hospital);
       return result;
     },
     onSuccess: () => {
       notifications.show({
-        title: "Ehr sent successfully!",
+        title: "EHR sent successfully!",
         color: "green",
-        message: "The EHR has been delivered! check out all your comunications",
         autoClose: 4000,
         position: "bottom-right",
+        message: (
+          <Stack justify="space-between">
+            <Text>The EHR has been delivered! Click below to check the comunication History</Text>
+            <Button
+              size="xs"
+              variant="light"
+              onClick={() => {
+                navigate("comunication-history")
+              }}
+            >
+              History
+            </Button>
+          </Stack>
+        ),
       });
     },
     onError: (error) => {
