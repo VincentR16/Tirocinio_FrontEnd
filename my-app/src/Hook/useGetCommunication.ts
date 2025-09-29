@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCommunicationApi } from "../api/getComunicationApi";
+import { getCommunicationApi } from "../api/getCommunicationApi";
 import type { CommunicationType } from "../types/CommunicationType.enum";
 
 export default function useGetCommunication(

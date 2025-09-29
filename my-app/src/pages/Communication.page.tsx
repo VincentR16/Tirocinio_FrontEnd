@@ -22,7 +22,7 @@ import {
   CommunicationTypeEnum,
   type CommunicationType,
 } from "../types/CommunicationType.enum";
-import useGetCommunication from "../hook/useGetComunication";
+import useGetCommunication from "../hook/useGetCommunication";
 import type { CommunicationStatus } from "../types/CommunicationStatus.enum";
 import { useJsonContext } from "../context/JsonContext";
 
