@@ -10,7 +10,7 @@ import EhrForm from "./pages/EhrForm.page";
 import { EhrProvider } from "./context/EhrProvider";
 import TwoFactorAuthPage from "./pages/TwoFactorAuth.page";
 import { SendProvider } from "./context/SendProvider";
-import ComunicationPage from "./pages/Comunication.page";
+import CommunicationPage from "./pages/Communication.page";
 import { JsonProvider } from "./context/JsonProvider";
 
 export const routes = [
@@ -62,7 +62,7 @@ export const routes = [
       },
       {
         path: "comunication-history",
-        element: <ComunicationPage />,
+        element: <CommunicationPage />,
       },
     ],
   },

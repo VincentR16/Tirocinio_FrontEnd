@@ -1,7 +1,7 @@
-import type { Comunication } from "./Comunication.type";
+import type { Communication } from "./Communication.type";
 
-export type PaginatedComunication = {
-  comunications: Comunication[];
+export type PaginatedCommunication = {
+  comunications: Communication[];
   pagination: {
     currentPage: number;
     itemPerPage: number;

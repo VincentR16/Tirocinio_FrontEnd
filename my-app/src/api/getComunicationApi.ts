@@ -1,12 +1,12 @@
-import type { ComunicationType } from "../types/ComunicationType.enum";
-import type { PaginatedComunication } from "../types/PaginatedComunication.type";
+import type { CommunicationType } from "../types/CommunicationType.enum";
+import type { PaginatedCommunication } from "../types/PaginatedComunication.type";
 import api from "./axios";
 
-export async function getComunicationApi(
-  type: ComunicationType,
+export async function getCommunicationApi(
+  type: CommunicationType,
   page: number
-): Promise<PaginatedComunication> {
-  const response = await api.get<PaginatedComunication>(
+): Promise<PaginatedCommunication> {
+  const response = await api.get<PaginatedCommunication>(
     `comunication?type=${type}&page=${page}`
   );
   return response.data;

@@ -19,21 +19,21 @@ import {
 import classes from "./style/comunication.module.css";
 import { useState } from "react";
 import {
-  ComunicationTypeEnum,
-  type ComunicationType,
-} from "../types/ComunicationType.enum";
-import useGetComunication from "../hook/useGetComunication";
-import type { ComunicationStatus } from "../types/ComunicationStatus.enum";
+  CommunicationTypeEnum,
+  type CommunicationType,
+} from "../types/CommunicationType.enum";
+import useGetCommunication from "../hook/useGetComunication";
+import type { CommunicationStatus } from "../types/CommunicationStatus.enum";
 import { useJsonContext } from "../context/JsonContext";
 
 interface StatusDotProps {
-  status: ComunicationStatus;
+  status: CommunicationStatus;
   size?: number;
 }
 
 function StatusDot({ status }: StatusDotProps) {
   const statusConfig: Record<
-    ComunicationStatus,
+    CommunicationStatus,
     {
       color: string;
       label: string;
@@ -80,12 +80,12 @@ function StatusDot({ status }: StatusDotProps) {
   );
 }
 
-export default function ComunicationPage() {
-  const [valueType, setValueType] = useState<ComunicationType>(
-    ComunicationTypeEnum.OUTGOING
+export default function CommunicationPage() {
+  const [valueType, setValueType] = useState<CommunicationType>(
+    CommunicationTypeEnum.OUTGOING
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, error } = useGetComunication(valueType, currentPage);
+  const { data, isLoading, error } = useGetCommunication(valueType, currentPage);
   const { openModal, setJson } = useJsonContext();
 
   const rows = data?.comunications.map((row) => {
@@ -130,7 +130,7 @@ export default function ComunicationPage() {
         <Paper p={4} radius="lg" shadow="lg">
           <SegmentedControl
             value={valueType}
-            onChange={(value) => setValueType(value as ComunicationType)}
+            onChange={(value) => setValueType(value as CommunicationType)}
             className={classes.segmentRoot}
             size="md"
             styles={{
@@ -140,12 +140,12 @@ export default function ComunicationPage() {
             }}
             data={[
               {
-                value: ComunicationTypeEnum.OUTGOING,
+                value: CommunicationTypeEnum.OUTGOING,
                 label: (
                   <Center style={{ gap: 10 }}>
                     <IconSend
                       color={
-                        valueType === ComunicationTypeEnum.OUTGOING
+                        valueType === CommunicationTypeEnum.OUTGOING
                           ? "white"
                           : "black"
                       }
@@ -153,7 +153,7 @@ export default function ComunicationPage() {
                     />
                     <Text
                       c={
-                        valueType === ComunicationTypeEnum.OUTGOING
+                        valueType === CommunicationTypeEnum.OUTGOING
                           ? "white"
                           : "black"
                       }
@@ -169,7 +169,7 @@ export default function ComunicationPage() {
                   <Center style={{ gap: 10 }}>
                     <IconCircleArrowDownRight
                       color={
-                        valueType === ComunicationTypeEnum.INCOMING
+                        valueType === CommunicationTypeEnum.INCOMING
                           ? "white"
                           : "black"
                       }
@@ -177,7 +177,7 @@ export default function ComunicationPage() {
                     />
                     <Text
                       c={
-                        valueType === ComunicationTypeEnum.INCOMING
+                        valueType === CommunicationTypeEnum.INCOMING
                           ? "white"
                           : "black"
                       }

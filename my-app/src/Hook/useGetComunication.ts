@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { getComunicationApi } from "../api/getComunicationApi";
-import type { ComunicationType } from "../types/ComunicationType.enum";
+import { getCommunicationApi } from "../api/getComunicationApi";
+import type { CommunicationType } from "../types/CommunicationType.enum";
 
-export default function useGetComunication(
-  type: ComunicationType,
+export default function useGetCommunication(
+  type: CommunicationType,
   page: number
 ) {
   return useQuery({
     queryKey: ["comuinication", type, page],
-    queryFn: () => getComunicationApi(type, page),
+    queryFn: () => getCommunicationApi(type, page),
   });
 }

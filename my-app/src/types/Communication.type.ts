@@ -1,13 +1,13 @@
 import type { Bundle, FhirResource, OperationOutcome } from "fhir/r4";
 import type { Doctor } from "./Doctor.type";
-import type { ComunicationType } from "./ComunicationType.enum";
-import type { ComunicationStatus } from "./ComunicationStatus.enum";
+import type { CommunicationType } from "./CommunicationType.enum";
+import type { CommunicationStatus } from "./CommunicationStatus.enum";
 
-export type Comunication = {
+export type Communication = {
   id: string;
   createdAt: Date;
-  type: ComunicationType;
-  status: ComunicationStatus;
+  type: CommunicationType;
+  status: CommunicationStatus;
   hospital: string;
   doctor: Doctor;
   message: OperationOutcome | Bundle<FhirResource>;
