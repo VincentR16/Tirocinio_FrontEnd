@@ -1,16 +1,7 @@
-import {
-  Button,
-  Center,
-  Text,
-  Image,
-  Modal,
-  Stack,
-  Title,
-  ThemeIcon,
-} from "@mantine/core";
+import { Button, Center, Text, Image, Modal, Stack } from "@mantine/core";
 import { useQrContext } from "../context/QrContext";
 import { IconQrcode, IconX } from "@tabler/icons-react";
-import { Group } from "lucide-react";
+import { CustomTitle } from "./CustomTitle";
 
 export default function QrCodeModal() {
   const { qrCode, openedQr, closeQr, openCode } = useQrContext();
@@ -20,35 +11,15 @@ export default function QrCodeModal() {
       onClose={closeQr}
       withinPortal={false}
       withCloseButton={false}
-       closeButtonProps={{
-              icon: <IconX size={20} color="red" ></IconX>
-            }}
+      closeButtonProps={{
+        icon: <IconX size={20} color="red"></IconX>,
+      }}
       title={
-        <Group>
-          <ThemeIcon
-            size="lg"
-            radius="md"
-            variant="gradient"
-            gradient={{ from: "blue", to: "cyan" }}
-          >
-            <IconQrcode size={20} />
-          </ThemeIcon>
-
-          <Title
-            order={3}
-            style={{
-              background: "linear-gradient(135deg, #228be6 0%, #15aabf 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              fontWeight: 600,
-            }}
-          >
-            Scan Qr Code
-          </Title>
-        </Group>
+        <CustomTitle
+          title="Scan the Qr code"
+          icon={<IconQrcode size={24}></IconQrcode>}
+        ></CustomTitle>
       }
-      size="auto"
-      closeOnClickOutside={false}
     >
       <Stack>
         <Center>
@@ -72,5 +43,5 @@ export default function QrCodeModal() {
   );
 }
 
-//todo ci sta questoe  2fa molto simili si potrebbe trovare un modo per non farne due ma solo uno , sarebbe sicuramente piu efficiente.
+//todo ci sta questo componente e un altro  in fase di registrazion 2fa molto simili si potrebbe trovare un modo per non farne due ma solo uno , sarebbe sicuramente piu efficiente.
 //ora no da fare successivamente in fase di refactoring non dovrebbe essere molto difficile

@@ -5,6 +5,7 @@ import {
   Center,
   Flex,
   Group,
+  Text,
   Modal,
 } from "@mantine/core";
 import { Sidebar } from "../components/Sidebar";
@@ -15,6 +16,9 @@ import useLogout from "../hook/useLogout";
 import classes from "./style/layout.module.css";
 import { useState } from "react";
 import SendModal from "../components/SendModal";
+import JsonModal from "../components/JsonModal";
+import { CustomTitle } from "../components/CustomTitle";
+import { IconLogout, IconX } from "@tabler/icons-react";
 
 export type SidebarContext = {
   sidebarActive: number;
@@ -84,11 +88,22 @@ export default function RootLayout() {
         <Modal
           opened={openedModal}
           onClose={close}
-          title="Logout"
+          title={
+            <CustomTitle
+              title="Logout"
+              icon={<IconLogout size={24}></IconLogout>}
+            ></CustomTitle>
+          }
           withinPortal={false}
+          closeButtonProps={{
+            icon: <IconX size={20} color="red"></IconX>,
+          }}
         >
-          Are you sure you want to logout? This action cannot be undone.
-          <Group mt={10}>
+          <Text ml={5}>Are you sure you want to logout?</Text>
+
+          <Text fs="italic" fw={600}  mt={5} ml={5}>This action cannot be undone.</Text>
+
+          <Group mt={15}>
             <Button
               variant="default"
               onClick={() => {
@@ -104,6 +119,7 @@ export default function RootLayout() {
           </Group>
         </Modal>
         <SendModal></SendModal>
+        <JsonModal></JsonModal>
       </AppShell>
     </>
   );

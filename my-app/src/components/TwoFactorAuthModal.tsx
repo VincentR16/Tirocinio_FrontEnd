@@ -1,18 +1,11 @@
-import {
-  Button,
-  Center,
-  Divider,
-  Modal,
-  PinInput,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Button, Center, Divider, Modal, PinInput, Stack } from "@mantine/core";
 import { useQrContext } from "../context/QrContext";
 import { useState } from "react";
 import useTwoFactorAuth from "../hook/useTwoFactorAuth";
 import { useAuthContext } from "../context/AuthContext";
 import { notifications } from "@mantine/notifications";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconQrcode, IconX } from "@tabler/icons-react";
+import { CustomTitle } from "./CustomTitle";
 
 export default function TwofactorAuthModal() {
   const { closeCode, openedCode } = useQrContext();
@@ -30,12 +23,14 @@ export default function TwofactorAuthModal() {
       p={0}
       withCloseButton={false}
       title={
-        <Center>
-          <Text size="lg" fw={700} ta="center" w="100%">
-            Two Factor Authentication
-          </Text>
-        </Center>
+        <CustomTitle
+          title="Two factor authentication"
+          icon={<IconQrcode size={24}></IconQrcode>}
+        ></CustomTitle>
       }
+      closeButtonProps={{
+        icon: <IconX size={20} color="red"></IconX>,
+      }}
     >
       <Divider></Divider>
       <Stack>
@@ -46,7 +41,7 @@ export default function TwofactorAuthModal() {
             size="xl"
             length={6}
             type="number"
-            error = {isError}
+            error={isError}
           />
         </Center>
         <Button
@@ -62,7 +57,7 @@ export default function TwofactorAuthModal() {
                     icon: <IconCheck size={18} />,
                     loading: false,
                     autoClose: 3500,
-                    position: "top-right"
+                    position: "top-right",
                   });
                 },
                 onError: () => {
@@ -70,9 +65,9 @@ export default function TwofactorAuthModal() {
                     color: "red",
                     title: "Two factor Authentication",
                     message: "Pin is not valid, try again!",
-                    autoClose: 3500
+                    autoClose: 3500,
                   });
-                  setIsError(true)
+                  setIsError(true);
                 },
               }
             );

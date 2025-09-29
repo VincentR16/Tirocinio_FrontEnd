@@ -11,6 +11,7 @@ import { EhrProvider } from "./context/EhrProvider";
 import TwoFactorAuthPage from "./pages/TwoFactorAuth.page";
 import { SendProvider } from "./context/SendProvider";
 import ComunicationPage from "./pages/Comunication.page";
+import { JsonProvider } from "./context/JsonProvider";
 
 export const routes = [
   {
@@ -30,11 +31,13 @@ export const routes = [
   {
     path: "/Medtrust",
     element: (
-      <SendProvider>
-        <ProtectedRoot>
-          <RootLayout />
-        </ProtectedRoot>
-      </SendProvider>
+      <JsonProvider>
+        <SendProvider>
+          <ProtectedRoot>
+            <RootLayout />
+          </ProtectedRoot>
+        </SendProvider>
+      </JsonProvider>
     ),
     children: [
       {

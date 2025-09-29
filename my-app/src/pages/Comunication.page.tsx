@@ -1,4 +1,6 @@
 import {
+  ActionIcon,
+  Box,
   Center,
   Flex,
   Loader,
@@ -7,6 +9,7 @@ import {
   SegmentedControl,
   Table,
   Text,
+  Tooltip,
 } from "@mantine/core";
 import {
   IconCircleArrowDownRight,
@@ -20,6 +23,62 @@ import {
   type ComunicationType,
 } from "../types/ComunicationType.enum";
 import useGetComunication from "../hook/useGetComunication";
+import type { ComunicationStatus } from "../types/ComunicationStatus.enum";
+import { useJsonContext } from "../context/JsonContext";
+
+interface StatusDotProps {
+  status: ComunicationStatus;
+  size?: number;
+}
+
+function StatusDot({ status }: StatusDotProps) {
+  const statusConfig: Record<
+    ComunicationStatus,
+    {
+      color: string;
+      label: string;
+    }
+  > = {
+    Pending: {
+      color: "orange",
+      label: "Pending",
+    },
+    Delivered: {
+      color: "green",
+      label: "Delivered",
+    },
+    Failed: {
+      color: "red",
+      label: "Failed",
+    },
+    Received: {
+      color: "green",
+      label: "Received",
+    },
+    Cancelled: {
+      color: "black",
+      label: "Cancelled",
+    },
+  };
+
+  const config = statusConfig[status];
+
+  return (
+    <Tooltip label={config.label} withArrow>
+      <Center>
+        <Box
+          p={5}
+          style={{
+            cursor: "pointer",
+            border: "1px solid var(--mantine-color-gray-6)",
+            borderRadius: "50%",
+            backgroundColor: `var(--mantine-color-${config.color}-6)`,
+          }}
+        />
+      </Center>
+    </Tooltip>
+  );
+}
 
 export default function ComunicationPage() {
   const [valueType, setValueType] = useState<ComunicationType>(
@@ -27,7 +86,7 @@ export default function ComunicationPage() {
   );
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, error } = useGetComunication(valueType, currentPage);
-  console.log("ecco user", data?.comunications[0].doctor);
+  const { openModal, setJson } = useJsonContext();
 
   const rows = data?.comunications.map((row) => {
     return (
@@ -39,12 +98,27 @@ export default function ComunicationPage() {
         <Table.Td>
           {row.doctor.user.name} {row.doctor.user.surname}
         </Table.Td>
-        <Table.Td>{row.hospital}</Table.Td>
-        <Table.Td>{row.status}</Table.Td>
         <Table.Td>
-          <Center>
-            <IconClipboard />
-          </Center>
+          <Text fw={500}>{row.hospital}</Text>
+        </Table.Td>
+        <Table.Td ta="center">
+          <StatusDot status={row.status}></StatusDot>
+        </Table.Td>
+        <Table.Td ta="center">
+          <Tooltip label="View the code" position="top" withArrow>
+            <ActionIcon
+              variant="subtle"
+              color="blue"
+              size="lg"
+              onClick={() => {
+                console.log("ecco", row.message);
+                setJson(row.message);
+                openModal();
+              }}
+            >
+              <IconClipboard size={24} />
+            </ActionIcon>
+          </Tooltip>
         </Table.Td>
       </Table.Tr>
     );
@@ -133,18 +207,26 @@ export default function ComunicationPage() {
         </Center>
       ) : (
         <>
-          <Paper p={15} mt={30} shadow="md" radius="lg">
+          <Paper
+            p={15}
+            mt={30}
+            shadow="md"
+            radius="lg"
+            withBorder
+            style={{
+              overflow: "hidden",
+            }}
+          >
             <Table.ScrollContainer minWidth={800}>
-              <Table verticalSpacing="xs">
+              <Table verticalSpacing="xs" highlightOnHover striped>
                 <Table.Thead>
                   <Table.Tr>
-                    
                     <Table.Th>Comunication Id</Table.Th>
                     <Table.Th>Date</Table.Th>
                     <Table.Th>From:</Table.Th>
                     <Table.Th>To:</Table.Th>
-                    <Table.Th>Status</Table.Th>
-                    <Table.Th>Message</Table.Th>
+                    <Table.Th ta="center">Status</Table.Th>
+                    <Table.Th ta="center">JSON Response</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>{rows}</Table.Tbody>
@@ -155,7 +237,6 @@ export default function ComunicationPage() {
       )}
       <Center mt="auto" py="md">
         <Pagination
-
           value={currentPage}
           onChange={setCurrentPage}
           total={data?.pagination?.totalPages || 1}
@@ -165,4 +246,4 @@ export default function ComunicationPage() {
   );
 }
 
-                    //! al posto di id mettere nome e cognome paziente e id ehr aggiustare prima il back end
+//! al posto di id mettere nome e cognome paziente e id ehr aggiustare prima il back end

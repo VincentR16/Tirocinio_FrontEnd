@@ -7,42 +7,17 @@ import {
   Stack,
   TextInput,
   Title,
-  Group,
-  ThemeIcon,
 } from "@mantine/core";
 import { useSendContext } from "../context/SendContext";
 import { useState } from "react";
 import { IconFileText, IconX } from "@tabler/icons-react";
 import useSendEhr from "../hook/useSendEhr";
+import { CustomTitle } from "./CustomTitle";
 
 export default function SendModal() {
   const [hospital, setHospital] = useState("");
   const { opened, closeModal, id, name, surname } = useSendContext();
   const handleSend = useSendEhr();
-
-  const ModalTitle = () => (
-    <Group>
-      <ThemeIcon
-        size="lg"
-        radius="md"
-        variant="gradient"
-        gradient={{ from: "blue", to: "cyan" }}
-      >
-        <IconFileText size={20} />
-      </ThemeIcon>
-      <Title
-        order={3}
-        style={{
-          background: "linear-gradient(135deg, #228be6 0%, #15aabf 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          fontWeight: 600,
-        }}
-      >
-        Send EHR
-      </Title>
-    </Group>
-  );
 
   return (
     <Modal
@@ -53,7 +28,12 @@ export default function SendModal() {
       closeButtonProps={{
         icon: <IconX size={20} color="red"></IconX>,
       }}
-      title={<ModalTitle></ModalTitle>}
+      title={
+        <CustomTitle
+          title="Send Ehr"
+          icon={<IconFileText size={24}></IconFileText>}
+        ></CustomTitle>
+      }
       size="md"
     >
       <Stack p="md">

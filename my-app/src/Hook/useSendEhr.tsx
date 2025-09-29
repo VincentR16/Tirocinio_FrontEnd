@@ -5,9 +5,10 @@ import { Button, Text, Stack } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 
 export default function useSendEhr() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: async (data: { id: string; hospital: string }) => {
+      console.log("ecco ospedale", data.hospital);
       const result = await sendEhrApi(data.id, data.hospital);
       return result;
     },
@@ -19,12 +20,15 @@ export default function useSendEhr() {
         position: "bottom-right",
         message: (
           <Stack justify="space-between">
-            <Text>The EHR has been delivered! Click below to check the comunication History</Text>
+            <Text>
+              The EHR has been delivered! Click below to check the comunication
+              History
+            </Text>
             <Button
               size="xs"
               variant="light"
               onClick={() => {
-                navigate("comunication-history")
+                navigate("comunication-history");
               }}
             >
               History
