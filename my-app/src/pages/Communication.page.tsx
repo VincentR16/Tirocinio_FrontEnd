@@ -85,13 +85,21 @@ export default function CommunicationPage() {
     CommunicationTypeEnum.OUTGOING
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, error } = useGetCommunication(valueType, currentPage);
+  const { data, isLoading, error } = useGetCommunication(
+    valueType,
+    currentPage
+  );
   const { openModal, setJson } = useJsonContext();
 
   const rows = data?.comunications.map((row) => {
+    console.log("ecco ehr", row.ehr)
     return (
       <Table.Tr key={row.id}>
-        <Table.Td>{row.id}</Table.Td>
+        <Table.Td>
+          {row.ehr.patient?.name?.[0]?.given?.[0]?.toString()}
+        </Table.Td>
+        <Table.Td>{row.ehr.patient?.name?.[0]?.family?.toString()}</Table.Td>
+        <Table.Td>{row.ehr.id}</Table.Td>
         <Table.Td>
           <Text>{row.createdAt.toString()}</Text>
         </Table.Td>
@@ -221,7 +229,9 @@ export default function CommunicationPage() {
               <Table verticalSpacing="xs" highlightOnHover striped>
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th>Comunication Id</Table.Th>
+                    <Table.Th>Patient Name</Table.Th>
+                    <Table.Th>Patient Surname</Table.Th>
+                    <Table.Th>Ehr Id</Table.Th>
                     <Table.Th>Date</Table.Th>
                     <Table.Th>From:</Table.Th>
                     <Table.Th>To:</Table.Th>
