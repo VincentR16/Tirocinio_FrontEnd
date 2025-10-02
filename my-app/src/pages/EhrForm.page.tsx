@@ -33,21 +33,6 @@ import type { EhrRequest } from "../types/EhrRequest";
 import { useLocation } from "react-router-dom";
 import type { EHR } from "../types/Ehr.types";
 
-//todo cercare un modo per rendere questo form di creazione anche un form di modifica, usare il context per passarsi le informazioni?
-//todo altrimenti estendere il context anche alla home page per passare eher , ehr viene passato a priori ad ogni step
-//todo da cui prendiamo le informazioni per poi poterle inserire come value.
-//todo aggiungere un modal che se si cerca di cambiare page esca con la scritta i tuoi progressi verranno persi o qulcs del genere
-//todo cambiare il tasto alla fine che se è nello stato di edit vada a chiamare l api corretta
-
-//! per il momento lascio stare semplicemente perche non mi viene in mente un modo semplice e coinciso per fare cio
-//! utilizzare lo stesso form della creazioni crea molti problemi, il form poi rimane compilato lo dovrei pure svuotare
-//! o si fa un form a parte solo per l edit oppure non do la possibilita di modificare tutto ma solo alcuni campi (es solo i dati del paziente) 
-//! oppure si trova un modo per poter fare tutto in modo coinciso , cosa che non penso che sriesca a fare
-
-//? non fare questa parte non comporterebbe niente di che ma di certo in linea di massima è una features che solitamente dovrebbe essere presente in questi tipi di siti?
-//? non lo so
-
-// non non è vero il form non mi rimane compilato ma si svuota da solo una volta uscito dalla pagina
 
 export default function EhrForm() {
   const { active, setActive, prevStep, handleNextStep, mapFormToEhr,setEhr} =

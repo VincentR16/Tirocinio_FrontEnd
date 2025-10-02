@@ -25,6 +25,18 @@ import {
 import useGetCommunication from "../hook/useGetCommunication";
 import type { CommunicationStatus } from "../types/CommunicationStatus.enum";
 import { useJsonContext } from "../context/JsonContext";
+import type { Bundle } from "fhir/r4";
+
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleString("it-IT", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 interface StatusDotProps {
   status: CommunicationStatus;
@@ -90,24 +102,27 @@ export default function CommunicationPage() {
     currentPage
   );
   const { openModal, setJson } = useJsonContext();
+  console.log("incoming", data?.comunications);
 
   const rows = data?.comunications.map((row) => {
-    console.log("ecco ehr", row.ehr)
+    const bundle = row.message as Bundle;
     return (
       <Table.Tr key={row.id}>
         <Table.Td>
-          {row.ehr.patient?.name?.[0]?.given?.[0]?.toString()}
-        </Table.Td>
-        <Table.Td>{row.ehr.patient?.name?.[0]?.family?.toString()}</Table.Td>
-        <Table.Td>{row.ehr.id}</Table.Td>
-        <Table.Td>
-          <Text>{row.createdAt.toString()}</Text>
+          {row.ehr.patient?.name?.[0]?.given?.[0]?.toString() ?? "N/A"}
         </Table.Td>
         <Table.Td>
-          {row.doctor.user.name} {row.doctor.user.surname}
+          {row.ehr.patient?.name?.[0]?.family?.toString() ?? "N/A"}
+        </Table.Td>
+        <Table.Td>{row.ehr.id ?? "N/A"}</Table.Td>
+        <Table.Td>
+          <Text>{formatDate(row.createdAt.toString())}</Text>
         </Table.Td>
         <Table.Td>
-          <Text fw={500}>{row.hospital}</Text>
+          {row.doctor.user.name ?? "N/A"} {row.doctor.user.surname ?? "N/A"}
+        </Table.Td>
+        <Table.Td>
+          <Text fw={500}>{row.hospital ?? "N/A"}</Text>
         </Table.Td>
         <Table.Td ta="center">
           <StatusDot status={row.status}></StatusDot>
@@ -133,7 +148,13 @@ export default function CommunicationPage() {
   });
 
   return (
-    <Flex mih="89vh" direction="column" w="100%">
+    <Flex
+      direction="column"
+      mih="100%"
+      h="100%"
+      w="100%"
+      justify="space-between"
+    >
       <Center>
         <Paper p={4} radius="lg" shadow="lg">
           <SegmentedControl
@@ -208,52 +229,59 @@ export default function CommunicationPage() {
           </Text>
         </Center>
       )}
-
-      {isLoading ? (
-        <Center h={400}>
-          <Loader size="lg" />
+      {rows?.length == 0 ? (
+        <Center mt={250}>
+          <Text size="lg" fs="italic" fw={600} c="grey">
+            No communication received yet.
+          </Text>
         </Center>
       ) : (
         <>
-          <Paper
-            p={15}
-            mt={30}
-            shadow="md"
-            radius="lg"
-            withBorder
-            style={{
-              overflow: "hidden",
-            }}
-          >
-            <Table.ScrollContainer minWidth={800}>
-              <Table verticalSpacing="xs" highlightOnHover striped>
-                <Table.Thead>
-                  <Table.Tr>
-                    <Table.Th>Patient Name</Table.Th>
-                    <Table.Th>Patient Surname</Table.Th>
-                    <Table.Th>Ehr Id</Table.Th>
-                    <Table.Th>Date</Table.Th>
-                    <Table.Th>From:</Table.Th>
-                    <Table.Th>To:</Table.Th>
-                    <Table.Th ta="center">Status</Table.Th>
-                    <Table.Th ta="center">JSON Response</Table.Th>
-                  </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>{rows}</Table.Tbody>
-              </Table>
-            </Table.ScrollContainer>
-          </Paper>
+          {isLoading ? (
+            <Center h={400}>
+              <Loader size="lg" />
+            </Center>
+          ) : (
+            <Flex direction="column" mih="72.5vh">
+              <Paper
+                p={15}
+                mt={30}
+                shadow="md"
+                radius="lg"
+                withBorder
+                style={{
+                  overflow: "hidden",
+                }}
+              >
+                <Table.ScrollContainer minWidth={800}>
+                  <Table verticalSpacing="xs" highlightOnHover striped>
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th>Patient Name</Table.Th>
+                        <Table.Th>Patient Surname</Table.Th>
+                        <Table.Th>Ehr Id</Table.Th>
+                        <Table.Th>Date</Table.Th>
+                        <Table.Th>From:</Table.Th>
+                        <Table.Th>To:</Table.Th>
+                        <Table.Th ta="center">Status</Table.Th>
+                        <Table.Th ta="center">JSON Response</Table.Th>
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>{rows}</Table.Tbody>
+                  </Table>
+                </Table.ScrollContainer>
+              </Paper>
+            </Flex>
+          )}
+          <Center mt="auto" py="md">
+            <Pagination
+              value={currentPage}
+              onChange={setCurrentPage}
+              total={data?.pagination?.totalPages || 1}
+            ></Pagination>
+          </Center>
         </>
       )}
-      <Center mt="auto" py="md">
-        <Pagination
-          value={currentPage}
-          onChange={setCurrentPage}
-          total={data?.pagination?.totalPages || 1}
-        ></Pagination>
-      </Center>
     </Flex>
   );
 }
-
-//! al posto di id mettere nome e cognome paziente e id ehr aggiustare prima il back end

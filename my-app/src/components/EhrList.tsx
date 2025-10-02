@@ -185,7 +185,7 @@ export function EhrList({ data, isLoading, error }: EhrListPorps) {
       mih="72vh"
       w="100%"
       miw="100%"
-      mt="lg"
+      mt="xl"
       direction="column"
       align="center"
       gap="lg"

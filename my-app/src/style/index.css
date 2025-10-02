@@ -17,7 +17,6 @@ body {
 }
 main{
    background-image: linear-gradient(to bottom right, #f8fafc, #eff6ff, #e0e7ff);
-  max-height: 100vh;
 }
 .Toastify__progress-bar {
   background: linear-gradient(to right, #43a047, #a5d6a7);

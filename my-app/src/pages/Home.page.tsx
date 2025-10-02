@@ -8,7 +8,6 @@ import { useState } from "react";
 import usePagination from "../hook/usePagination";
 import type { SidebarContext } from "./RootLayout.page";
 
-
 export default function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -18,7 +17,7 @@ export default function Home() {
 
   return (
     <>
-      <Flex direction="column" align="center" className={classes.container}>
+      <Flex  direction="column" align="center" className={classes.container}>
         <SearchBar
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.currentTarget.value)}
@@ -34,7 +33,7 @@ export default function Home() {
 
         <Tooltip label="Add EHR">
           <ActionIcon
-            mb="xs"
+
             mr="md"
             variant="filled"
             size="xl"
@@ -54,7 +53,6 @@ export default function Home() {
           </ActionIcon>
         </Tooltip>
       </Flex>
-
     </>
   );
 }

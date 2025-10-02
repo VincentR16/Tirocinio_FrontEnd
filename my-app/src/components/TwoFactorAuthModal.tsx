@@ -47,7 +47,7 @@ export default function TwofactorAuthModal() {
         <Button
           onClick={() => {
             twoFactorAuth.mutate(
-              { userId: user!.id, twoFactorAuthenticationCode },
+              { email: user!.email, twoFactorAuthenticationCode },
               {
                 onSuccess: () => {
                   setIsError(false);

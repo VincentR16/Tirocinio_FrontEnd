@@ -23,8 +23,7 @@ export default function Welcome() {
       <QrCodeModal />
       {/* modal che si aprirà nel momento del login per inserire il codice */}
       <TwoFactorAuthModal />
-
-      <NavBar  setAuthType={setAuthType} />
+      <NavBar setAuthType={setAuthType} />
       <header>
         <div className="container">
           <div className="title-container">
@@ -45,7 +44,6 @@ export default function Welcome() {
           </aside>
         </div>
       </header>
-
       <main>
         <hr className="custom-hr" />
         <div className="main-container">
@@ -82,7 +80,11 @@ export default function Welcome() {
           <hr className="custom-hr" />
 
           <div className="form-container">
-            <AuthenticationForm authType={authType} setAuthType={setAuthType} className="auth-container"></AuthenticationForm>
+            <AuthenticationForm
+              authType={authType}
+              setAuthType={setAuthType}
+              className="auth-container"
+            ></AuthenticationForm>
           </div>
         </div>
       </main>

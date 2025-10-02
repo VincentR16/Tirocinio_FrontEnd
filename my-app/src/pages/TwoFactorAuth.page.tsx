@@ -14,7 +14,7 @@ import {
   Box,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconInfoCircle, IconQrcode } from "@tabler/icons-react";
+import { IconInfoCircle, IconQrcode, IconX } from "@tabler/icons-react";
 import useQrCode from "../hook/useQrCode";
 
 export default function TwoFactorAuthPage() {
@@ -106,12 +106,14 @@ export default function TwoFactorAuthPage() {
             </Title>
           </Group>
         }
-        p="xl"
         mr="xl"
         opened={opened}
         onClose={toggle}
         withinPortal={false}
         size="md"
+        closeButtonProps={{
+          icon: <IconX size={20} color="red"></IconX>,
+        }}
         style={{
           marginLeft: "-7rem",
         }}
@@ -119,7 +121,7 @@ export default function TwoFactorAuthPage() {
       >
         <Stack align="center" gap="md">
           <Text size="sm" ta="center" c="dimmed">
-            Scan this QR code with your authenticator app
+            Scan with your authenticator app
           </Text>
 
           <Center>

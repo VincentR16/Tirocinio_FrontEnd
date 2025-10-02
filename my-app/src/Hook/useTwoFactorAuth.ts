@@ -23,7 +23,7 @@ export default function useTwoFactorAuth() {
     },
     onError: (err) => {
       if (isAxiosError(err)) {
-        setIsAuthenticated(false); 
+        setIsAuthenticated(false);
         setLoading(false);
         if (err.response?.status === 401) {
           console.warn("Invalid 2FA code");

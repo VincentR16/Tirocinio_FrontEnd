@@ -1,4 +1,4 @@
 export type TwoFactorRequest = {
-  userId: string;
+  email: string;
   twoFactorAuthenticationCode: string;
 };
