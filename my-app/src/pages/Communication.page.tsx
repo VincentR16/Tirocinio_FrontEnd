@@ -3,6 +3,7 @@ import {
   Box,
   Center,
   Flex,
+  Group,
   Loader,
   Pagination,
   Paper,
@@ -12,9 +13,11 @@ import {
   Tooltip,
 } from "@mantine/core";
 import {
+  IconCheck,
   IconCircleArrowDownRight,
   IconClipboard,
   IconSend,
+  IconX,
 } from "@tabler/icons-react";
 import classes from "./style/comunication.module.css";
 import { useState } from "react";
@@ -23,9 +26,13 @@ import {
   type CommunicationType,
 } from "../types/CommunicationType.enum";
 import useGetCommunication from "../hook/useGetCommunication";
-import type { CommunicationStatus } from "../types/CommunicationStatus.enum";
+import {
+  CommunicationStatusEnum,
+  type CommunicationStatus,
+} from "../types/CommunicationStatus.enum";
 import { useJsonContext } from "../context/JsonContext";
-import type { Bundle } from "fhir/r4";
+import type { Bundle, Patient } from "fhir/r4";
+import useUpdateCommunication from "../hook/useUpdateCommunication";
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -102,50 +109,9 @@ export default function CommunicationPage() {
     currentPage
   );
   const { openModal, setJson } = useJsonContext();
-  console.log("incoming", data?.comunications);
+  const update = useUpdateCommunication();
 
-  const rows = data?.comunications.map((row) => {
-    const bundle = row.message as Bundle;
-    return (
-      <Table.Tr key={row.id}>
-        <Table.Td>
-          {row.ehr.patient?.name?.[0]?.given?.[0]?.toString() ?? "N/A"}
-        </Table.Td>
-        <Table.Td>
-          {row.ehr.patient?.name?.[0]?.family?.toString() ?? "N/A"}
-        </Table.Td>
-        <Table.Td>{row.ehr.id ?? "N/A"}</Table.Td>
-        <Table.Td>
-          <Text>{formatDate(row.createdAt.toString())}</Text>
-        </Table.Td>
-        <Table.Td>
-          {row.doctor.user.name ?? "N/A"} {row.doctor.user.surname ?? "N/A"}
-        </Table.Td>
-        <Table.Td>
-          <Text fw={500}>{row.hospital ?? "N/A"}</Text>
-        </Table.Td>
-        <Table.Td ta="center">
-          <StatusDot status={row.status}></StatusDot>
-        </Table.Td>
-        <Table.Td ta="center">
-          <Tooltip label="View the code" position="top" withArrow>
-            <ActionIcon
-              variant="subtle"
-              color="blue"
-              size="lg"
-              onClick={() => {
-                console.log("ecco", row.message);
-                setJson(row.message);
-                openModal();
-              }}
-            >
-              <IconClipboard size={24} />
-            </ActionIcon>
-          </Tooltip>
-        </Table.Td>
-      </Table.Tr>
-    );
-  });
+ 
 
   return (
     <Flex
@@ -159,7 +125,10 @@ export default function CommunicationPage() {
         <Paper p={4} radius="lg" shadow="lg">
           <SegmentedControl
             value={valueType}
-            onChange={(value) => setValueType(value as CommunicationType)}
+            onChange={(value) => {
+              setValueType(value as CommunicationType);
+              setCurrentPage(1);
+            }}
             className={classes.segmentRoot}
             size="md"
             styles={{
@@ -264,7 +233,7 @@ export default function CommunicationPage() {
                         <Table.Th>From:</Table.Th>
                         <Table.Th>To:</Table.Th>
                         <Table.Th ta="center">Status</Table.Th>
-                        <Table.Th ta="center">JSON Response</Table.Th>
+                        <Table.Th ta="center">JSON</Table.Th>
                       </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>{rows}</Table.Tbody>

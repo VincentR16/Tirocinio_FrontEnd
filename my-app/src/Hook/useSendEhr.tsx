@@ -8,7 +8,6 @@ export default function useSendEhr() {
   const navigate = useNavigate();
   return useMutation({
     mutationFn: async (data: { id: string; hospital: string }) => {
-      console.log("ecco ospedale", data.hospital);
       const result = await sendEhrApi(data.id, data.hospital);
       return result;
     },
