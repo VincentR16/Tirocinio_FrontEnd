@@ -19,6 +19,7 @@ import SendModal from "../components/SendModal";
 import JsonModal from "../components/JsonModal";
 import { CustomTitle } from "../components/CustomTitle";
 import { IconLogout, IconX } from "@tabler/icons-react";
+import { NotificationComponent } from "../components/Notification";
 
 export type SidebarContext = {
   sidebarActive: number;
@@ -30,7 +31,6 @@ export default function RootLayout() {
   const [openedModal, { open, close }] = useDisclosure(false);
   const [sidebarActive, setSidebarActive] = useState(0);
   const logout = useLogout();
-
   return (
     <>
       <AppShell
@@ -44,7 +44,7 @@ export default function RootLayout() {
         }}
       >
         <AppShell.Header className={classes.header}>
-          <Flex pl="sm" p="sm" direction="row" gap="sm">
+          <Flex pl="sm" p="sm" direction="row" gap="sm" w="100%" align="center">
             <Center>
               <Burger
                 opened={opened}
@@ -66,6 +66,8 @@ export default function RootLayout() {
                 Trust
               </h3>
             </Center>
+
+            <NotificationComponent setSidebarActive={setSidebarActive} />
           </Flex>
         </AppShell.Header>
 
@@ -101,7 +103,9 @@ export default function RootLayout() {
         >
           <Text ml={5}>Are you sure you want to logout?</Text>
 
-          <Text fs="italic" fw={600}  mt={5} ml={5}>This action cannot be undone.</Text>
+          <Text fs="italic" fw={600} mt={5} ml={5}>
+            This action cannot be undone.
+          </Text>
 
           <Group mt={15}>
             <Button

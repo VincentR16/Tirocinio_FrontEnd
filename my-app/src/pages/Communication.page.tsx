@@ -1,24 +1,14 @@
 import {
-  ActionIcon,
-  Box,
   Center,
   Flex,
-  Group,
   Loader,
   Pagination,
   Paper,
   SegmentedControl,
   Table,
   Text,
-  Tooltip,
 } from "@mantine/core";
-import {
-  IconCheck,
-  IconCircleArrowDownRight,
-  IconClipboard,
-  IconSend,
-  IconX,
-} from "@tabler/icons-react";
+import { IconCircleArrowDownRight, IconSend } from "@tabler/icons-react";
 import classes from "./style/comunication.module.css";
 import { useState } from "react";
 import {
@@ -26,78 +16,7 @@ import {
   type CommunicationType,
 } from "../types/CommunicationType.enum";
 import useGetCommunication from "../hook/useGetCommunication";
-import {
-  CommunicationStatusEnum,
-  type CommunicationStatus,
-} from "../types/CommunicationStatus.enum";
-import { useJsonContext } from "../context/JsonContext";
-import type { Bundle, Patient } from "fhir/r4";
-import useUpdateCommunication from "../hook/useUpdateCommunication";
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return date.toLocaleString("it-IT", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
-
-interface StatusDotProps {
-  status: CommunicationStatus;
-  size?: number;
-}
-
-function StatusDot({ status }: StatusDotProps) {
-  const statusConfig: Record<
-    CommunicationStatus,
-    {
-      color: string;
-      label: string;
-    }
-  > = {
-    Pending: {
-      color: "orange",
-      label: "Pending",
-    },
-    Delivered: {
-      color: "green",
-      label: "Delivered",
-    },
-    Failed: {
-      color: "red",
-      label: "Failed",
-    },
-    Received: {
-      color: "green",
-      label: "Received",
-    },
-    Cancelled: {
-      color: "black",
-      label: "Cancelled",
-    },
-  };
-
-  const config = statusConfig[status];
-
-  return (
-    <Tooltip label={config.label} withArrow>
-      <Center>
-        <Box
-          p={5}
-          style={{
-            cursor: "pointer",
-            border: "1px solid var(--mantine-color-gray-6)",
-            borderRadius: "50%",
-            backgroundColor: `var(--mantine-color-${config.color}-6)`,
-          }}
-        />
-      </Center>
-    </Tooltip>
-  );
-}
+import { CommunicationTable } from "../components/CommunicationTable";
 
 export default function CommunicationPage() {
   const [valueType, setValueType] = useState<CommunicationType>(
@@ -108,10 +27,7 @@ export default function CommunicationPage() {
     valueType,
     currentPage
   );
-  const { openModal, setJson } = useJsonContext();
-  const update = useUpdateCommunication();
-
- 
+  const rows = CommunicationTable({ data });
 
   return (
     <Flex
@@ -122,72 +38,71 @@ export default function CommunicationPage() {
       justify="space-between"
     >
       <Center>
-        <Paper p={4} radius="lg" shadow="lg">
-          <SegmentedControl
-            value={valueType}
-            onChange={(value) => {
-              setValueType(value as CommunicationType);
-              setCurrentPage(1);
-            }}
-            className={classes.segmentRoot}
-            size="md"
-            styles={{
-              indicator: {
-                backgroundColor: "#228be6",
-              },
-            }}
-            data={[
-              {
-                value: CommunicationTypeEnum.OUTGOING,
-                label: (
-                  <Center style={{ gap: 10 }}>
-                    <IconSend
-                      color={
-                        valueType === CommunicationTypeEnum.OUTGOING
-                          ? "white"
-                          : "black"
-                      }
-                      size={16}
-                    />
-                    <Text
-                      c={
-                        valueType === CommunicationTypeEnum.OUTGOING
-                          ? "white"
-                          : "black"
-                      }
-                    >
-                      Outgoing
-                    </Text>
-                  </Center>
-                ),
-              },
-              {
-                value: "Incoming",
-                label: (
-                  <Center style={{ gap: 10 }}>
-                    <IconCircleArrowDownRight
-                      color={
-                        valueType === CommunicationTypeEnum.INCOMING
-                          ? "white"
-                          : "black"
-                      }
-                      size={16}
-                    />
-                    <Text
-                      c={
-                        valueType === CommunicationTypeEnum.INCOMING
-                          ? "white"
-                          : "black"
-                      }
-                    >
-                      Incoming
-                    </Text>
-                  </Center>
-                ),
-              },
-            ]}
-          />
-        </Paper>
+        <SegmentedControl
+          radius="md"
+          value={valueType}
+          onChange={(value) => {
+            setValueType(value as CommunicationType);
+            setCurrentPage(1);
+          }}
+          className={classes.segmentRoot}
+          size="md"
+          styles={{
+            indicator: {
+              backgroundColor: "#228be6",
+            },
+          }}
+          data={[
+            {
+              value: CommunicationTypeEnum.OUTGOING,
+              label: (
+                <Center style={{ gap: 10 }}>
+                  <IconSend
+                    color={
+                      valueType === CommunicationTypeEnum.OUTGOING
+                        ? "white"
+                        : "black"
+                    }
+                    size={16}
+                  />
+                  <Text
+                    c={
+                      valueType === CommunicationTypeEnum.OUTGOING
+                        ? "white"
+                        : "black"
+                    }
+                  >
+                    Outgoing
+                  </Text>
+                </Center>
+              ),
+            },
+            {
+              value: "Incoming",
+              label: (
+                <Center style={{ gap: 10 }}>
+                  <IconCircleArrowDownRight
+                    color={
+                      valueType === CommunicationTypeEnum.INCOMING
+                        ? "white"
+                        : "black"
+                    }
+                    size={16}
+                  />
+                  <Text
+                    c={
+                      valueType === CommunicationTypeEnum.INCOMING
+                        ? "white"
+                        : "black"
+                    }
+                  >
+                    Incoming
+                  </Text>
+                </Center>
+              ),
+            },
+          ]}
+        />
       </Center>
 
       {error && (
@@ -223,7 +138,15 @@ export default function CommunicationPage() {
                 }}
               >
                 <Table.ScrollContainer minWidth={800}>
-                  <Table verticalSpacing="xs" highlightOnHover striped>
+                  <Table
+                    verticalSpacing="xs"
+                    highlightOnHover
+                    striped
+                    style={{
+                      cursor: "default",
+                      outline: "none",
+                    }}
+                  >
                     <Table.Thead>
                       <Table.Tr>
                         <Table.Th>Patient Name</Table.Th>

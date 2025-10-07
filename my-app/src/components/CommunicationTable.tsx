@@ -1,12 +1,96 @@
-import { Tooltip, ActionIcon } from "@mantine/core";
+import {
+  Tooltip,
+  ActionIcon,
+  Center,
+  Table,
+  Box,
+  Text,
+  Group,
+} from "@mantine/core";
 import { IconClipboard, IconCheck, IconX } from "@tabler/icons-react";
 import type { Bundle, Patient } from "fhir/r4";
-import { Table, Group } from "lucide-react";
-import { data } from "react-router-dom";
-import type { CommunicationStatusEnum } from "../types/CommunicationStatus.enum";
-import type { CommunicationTypeEnum } from "../types/CommunicationType.enum";
+import {
+  CommunicationStatusEnum,
+  type CommunicationStatus,
+} from "../types/CommunicationStatus.enum";
+import { CommunicationTypeEnum } from "../types/CommunicationType.enum";
+import { useJsonContext } from "../context/JsonContext";
+import useUpdateCommunication from "../hook/useUpdateCommunication";
+import type { PaginatedCommunication } from "../types/PaginatedCommunication.type";
 
-export function CommunicationTable() {
+interface StatusDotProps {
+  status: CommunicationStatus;
+  size?: number;
+}
+
+function StatusDot({ status }: StatusDotProps) {
+  const statusConfig: Record<
+    CommunicationStatus,
+    {
+      color: string;
+      label: string;
+    }
+  > = {
+    Pending: {
+      color: "orange",
+      label: "Pending",
+    },
+    Delivered: {
+      color: "green",
+      label: "Delivered",
+    },
+    Failed: {
+      color: "red",
+      label: "Failed",
+    },
+    Received: {
+      color: "green",
+      label: "Received",
+    },
+    Cancelled: {
+      color: "red",
+      label: "Cancelled",
+    },
+  };
+
+  const config = statusConfig[status];
+
+  return (
+    <Tooltip label={config.label} withArrow>
+      <Center>
+        <Box
+          p={5}
+          style={{
+            cursor: "pointer",
+            border: "1px solid var(--mantine-color-gray-6)",
+            borderRadius: "50%",
+            backgroundColor: `var(--mantine-color-${config.color}-6)`,
+          }}
+        />
+      </Center>
+    </Tooltip>
+  );
+}
+
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleString("it-IT", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+interface communicationTableProps {
+  data: PaginatedCommunication | undefined;
+}
+
+export function CommunicationTable({ data }: communicationTableProps) {
+  const { openModal, setJson } = useJsonContext();
+  const update = useUpdateCommunication();
+
   const rows = data?.comunications.map((row) => {
     const bundle = row.message as Bundle;
     const patient = bundle.entry?.[0]?.resource as Patient | undefined;
@@ -22,7 +106,6 @@ export function CommunicationTable() {
             row.doctor?.user?.surname ?? "N/A"
           }`
         : row.hospital ?? "N/A";
-
     const communicationTo =
       row.type === CommunicationTypeEnum.OUTGOING
         ? row.hospital ?? "N/A"
@@ -31,7 +114,13 @@ export function CommunicationTable() {
           }`;
 
     return (
-      <Table.Tr key={row.id}>
+      <Table.Tr
+        key={row.id}
+        style={{
+          cursor: "default", 
+          outline: "none", 
+        }}
+      >
         <Table.Td>
           <Text>{name}</Text>
         </Table.Td>
@@ -60,7 +149,6 @@ export function CommunicationTable() {
               size="lg"
               color="blue"
               onClick={() => {
-                console.log("ecco", row.message);
                 setJson(row.message);
                 openModal();
               }}
@@ -69,9 +157,9 @@ export function CommunicationTable() {
             </ActionIcon>
           </Tooltip>
         </Table.Td>
-        {row.type === CommunicationTypeEnum.INCOMING &&
-          row.status === CommunicationStatusEnum.PENDING && (
-            <Table.Td ta="center">
+        {row.type === CommunicationTypeEnum.INCOMING && (
+          <Table.Td ta="center">
+            {row.status === CommunicationStatusEnum.PENDING && (
               <Group justify="center">
                 <Tooltip label="Accept" position="top" withArrow>
                   <ActionIcon
@@ -102,9 +190,26 @@ export function CommunicationTable() {
                   </ActionIcon>
                 </Tooltip>
               </Group>
-            </Table.Td>
-          )}
+            )}
+            {row.status === CommunicationStatusEnum.RECEIVED && (
+              <Center>
+                <Tooltip label="Accepted" position="top" withArrow>
+                  <IconCheck size={20} color="green" />
+                </Tooltip>
+              </Center>
+            )}
+            {row.status === CommunicationStatusEnum.CANCELLED && (
+              <Center>
+                <Tooltip label="Rejected" position="top" withArrow>
+                  <IconX size={20} color="red" />
+                </Tooltip>
+              </Center>
+            )}
+          </Table.Td>
+        )}
       </Table.Tr>
     );
   });
+
+  return rows;
 }
