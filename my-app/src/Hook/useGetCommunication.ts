@@ -7,7 +7,7 @@ export default function useGetCommunication(
   page: number
 ) {
   return useQuery({
-    queryKey: ["comuinications", type, page],
+    queryKey: ["communications", type, page],
     queryFn: () => getCommunicationApi(type, page),
   });
 }

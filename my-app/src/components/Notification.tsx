@@ -37,7 +37,7 @@ export function NotificationComponent({ setSidebarActive }: NotificationProps) {
               color="red"
               pos="absolute"
               top={-4}
-              right={-4}
+              right={0}
               w={18}
               h={18}
               p={0}
