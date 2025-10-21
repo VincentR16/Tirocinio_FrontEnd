@@ -17,11 +17,13 @@ import {
   IconStethoscope,
   IconUser,
   IconSend,
+  IconEdit,
 } from "@tabler/icons-react";
 import classes from "./style/EhrCard.module.css";
 import usePdf from "../hook/usePdf";
 import type { EHR } from "../types/Ehr.types";
 import { useSendContext } from "../context/SendContext";
+import { useQrContext } from "../context/QrContext";
 interface EhrCardProps {
   ehr: EHR;
   id: string;
@@ -43,7 +45,8 @@ export function EhrCard({
   doctorSurname,
 }: EhrCardProps) {
   const downloadPdfMutation = usePdf();
-  const { setName, setSurname, setId, openModal } = useSendContext();
+  const { setName, setSurname, setId } = useSendContext();
+  const { openCode } = useQrContext();
 
   return (
     <Paper
@@ -145,6 +148,26 @@ export function EhrCard({
         </Flex>
 
         <Group gap="xs" style={{ flexShrink: 0 }}>
+          <Tooltip label="Edit" position="top">
+            <ActionIcon
+              onClick={() => {}}
+              variant="subtle"
+              color="yellow"
+              size="lg"
+              radius="md"
+              styles={{
+                root: {
+                  "&:hover": {
+                    backgroundColor: "var(--mantine-color-green-1)",
+                    transform: "scale(1.05)",
+                  },
+                },
+              }}
+            >
+              <IconEdit size={24} />
+            </ActionIcon>
+          </Tooltip>
+
           <Tooltip label="Download PDF" position="top">
             <ActionIcon
               onClick={() => {
@@ -173,7 +196,7 @@ export function EhrCard({
                 setName(name);
                 setSurname(surname);
                 setId(id);
-                openModal();
+                openCode();
               }}
               variant="subtle"
               color="blue"

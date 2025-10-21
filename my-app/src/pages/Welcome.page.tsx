@@ -12,17 +12,22 @@ import TwoFactorAuthModal from "../components/TwoFactorAuthModal";
 import QrCodeModal from "../components/QrCodeModal";
 import { useState } from "react";
 import { type AuthType, AuthTypeEnum } from "../types/Auth.type";
+import { useNavigate } from "react-router-dom";
 
 export default function Welcome() {
   const { aboutRef, loginRef } = useScrollContext();
   const [authType, setAuthType] = useState<AuthType>(AuthTypeEnum.LOGIN);
-
+  const navigate = useNavigate();
   return (
     <div ref={aboutRef} className="background">
       {/* modal che si aprirà nel momento della registrazione per scansionare il qrCode */}
       <QrCodeModal />
       {/* modal che si aprirà nel momento del login per inserire il codice */}
-      <TwoFactorAuthModal />
+      <TwoFactorAuthModal
+        action={() => {
+          navigate("/Medtrust");
+        }}
+      />
       <NavBar setAuthType={setAuthType} />
       <header>
         <div className="container">

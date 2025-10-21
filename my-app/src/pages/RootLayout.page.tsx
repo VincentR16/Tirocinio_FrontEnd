@@ -20,6 +20,8 @@ import JsonModal from "../components/JsonModal";
 import { CustomTitle } from "../components/CustomTitle";
 import { IconLogout, IconX } from "@tabler/icons-react";
 import { NotificationComponent } from "../components/Notification";
+import TwofactorAuthModal from "../components/TwoFactorAuthModal";
+import { useSendContext } from "../context/SendContext";
 
 export type SidebarContext = {
   sidebarActive: number;
@@ -27,6 +29,7 @@ export type SidebarContext = {
 };
 
 export default function RootLayout() {
+  const { openModal } = useSendContext();
   const [opened, { toggle }] = useDisclosure(true);
   const [openedModal, { open, close }] = useDisclosure(false);
   const [sidebarActive, setSidebarActive] = useState(0);
@@ -124,6 +127,11 @@ export default function RootLayout() {
         </Modal>
         <SendModal></SendModal>
         <JsonModal></JsonModal>
+        <TwofactorAuthModal
+          action={() => {
+            openModal();
+          }}
+        />
       </AppShell>
     </>
   );

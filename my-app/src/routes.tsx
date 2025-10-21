@@ -31,13 +31,15 @@ export const routes = [
   {
     path: "/Medtrust",
     element: (
-      <JsonProvider>
-        <SendProvider>
-          <ProtectedRoot>
-            <RootLayout />
-          </ProtectedRoot>
-        </SendProvider>
-      </JsonProvider>
+      <QrProvider>
+        <JsonProvider>
+          <SendProvider>
+            <ProtectedRoot>
+              <RootLayout />
+            </ProtectedRoot>
+          </SendProvider>
+        </JsonProvider>
+      </QrProvider>
     ),
     children: [
       {

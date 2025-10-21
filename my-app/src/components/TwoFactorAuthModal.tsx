@@ -7,7 +7,11 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconQrcode, IconX } from "@tabler/icons-react";
 import { CustomTitle } from "./CustomTitle";
 
-export default function TwofactorAuthModal() {
+interface ModalProps {
+  action: () => void;
+}
+
+export default function TwofactorAuthModal({ action }: ModalProps) {
   const { closeCode, openedCode } = useQrContext();
   const twoFactorAuth = useTwoFactorAuth();
   const { user } = useAuthContext();
@@ -50,10 +54,12 @@ export default function TwofactorAuthModal() {
               { email: user!.email, twoFactorAuthenticationCode },
               {
                 onSuccess: () => {
+                  closeCode();
                   setIsError(false);
+                  action();
                   notifications.show({
-                    title: "Welcome back!",
-                    message: "You're now logged in.",
+                    title: "Two Factor Authentication !",
+                    message: "Pin is Correct",
                     icon: <IconCheck size={18} />,
                     loading: false,
                     autoClose: 3500,

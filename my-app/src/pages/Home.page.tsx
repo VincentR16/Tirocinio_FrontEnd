@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <>
-      <Flex  direction="column" align="center" className={classes.container}>
+      <Flex direction="column" align="center" className={classes.container}>
         <SearchBar
           value={searchQuery}
           onChange={(event) => setSearchQuery(event.currentTarget.value)}
@@ -33,7 +33,6 @@ export default function Home() {
 
         <Tooltip label="Add EHR">
           <ActionIcon
-
             mr="md"
             variant="filled"
             size="xl"
